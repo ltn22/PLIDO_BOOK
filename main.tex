@@ -23,14 +23,14 @@
 % Font Settings
 \usepackage{avant} % Use the Avantgarde font for headings
 %\usepackage{times} % Use the Times font for headings
-\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Sym­bol, Chancery and Com­puter Modern fonts
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Symbol, Chancery and Computer Modern fonts
 
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
 \usepackage[french]{varioref}
-%\usepackage[french]{babel}
+\usepackage[french]{babel}
 
 \usepackage{wrapfig}
 \usepackage{listings}
@@ -39,6 +39,8 @@
 \usepackage{colortbl}
 \usepackage{booktabs}
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\usepackage{qrcode}
 
 \usepackage{soul}
 
@@ -166,8 +168,9 @@ showstringspaces=false
   commentstyle=\itshape\color{purple!40!black},
   identifierstyle=\color{blue},
   stringstyle=\color{orange}, caption=#1,
-  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt] {Programs/#1}
+  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single] {Programs/#1}
   }
+
 
 
 
@@ -239,11 +242,11 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-%\input{Part1.0-Intro}
+\input{Part1.0-Intro}
 %\input{Part2.0-ArchiIP}
 %\input{Part3.0-Modbus}
 %\input{Part4.0-ArchiIoT}
-\input{Part5.0-Data}
+%\input{Part5.0-Data}
 
 
 

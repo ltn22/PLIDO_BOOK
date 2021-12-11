@@ -227,30 +227,47 @@ JSON est facilement exploitable dans d’autres langages. Par exemple en Python,
      \vspace{1em}
      \pythonlst{example\_json.py}
 
-Le programme \pprog{example\_json.py} reprend la structure précédente. La variable \texttt{struct_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
+Le programme \pprog{example\_json.py} reprend la structure précédente. La variable \texttt{struct\_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json]
-{
-"Image": {
-      "Width": 800,
-      "Height": 600,
-      "Title": "View from 15th Floor",
-      "Thumbnail": {   
-           "Url": "http://www.example.com/image/481989943",
-           "Height": 125,
-           "Width": 100
-       },
-       "Animated" : false,
-       "IDs": [11, 943, 234, 38793]
-    }
-}
+\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\tiny]
+{'Image': {'IDs': [17, 2371, 234, 38793], 'Height': 600, 'Animated': False, 'Title': 'Empty picture', 'Thumbnail': 
+{'Url': 'http://www.example.com/image/481989943', 'Width': 100, 'Height': 125}, 'Width': 800, 'Copyright': None}}
+{'Image': {'Animated': False,
+           'Copyright': None,
+           'Height': 600,
+           'IDs': [17, 2371, 234, 38793],
+           'Thumbnail': {'Height': 125,
+                         'Url': 'http://www.example.com/image/481989943',
+                         'Width': 100},
+           'Title': 'Empty picture',
+           'Width': 800}}
 \end{termc}
 
-Grâce à la fonction dumps du module json, la variable \texttt{struct\_python} est transformée en JSON. Les mots clé False et None sont remplacés par false et null. 
+Grâce à la fonction \pfunction{json}{dumps} du module \texttt{json}, la variable \texttt{struct\_python} est transformée en JSON. Les mots clé  \texttt{False} et  \texttt{None} sont remplacés par  \texttt{false} et  \texttt{null}. Le programme affiche une chaîne de caractères.
 
-Le programme affiche une chaîne de caractères.
+\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\tiny]
+{"Image": {"IDs": [17, 2371, 234, 38793], "Height": 600, "Animated": false, "Title": "Empty picture", "Thumbnail": 
+{"Url": "http://www.example.com/image/481989943", "Width": 100, "Height": 125}, "Width": 800, "Copyright": null}}
+\end{termc}
 
-Pour le retransformer, de JSON en variable Python, on utilise la fonction inverse loads qui traduit une chaîne de caractères en variable Python, Les autres langues de programmation possèdent également leur propre bibliothèque pour effectuer la traduction.
+Pour le retransformer, de JSON en variable Python, on utilise la fonction inverse \pfunction{json}{loads} qui traduit une chaîne de caractères en variable Python.
 
-Par rapport à XML, JSON est beaucoup plus permissif et manque de formalisme pour décrire la structure. JSON-LD (Linked Data) défini par le W3C renforce l’interopérabilité de JSON en introduisant des clés spécifiques décrivant la structure des données, une référence aux unités, etc. Nous verrons ces concepts dans la suite du cours.
+\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\tiny]
+{'Image': {'Animated': False,
+           'Copyright': None,
+           'Height': 600,
+           'IDs': [17, 2371, 234, 38793],
+           'Thumbnail': {'Height': 125,
+                         'Url': 'http://www.example.com/image/481989943',
+                         'Width': 100},
+           'Title': 'Empty picture',
+           'Width': 800}}
+\end{termc}
+
+
+Les autres langues de programmation possèdent également leur propre bibliothèque pour effectuer la traduction.
+
+     \vspace{1em}
+
+Par rapport à \ac{XML}, \ac{JSON} est beaucoup plus permissif et manque de formalisme pour décrire la structure. \ac{JSON-LD} défini par le \ac{W3C} renforce l’interopérabilité de JSON en introduisant des clés spécifiques décrivant la structure des données, une référence aux unités, etc. Nous verrons ces concepts dans la suite du cours.
 
