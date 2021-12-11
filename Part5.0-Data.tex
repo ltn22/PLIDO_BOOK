@@ -29,7 +29,7 @@ Par exemple : quelle est la taille des blocs que l’on va transmettre ? Comment
      \vspace{1em}
 
 
-Pour que la transmission se fasse correctement, il faut que l’émetteur et le récepteur adoptent les mêmes conventions. Quand il s’agit d’un ensemble de données, il faut être capable de les séparer. Avec les tableurs, une première méthode est possible avec la notation CSV (pour Comma Separated Values). Comme son nom l’indique, les valeurs sont séparées par des virgules. Les valeurs sont représentées par des chaînes de caractères. Les textes sont différenciés des valeurs numériques, par l’utilisation de guillemets. Ainsi, 123 sera interprété comme un nombre et ”123” comme un texte.
+Pour que la transmission se fasse correctement, il faut que l’émetteur et le récepteur adoptent les mêmes conventions. Quand il s’agit d’un ensemble de données, il faut être capable de les séparer. Avec les tableurs, une première méthode est possible avec la notation \ac{CSV} Comme son nom l’indique, les valeurs sont séparées par des virgules. Les valeurs sont représentées par des chaînes de caractères. Les textes sont différenciés des valeurs numériques, par l’utilisation de guillemets. Ainsi, 123 sera interprété comme un nombre et ”123” comme un texte.
 
 Si cette représentation est adaptée aux tableurs, elle est relativement pauvre car elle ne permet de représenter que des valeurs sur des lignes et des colonnes. Pour les usages du Web, il a fallu trouver un format plus souple permettant de représenter des structures de données complexes. Évidemment, comme rien n'est simple, il en existe plusieurs et les applications échangeant des données devront utiliser le même.
 
@@ -39,7 +39,7 @@ Si cette représentation est adaptée aux tableurs, elle est relativement pauvre
 On voit que l'envoi de la chaîne de caractères ne suffit pas, il faut la formater pour que le récepteur puisse trouver le type de la donnée transmise, qu'un nombre ne soit pas interprété comme une chaîne de caractères, qu'une chaîne de caractères reste une chaîne de caractères même si elle ne contient que des chiffres.   
     \vspace{1em}
    
-\section{La sérialisation}
+\section{La \Index{sérialisation}}
 
 Sous ce nom barbare se cache la méthode utilisée pour transmettre 
 des données d’un ordinateur à un autre.
@@ -50,9 +50,9 @@ Pour des structures complexes comme les tableaux, les éléments peuvent être r
 
 La sérialisation consiste à transformer une structure de données en une séquence qui pourra être transmise sur le réseau, stockée dans un fichier ou une base de données. L'opération inverse, consistant à reconstruire localement une structure de données, s'appelle désérialisation. 
 
-Il existe plusieurs formats pour sérialiser les données. Ils peuvent être binaires mais ceux généralement utilisés sont basés sur des chaînes de caractères. En effet, la représentation ASCII définissant les caractères de base et codée sur 7 bits est commune à l'ensemble des ordinateurs. L'autre avantage du code ASCII est qu'il est facilement lisible et simplifie la mise au point des programmes.  
+Il existe plusieurs formats pour sérialiser les données. Ils peuvent être binaires mais ceux généralement utilisés sont basés sur des chaînes de caractères. En effet, la représentation \ac{ASCII} définissant les caractères de base et codée sur 7 bits est commune à l'ensemble des ordinateurs. L'autre avantage du code ASCII est qu'il est facilement lisible et simplifie la mise au point des programmes.  
 
-Wikipédia donne ce tableau (cf. figure~\vref{fig-ASCII})des codes ASCII datant de 1972 (une éternité en informatique) et recolorisé par nos soins.
+Wikipédia donne ce tableau (cf. figure~\vref{fig-ASCII}) des codes \ac{ASCII} datant de 1972 (une éternité en informatique) et recolorisé par nos soins.
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture20.png}}
@@ -64,10 +64,10 @@ Les caractères en orange ne sont pas imprimables. Ils permettent de contrôler 
 
 \subsection*{Hexlify}
 
-En Python, il existe le module binascii très pratique qui permet de convertir une séquence binaire en une chaîne de caractères ou inversement :
+En Python, il existe le module \Index{binascii} très pratique qui permet de convertir une séquence binaire en une chaîne de caractères ou inversement :
 \begin{itemize}
-\item \texttt{hexlify} prend un tableau d'octets et le convertit en une chaîne de caractères hexadécimaux plus lisible pour les spécialistes. Cela permet de visualiser n'importe quelle séquence de données. 
-\item \texttt{unhexify} fait l'inverse. Il prend une chaîne de caractères et la convertit en un tableau d'octets. Cela peut vous faciliter la programmation car, dans votre code, il est plus facile de manipuler des chaînes de caractères.
+\item \pfunction{binascii}{hexlify} prend un tableau d'octets et le convertit en une chaîne de caractères hexadécimaux plus lisible pour les spécialistes. Cela permet de visualiser n'importe quelle séquence de données. 
+\item \pfunction{binascii}{unhexify} fait l'inverse. Il prend une chaîne de caractères et la convertit en un tableau d'octets. Cela peut vous faciliter la programmation car, dans votre code, il est plus facile de manipuler des chaînes de caractères.
 
 \end{itemize}
 Dans la suite, nous l'utiliserons pour manipuler des identifiants. Par exemple, ce bout de code illustre l'utilisation de ces fonctions :
@@ -83,7 +83,7 @@ app_eui = binascii.unhexlify('70 B3 D5 7E D0 03 3A E3'.replace(' ',''))
 
 Comme nous le verrons par la suite, a fonction \pfunction{network}{lora.mac()} retourne un tableau d'octets. La fonction \pfunction{binascii}{hexlify} ligne suivante le convertit en chaîne de caractères pour un affichage plus propre. 
 
-Inversement, nous devons affecter une séquence binaire à la variable \texttt{app\_eui}. Nous mettons cette séquence hexadécimale en chaîne de caractères. Les espaces offrent plus de lisibilité. Ils sont retirés par la méthode replace et le résultat est converti en binaire grâce à \pfunction{binascii}{unhexlify}
+Inversement, nous devons affecter une séquence binaire à la variable \texttt{app\_eui}. Nous mettons cette séquence hexadécimale en chaîne de caractères. Les espaces offrent plus de lisibilité. Ils sont retirés par la méthode replace et le résultat est converti en binaire grâce à \pfunction{binascii}{unhexify}
 
 \section{Base64}
 
@@ -124,15 +124,16 @@ AQIzNA==
 b'\x01\x0234'
 \end{termc}
 
-À noter que l'utilisation du \texttt{ser.\pfunction{}{decode()}}, ligne 6, pour transformer une chaîne d'octets en chaîne de caractères, c'est-à-dire supprimer le \texttt{b} du début, peut être utilisé dans certains cas.
+À noter que l'utilisation du \texttt{ser.\pfunction{str}{decode()}}, ligne 6, pour transformer une chaîne d'octets en chaîne de caractères, c'est-à-dire supprimer le \texttt{b} du début, peut être utilisé dans certains cas.
 
-\section{CSV}
 
-La sérialisation en chaînes de caractères (par exemple en Python via la commande \pfunction{binascii]{}hexlify}) ou en Base64 concerne surtout des données binaires. Mais la donnée peut être aussi structurée, par exemple la page d'un tableur. Il faut donc formater le document pour éviter une fusion des différents champs. Le format CSV (\textit{Comma Separated Values}), comme son nom l'indique, sépare les données par des virgules (comma en anglais). Mais si ce format s'applique bien aux données d'un tableau, c'est-à-dire un ensemble de lignes et de colonnes, il est très limité pour représenter une information telle que la mise en forme d'une page Web.
 
 \section{HTML}
 
-HTML (\textit{Hyper Text Markup Language}), sans entrer dans les détails, définit un format où les champs sont repérés par un balisage.  Une balise de début est un mot clé entre \texttt{<>} et, pour une balise de fin, le mot clé est précédé du caractère \texttt{/}. Par exemple, la figure~\vref{fig-HTML} avec le balisage, le premier paragraphe est formaté de cette manière, Dans le MOOC :
+La sérialisation en chaînes de caractères (par exemple en Python via la commande \pfunction{binascii}{hexlify}) ou en Base64 concerne surtout des données binaires. Mais la donnée peut être aussi structurée, par exemple la page d'un tableur. Il faut donc formater le document pour éviter une fusion des différents champs.
+
+
+\ac{HTML}, sans entrer dans les détails, définit un format où les champs sont repérés par un balisage.  Une balise de début est un mot clé entre \texttt{<>} et, pour une \Index{balise} de fin, le mot clé est précédé du caractère \texttt{/}. Par exemple, la figure~\vref{fig-HTML} avec le balisage, le premier paragraphe est formaté de cette manière, Dans le MOOC :
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture22.png}}
@@ -140,7 +141,7 @@ HTML (\textit{Hyper Text Markup Language}), sans entrer dans les détails, défi
 \label{fig-HTML}
 \end{figure}
 
-Les balises peuvent aussi prendre des arguments, comme la balise span dans l'exemple précédent. Ainsi, si l'on regarde une page Web, comme indiqué figure~\vref{fig-Web-HTML}, le navigateur est capable de l'analyser pour trouver les URI qu'elle contient. La balise \texttt{img} indiquant qu'il s'agit d'une image, le client peut interroger le serveur pour l'afficher à l'écran. Ce format structuré de sérialisation nous permet de mettre en place une caractéristique de REST, c'est-à-dire les liens entre ressources.
+Les balises peuvent aussi prendre des arguments, comme la balise \Index{span} dans l'exemple précédent. Ainsi, si l'on regarde une page Web, comme indiqué figure~\vref{fig-Web-HTML}, le navigateur est capable de l'analyser pour trouver les \ac{URI} qu'elle contient. La balise \texttt{\Index{img}} indiquant qu'il s'agit d'une image, le client peut interroger le serveur pour l'afficher à l'écran. Ce format structuré de sérialisation nous permet de mettre en place une caractéristique de \ac{REST}, c'est-à-dire les liens entre ressources.
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture23.png}}
@@ -151,7 +152,7 @@ Les balises peuvent aussi prendre des arguments, comme la balise span dans l'exe
 
 \section{XML}
 
-Si HTML est dédié au formatage à l'écran de données textuelles et à la navigation sur le Web, XML(\textit{eXtensible Markup Language}), défini par le W3C, est un format d’échange entre deux applications. Par exemple, pour échanger les notes des étudiants entre la plate-forme FUN et une autorité de certification, on pourrait utiliser le format suivant :
+Si \ac{HTML} est dédié au formatage à l'écran de données textuelles et à la navigation sur le Web. \ac{XML}\footnote{\url{https://www.w3.org/TR/xml/}} défini par le \ac{W3C}, est un format d’échange entre deux applications. Par exemple, pour échanger les notes des étudiants entre la plate-forme FUN et une autorité de certification des cours, on pourrait utiliser le format suivant~:
 
 \begin{termc}[backgroundcolor=\color{gray!10}]
 <etudiant>
@@ -166,6 +167,90 @@ Il est facile en lisant l'exemple de trouver le prénom, le nom et la note de l'
 
      \vspace{1em}
 
-S'il est syntaxiquement correct, rien ne dit que le créateur fournit quelque chose de correct qui pourra être interprété par une autre instance.  XML peut inclure une grammaire ou un schéma qui est utilisé pour valider que les informations représentées dans le fichier sont non seulement syntaxiquement conformes au langage XML, mais aussi conformes au schéma. Ce schéma va décrire les champs attendus et leur type (texte, nombre...). Vous pouvez accéder à ce cours si vous voulez en savoir plus sur les schémas XML.
+S'il est syntaxiquement correct, rien ne dit que le créateur fournit quelque chose de correct qui pourra être interprété par une autre instance.  \ac{XML} peut inclure une grammaire ou un schéma qui est utilisé pour valider que les informations représentées dans le fichier sont non seulement syntaxiquement conformes au langage \ac{XML}, mais aussi conformes au schéma. Ce schéma va décrire les champs attendus et leur type (texte, nombre...). Vous pouvez accéder à ce cours si vous voulez en savoir plus sur les schémas \ac{XML}.
 
 Du point de vue de l’internet des objets, même si le XML pourrait être un bon candidat pour l’échange d’informations, il est un format trop lourd et donc énergivore. On peut noter que pour envoyer une note sur 20 qui, dans l'absolu, prendrait 6 bits, on transmet \texttt{<note>18</note>}, soit 15 caractères soit 120 bits! 
+
+\section{JSON}
+
+\ac{JSON}  offre un moyen de structurer l’information de manière plus compacte que \ac{XML}. JSON s’impose comme le langage commun pour échanger les informations. A l’origine, JSON était utilisé par\Index{Javascriptt} pour échanger des informations ; par exemple, pour afficher en temps réel l’évolution des cours de la bourse ou pour afficher des graphiques dynamiques sur l’écran de l’utilisateur.
+
+JSON \rfc{8259} est un format d’échange simple. Il définit 4 types de données :
+
+\begin{itemize}
+    \item nombre~: Les nombres sont composés de chiffres et peuvent être positifs, négatifs, entiers ou flottants.
+    \item texte~: Le texte est délimité par des guillemets simples ou doubles.
+    \item \Index{tableau}~: Les tableaux sont des listes d’éléments séparés par des virgules et entourés de crochets.
+    \item \Index{objet}~: L’objet est une liste de paires composées d’une \Index{clé} et d’une valeur. La clé est une chaîne de caractères et la valeur peut être de n’importe quel type. La clé doit être unique à l’intérieur d’un objet, et référence entièrement la valeur qui la suit. Le couple clé - valeur est séparé par le caractère 2 points  \texttt{:}. Les éléments de l’objet sont séparés par des virgules. L'objet est délimité par des accolades.
+\end{itemize}
+
+Par exemple, quelques structures \ac{JSON} :
+
+\begin{itemize}
+    \item \texttt{[1, -2, 0.3, 4e1]} est un tableau qui contient 4 nombres ;
+    \item \texttt{[1, ”2”, ”34”]} est un tableau contenant un nombre et deux chaines de caractères ;
+    \item \texttt{[1, [2, 3 , ”4”]]} est un tableau de deux éléments dont le second est également un tableau de 3 éléments ;
+    \item \texttt{\{ ”couleur” : [34, 16, 3]\}} est un objet qui contient un élément et la valeur est un tableau ; 
+    \item \texttt{\{ ”name” : ”bob”, ”age” : 30\}} est un objet qui contient deux éléments référencés par les chaînes de caractères (ou index)  ”name” et ”age”.
+    
+    L’ordre dans lequel sont placés les éléments est indifférent. \texttt{\{”age” : 30, ”name” : ”bob”\}} est équivalent au dernier exemple. 
+
+    Cela impose que l’index utilisé pour accéder à une valeur doit être unique dans la structure objet \texttt{\{”name” : ”bob”, ”name” : ”alice”}\} est interdit.
+\end{itemize}
+
+     \vspace{1em}
+
+Le listing suivant donne un exemple de structure JSON tirée du \rfc{8259}. Il contient un objet JSON avec une seule clé \texttt{”Image”}. La valeur de cette clé est une autre structure qui contient six éléments. 
+
+\begin{termc}[backgroundcolor=\color{gray!10}, language=json]
+{
+"Image": {
+      "Width": 800,
+      "Height": 600,
+      "Title": "View from 15th Floor",
+      "Thumbnail": {   
+           "Url": "http://www.example.com/image/481989943",
+           "Height": 125,
+           "Width": 100
+       },
+       "Animated" : false,
+       "IDs": [11, 943, 234, 38793]
+    }
+}
+\end{termc}
+
+Le balisage par clé est un élément fondamental dans la structure des données. Il est primordial d'être cohérent et d'assurer une concordance entre émetteur et récepteur sur l'intitulé de la clé pour pouvoir récupérer l'information voulue. De la même façon, il faut s'accorder sur les unités de mesure : une interprétation d'une mesure en centimètre alors qu'elle est en pixel peut être désastreux ; c'est un problème d'interopérabilité.
+     \vspace{1em}
+
+JSON est facilement exploitable dans d’autres langages. Par exemple en Python, le module JSON peut être utilisé pour convertir une structure JSON qui est une chaîne ASCII en une représentation interne Python. Les tableaux sont convertis en listes et les objets en dictionnaires.
+
+     \vspace{1em}
+     \pythonlst{example\_json.py}
+
+Le programme \pprog{example\_json.py} reprend la structure précédente. La variable \texttt{struct_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
+
+\begin{termc}[backgroundcolor=\color{gray!10}, language=json]
+{
+"Image": {
+      "Width": 800,
+      "Height": 600,
+      "Title": "View from 15th Floor",
+      "Thumbnail": {   
+           "Url": "http://www.example.com/image/481989943",
+           "Height": 125,
+           "Width": 100
+       },
+       "Animated" : false,
+       "IDs": [11, 943, 234, 38793]
+    }
+}
+\end{termc}
+
+Grâce à la fonction dumps du module json, la variable \texttt{struct\_python} est transformée en JSON. Les mots clé False et None sont remplacés par false et null. 
+
+Le programme affiche une chaîne de caractères.
+
+Pour le retransformer, de JSON en variable Python, on utilise la fonction inverse loads qui traduit une chaîne de caractères en variable Python, Les autres langues de programmation possèdent également leur propre bibliothèque pour effectuer la traduction.
+
+Par rapport à XML, JSON est beaucoup plus permissif et manque de formalisme pour décrire la structure. JSON-LD (Linked Data) défini par le W3C renforce l’interopérabilité de JSON en introduisant des clés spécifiques décrivant la structure des données, une référence aux unités, etc. Nous verrons ces concepts dans la suite du cours.
+
