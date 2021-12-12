@@ -39,6 +39,7 @@
 \usepackage{colortbl}
 \usepackage{booktabs}
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
+\usepackage{hyperref}
 
 \usepackage{qrcode}
 
@@ -174,14 +175,12 @@ showstringspaces=false
 
 
 
+\newcommand\Youtube[1]{\begin{tcolorbox}[colback=red!5,colframe=red!75!black,title=Youtube, width=3cm]\href{#1}{\qrcode{#1}}\end{tcolorbox}}
 
 
 
 
 \begin{document}
-
-
-
 
 \let\cleardoublepage\clearpage
 
@@ -242,8 +241,9 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-\input{Part1.0-Intro}
+%\input{Part1.0-Intro}
 %\input{Part2.0-ArchiIP}
+\input{Part2.5-Wireshark}
 %\input{Part3.0-Modbus}
 %\input{Part4.0-ArchiIoT}
 %\input{Part5.0-Data}
@@ -263,4 +263,8 @@ showstringspaces=false
 \input{questions}
 
 \printindex
+
+
+\printbibliography
+
 \end{document}
