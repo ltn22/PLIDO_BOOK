@@ -6,6 +6,9 @@
 Envoyer une donnée sur un réseau n’est pas aussi simple que l’on croit.
      \vspace{1em}
 
+ \begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/k-RhgiwKx2M}
+\end{wrapfigure}
 Il faut faire la différence entre le format utilisé pour stocker des données dans la mémoire de l'ordinateur et celui employé pour l'envoyer à une autre machine. En effet, chaque machine à sa propre représentation souvent liée aux capacités de leur processeur. Cela est surtout vrai pour les nombres. Ils peuvent être stockés sur un nombre de bits plus ou moins important ou peuvent être représentés en mémoire de manière optimisée pour accélérer leur traitement. 
 
 En revanche, la représentation des chaînes de caractères (non accentués) est relativement uniforme car elle se base sur le code ASCII qui est le même pour tous les ordinateurs. Un texte de base est facilement compréhensible par toutes les machines. Une solution serait donc de n'utiliser que des chaînes de caractères. 
@@ -173,6 +176,10 @@ Du point de vue de l’internet des objets, même si le XML pourrait être un bo
 
 \section{JSON}
 
+ \begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/IhZ9w6jWnq8}
+\end{wrapfigure}
+
 \ac{JSON}  offre un moyen de structurer l’information de manière plus compacte que \ac{XML}. JSON s’impose comme le langage commun pour échanger les informations. A l’origine, JSON était utilisé par\Index{Javascriptt} pour échanger des informations ; par exemple, pour afficher en temps réel l’évolution des cours de la bourse ou pour afficher des graphiques dynamiques sur l’écran de l’utilisateur.
 
 JSON \rfc{8259} est un format d’échange simple. Il définit 4 types de données :
@@ -271,3 +278,8 @@ Les autres langues de programmation possèdent également leur propre bibliothè
 
 Par rapport à \ac{XML}, \ac{JSON} est beaucoup plus permissif et manque de formalisme pour décrire la structure. \ac{JSON-LD} défini par le \ac{W3C} renforce l’interopérabilité de JSON en introduisant des clés spécifiques décrivant la structure des données, une référence aux unités, etc. Nous verrons ces concepts dans la suite du cours.
 
+\section{CBOR}
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/thSWuJ-1ld0}
+\end{wrapfigure}

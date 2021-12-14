@@ -15,11 +15,9 @@
 \documentclass[11pt,fleqn]{book} % Default font size and left-justified equations
 
 \usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,letterpaper]{geometry} % Page margins
-
 \usepackage[dvipsnames]{xcolor}
 \usepackage{lipsum} % Required for specifying colors by name
-\definecolor{ocre}{RGB}{51,102,0} 
-\definecolor{lightgray}{RGB}{229,229,229} 
+
 % Font Settings
 \usepackage{avant} % Use the Avantgarde font for headings
 %\usepackage{times} % Use the Times font for headings
@@ -40,15 +38,17 @@
 \usepackage{booktabs}
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \usepackage{hyperref}
-
 \usepackage{qrcode}
-
 \usepackage{soul}
+\usepackage{tabto}
+\usepackage{multienum}
+
 
 \definecolor{deepblue}{rgb}{0.0,0.0,0.5}
 \definecolor{deepred}{rgb}{0.6,0,0}
 \definecolor{deepgreen}{rgb}{0,0.5,0}
-
+\definecolor{ocre}{RGB}{51,102,0} 
+\definecolor{lightgray}{RGB}{229,229,229} 
 
 \newcommand\pythonstyle{\lstset{
 language=Python,
@@ -241,12 +241,12 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-%\input{Part1.0-Intro}
-%\input{Part2.0-ArchiIP}
+\input{Part1.0-Intro}
+\input{Part2.0-ArchiIP}
 \input{Part2.5-Wireshark}
-%\input{Part3.0-Modbus}
-%\input{Part4.0-ArchiIoT}
-%\input{Part5.0-Data}
+\input{Part3.0-Modbus}
+\input{Part4.0-ArchiIoT}
+\input{Part5.0-Data}
 
 
 

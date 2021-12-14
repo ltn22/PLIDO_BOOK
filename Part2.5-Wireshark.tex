@@ -1,6 +1,6 @@
 \chapter {Wireshark}
 
-\Index{Wireshark} va être notre ami dans la suite de cet ouvrage pour comprendre le fonctionnement des protocoles et analyser les données qui vont circuler. Malheureusement, dans certains cas, nous devons avoir recours à des outil plus rustiques comme des traces en \Index{hexadécimal}\footnote{\url{https://fr.wikipedia.org/wiki/Syst\%C3\%A8me\_hexad\%C3\%A9cimal}} (base 16).  Il faut donc se familiariser avec ces outils, ce que nous allons faire dare-dare en analysant des requêtes HTTP simples.
+\Index{Wireshark} va être notre ami dans la suite de cet ouvrage pour comprendre le fonctionnement des protocoles et analyser les données qui vont circuler. Malheureusement, dans certains cas, nous devons avoir recours à des outil plus rustiques comme des traces en \Index{hexadécimal}\footnote{\url{https://fr.wikipedia.org/wiki/Syst\%C3\%A8me\_hexad\%C3\%A9cimal}} (base 16).  Il faut donc se familiariser avec ces outils, ce que nous allons faire dare-dare en analysant des requêtes HTTP simples. Si vous avez accès à un ordinateur pouvant faire tourner Wireshark, nous vous recommandons d'essayer de faire les manipulation indiquées et de répondre aux questions.
 
 \section{Installation}
 
@@ -118,7 +118,7 @@ Cela fait beaucoup de trafic, nous allons limiter ce qui est affiché en ajoutan
 
 \noindent n'oubliez par le double \texttt{==} et la fenêtre doit devenir verte quand tout sera tapé indiquant que la syntaxe du filtre est correcte. En appuyant sur entrée, la fenêtre doit se vider.
 
-\section{Analyse du trafic web}
+\subsection{Analyse du trafic web}
 
 Dans la barre d'adresse de votre navigateur préféré, taper l'URL suivante:
 
@@ -159,3 +159,250 @@ Trois phases peuvent être distinguées~:
     \end{itemize}
     \item le serveur termine la connexion après 5 secondes d'inactivité. La fermeture se fait en échangeant 4 messages TCP.
 \end{itemize}
+
+\Question{Code de notification de HTTP}
+{Dans la trace suivante, nous avons vu que le serveur répondait aux requêtes du client par un numéro à 3 chiffres. A l'aide du \rfc{7231}, pouvez-vous attribuer le chiffre de gauche à une catégorie de notifications:
+  \vspace{1em}
+
+\tabto{3cm}
+\begin{description}
+    \item    0 $\square$ \tab\tab $\square$ Redirection 
+    \item    1 $\square$ \tab\tab $\square$ Erreur coté serveur
+    \item    2 $\square$ \tab\tab $\square$ Erreur coté client
+    \item    3 $\square$ \tab\tab $\square$ Non attribué 
+    \item    4 $\square$ \tab\tab $\square$ Succès
+    \item    5 $\square$ \tab\tab $\square$ Information 
+\end{description}
+
+}
+{
+\begin{description}
+    \item    0~:  Non attribué 
+    \item    1~: Information 
+    \item    2~: Succès
+    \item    3~: Redirection
+    \item    4~: Erreur coté client
+    \item    5~: Erreur coté serveur
+\end{description}}
+
+\subsection{Analyse des requêtes HTTP}
+
+La version 1.1 du protocole \ac{HTTP}  est spécifiée par le \rfc{7230}. Nous allons regarder une petite description en anglais de l'architecture et des formats des messages.
+
+\begin{termc} [basicstyle=\footnotesize\ttfamily, frame=single]
+
+2.  Architecture
+
+  HTTP was created for the World Wide Web (WWW) architecture and has
+  evolved over time to support the scalability needs of a worldwide
+  hypertext system.  Much of that architecture is reflected in the
+  terminology and syntax productions used to define HTTP.
+
+2.1.  Client/Server Messaging
+
+  HTTP is a stateless request/response protocol that operates by
+  exchanging messages  across a reliable transport- or
+  session-layer "connection".  An HTTP "client" is a
+  program that establishes a connection to a server for the purpose of
+  sending one or more HTTP requests.  An HTTP "server" is a program
+  that accepts connections in order to service HTTP requests by sending
+  HTTP responses.
+
+\end{termc}
+
+\Question{Organisme de standardisation.}
+{
+Quelle organisation de standardisation a publié ce document ?
+
+\begin{itemize}[label=$\circ$]
+   \item \Wrong{Microsoft}
+   \item \Wrong{ISO}
+   \item \Wrong{IEEE}
+   \item \Correct{IETF}
+ \end{itemize}
+}
+{
+Le préfixe \acl{RFC} est caractéristique de l'IETF.
+}
+Le RFC indique ensuite :
+
+\begin{termc} [basicstyle=\footnotesize\ttfamily, frame=singlelabel={lst-rfc7230}]
+  The terms "client" and "server" refer only to the roles that these
+  programs perform for a particular connection.  The same program might
+  act as a client on some connections and a server on others. [...]
+ 
+  Most HTTP communication consists of a retrieval request (GET) for a
+  representation of some resource identified by a URI.  In the simplest
+  case, this might be accomplished via a single bidirectional
+  connection (===) between the user agent (UA) and the origin
+  server (O).
+
+           request   >
+      UA ======================================= O
+                                  <   response
+
+  A client sends an HTTP request to a server in the form of a request
+  message, beginning with a request-line that includes a method, URI,
+  and protocol version, followed by header fields
+  containing request modifiers, client information, and representation
+  metadata, an empty line to indicate the end of the
+  header section, and finally a message body containing the payload
+  body.
+
+  A server responds to a client's request by sending one or more HTTP
+  response messages, each beginning with a status line that includes
+  the protocol version, a success or error code, and textual reason
+  phrase possibly followed by header fields containing
+  server information, resource metadata, and representation metadata,
+  an empty line to indicate the end of the header
+  section, and finally a message body containing the payload body.
+
+  The following example illustrates a typical message exchange for a
+  GET request on the URI "http://www.example.com/hello.txt":
+
+  Client request:
+
+    GET /hello.txt HTTP/1.1
+    User-Agent: curl/7.16.3 libcurl/7.16.3 OpenSSL/0.9.7l zlib/1.2.3
+    Host: www.example.com
+    Accept-Language: en, mi
+
+  Server response:
+
+    HTTP/1.1 200 OK
+    Date: Mon, 27 Jul 2009 12:28:53 GMT
+    Server: Apache
+    Last-Modified: Wed, 22 Jul 2009 19:15:56 GMT
+    ETag: "34aa387-d-1568eb00"
+    Accept-Ranges: bytes
+    Content-Length: 51
+    Vary: Accept-Encoding
+    Content-Type: text/plain
+
+    Hello World! My payload includes a trailing CRLF.
+\end{termc}
+
+\Question{Formatage des messages HTTP}
+{
+Est-ce que les en-têtes HTTP ont une taille fixe (vous pouvez aller voir le \rfc{7231} qui donne des indications sur le protocole) ?
+\begin{itemize}[label=$\circ$]
+   \item \Wrong{l'en-tête tient en une ligne de 80 caractères.}
+   \item \Correct{une ligne blanche sépare l'en-tête du contenu. L'en-tête peut contenir autant de lignes que nécessaire. }
+ \end{itemize}
+}
+{
+Comme on le voit sur l'exemple donné dans le RFC dans le message de réponse, l'en-tête HTTP contient, une ligne obligatoire, suivie d'options. Leur nombre n'est pas fixé par le standard. pour les séparer des données, une ligne blanche fait office de séparation.
+}
+
+\Question{Options des en-têtes HTTP}
+{
+Comment sont construites les lignes optionnelles de l'en-tête ?
+\begin{itemize}[label=$\circ$]
+   \item \Correct{mot-clé : valeurs}
+   \item \Wrong{un texte non formaté}
+   \item \Wrong{mot-clé : longueur des données : valeurs}
+ \end{itemize}
+}
+{
+L'en-tête est de taille variable. Elle comporte une première ligne obligatoire donnant la nature de la requête ou de la réponse, suivie d'informations optionnelles construites sur le format "mot clé : valeur". Une ligne blanche sépare l'en-tête du contenu.
+}
+
+\subsection{Analyse de la pile protocolaire}
+
+La trame contenant la requête HTTP GET permet de visualiser l'encapsulation protocolaire définie par le modèle de référence de l'\ac{ISO}. Dans Wireshark, en cliquant sur la trame, on peut la voir désassemblée et en hexadécimal dans les deux fenêtres comme le montre la figure~\vref{fig-ws-GET}.
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=1\columnwidth]{Pictures/ws-GET.png}}
+\caption{Contenu de la trame transportant la requête HTTP GET}
+\label{fig-ws-GET}
+\end{figure}
+
+  \vspace{1em}
+
+La deuxième fenêtre montre la pile protocolaire, inversée par rapport aux représentations classique (cf. figure~\vref{fig-fullstack}), mais correspondant à l'ordre des encapsulations dans la trame. Comment Wireshark a pu arriver à un tel résultat.
+
+\subsubsection{Ethernet}
+
+Wireshark reçoit une trame du réseau \Index{Ethernet} ou \Index{Wi-Fi}\footnote{Pour le réseau Wi-Fi, il transforme le format en celui d'une trame Ethernet pour un affichage plus compact.}. Le format d'un trame Ethernet est défini par le standard \Index{IEEE 802.3}. L'en-tête contient trois champs~: 
+\begin{itemize}
+    \item 6 octets pour l'adresse MAC du destinataire,
+    \item 6 octets pour l'adresse de la source.
+    \item 2 octets pour le protocole de niveau supérieur. Ainsi la valeur \texttt{0x0800} désigne IPv4 et \texttt{0x86dd} IPv6.
+\end{itemize}
+
+  \vspace{1em}
+
+Suivant le principe du modèle de référence de l'ISO, les adresses sont celles des nœuds adjacents, c'est-à-dire connecté au même réseau Ethernet ou Wi-Fi.
+
+  \vspace{1em}
+
+Dans notre cas, le protocole de niveau supérieur est donc un paquet IPv4 et Wireshark peut continuer à analyser, ce qui suit. Formellement se sont des données de la trame Ethernet, mais elles peuvent être comprise comme un paquet IPv4.
+
+\Question{Mon adresse}{
+Dasn l'exemple, figure~\vref{fig-ws-GET}, qu'elle est l'adresse Ethernet de la machine émettrice de la trame ?
+}{
+\texttt{10:65:30:b0:54:bf}. Attention, la trame commence par l'adresse de la destination, suivie de l'adresse de la source.
+}
+
+\subsubsection{IPv4}
+
+Le format des paquets IPv4 défini dans le \rfc{791} a très peu évolué depuis sa publication en 1981. La figure~\vref{fig-header-IPv4} reprend ce format. Sans entrer dans les détails, les champs~:
+
+\begin{itemize}
+    \item adresse \texttt{source} et \texttt{destination} vont contenir les adresses IPv4 sur 32 bits des équipements d'extrémité. Des équipements intermédiaires, appelés routeur se chargent de recopier le paquet vers sa destination.
+    \item Le champ \texttt{protocole} désigne la couche supérieure, la valeur 6 correspond à \Index{TCP} et 17 à \Index{UDP}.
+\end{itemize}
+
+\begin{figure}[tbp]
+
+	\center {
+    \begin{tikzpicture}
+
+	\draw (0.5, 5.5) node  [right] {\tiny{\tt{0..................7...................15...................23....................31}}};
+	
+	 \draw (0.5, 5) node (context) [right, shade,  draw, minimum height=0.5cm, minimum width=1.2cm] {\tiny{Ver.}};
+
+	\draw (1.7, 5) node (context) [right, draw, shade, minimum height=0.5cm, minimum width=1.2cm] {\tiny{IHL}};
+
+	 \draw (2.9, 5) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=2.4cm] {\tiny{DiffServ}};
+
+	 \draw (5.3, 5) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=4.8cm] {\tiny{Packet Length}};
+
+	 \draw (0.5, 4.5) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=4.8cm] {\tiny{Identifier}};
+	 \draw (5.3, 4.5) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=.9cm] {\tiny{flag}};
+	 \draw (6.2, 4.5) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=3.9cm] {\tiny{Offset}};
+
+	 \draw (2.9, 4) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=2.4cm, blue] {\tiny{Protocol}};
+
+	 \draw (0.5, 4) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=2.4cm] {\tiny{TTL}};
+
+	 \draw (5.3, 4) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=4.8cm] {\tiny{Checksum}};
+	 
+	 \draw (0.5, 3.5) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=9.6cm, blue] {\tiny{Source Address}};
+	 \draw (0.5, 3) node (context) [right, draw, shade,  minimum height=0.5cm, minimum width=9.6cm, blue] {\tiny{Destination Address}};
+
+
+	\end{tikzpicture}
+	} %\center
+
+\caption{Format d'un en-tête IPv4}
+\label{fig-header-IPv4}
+\end{figure}
+
+\Question{saut par saut}{
+Est-ce que l'adressse Ethernet \texttt{14:2e:5e:37:1e:6a} que l'on retrouve dans le paquet~\vref{fig-ws-GET} correspond à l'adresse Ethernet du destinataire du paquet ? A quoi correspond elle?
+}{
+Non, l'adresse Ethernet n'est valable que sur ce réseau Ethernet. Pour atteindre le destinataire le paquet devra traverser plusieurs routeurs. Comme la trame a été capturée sur la machine émettrice, cette adresse est donc celle du premier routeur traversé.
+}
+
+\subsubsection{TCP}
+
+Wireshark, à partir du champ protocole, détermine que les données IP qui suivent l'en-tête sont un message TCP, il peut donc poursuivre le désassemblage de la trame.
+
+
+
+
+
+
+  
+-
