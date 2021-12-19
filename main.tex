@@ -49,6 +49,7 @@
 \definecolor{deepgreen}{rgb}{0,0.5,0}
 \definecolor{ocre}{RGB}{51,102,0} 
 \definecolor{lightgray}{RGB}{229,229,229} 
+\definecolor{palerod}{RGB}{238,232,170}
 
 \newcommand\pythonstyle{\lstset{
 language=Python,
@@ -163,13 +164,13 @@ showstringspaces=false
 
 
 
-\newcommand\pythonlst[1]{
-\lstinputlisting[language=Python, backgroundcolor=\color{gray!10},   basicstyle=\footnotesize\ttfamily,
+\newcommand\pythonlst[2][]{
+\lstinputlisting[language=Python, backgroundcolor=\color{palerod},   basicstyle=\footnotesize\ttfamily,
   keywordstyle=\bfseries\color{green!40!black},
   commentstyle=\itshape\color{purple!40!black},
   identifierstyle=\color{blue},
-  stringstyle=\color{orange}, caption=#1,
-  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single] {Programs/#1}
+  stringstyle=\color{orange}, caption=#2,
+  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single, #1] {Programs/#2}\index{Programmes Python!#2}
   }
 
 
@@ -247,6 +248,8 @@ showstringspaces=false
 \input{Part3.0-Modbus}
 \input{Part4.0-ArchiIoT}
 \input{Part5.0-Data}
+\input{Part6.0-VSensors}
+\input{Part7.0-LoPy}
 
 
 

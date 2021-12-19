@@ -140,7 +140,7 @@ Wireshark a permis de visualiser le trafic échangé entre l'ordinateur et le se
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/ws-filtre.png}}
-\caption{Afficher de la page par Firefox}
+\caption{Diagramme temporel des échanges.}
 \label{fig-ws-filtre}
 \end{figure}
 
@@ -397,12 +397,146 @@ Non, l'adresse Ethernet n'est valable que sur ce réseau Ethernet. Pour atteindr
 
 \subsubsection{TCP}
 
-Wireshark, à partir du champ protocole, détermine que les données IP qui suivent l'en-tête sont un message TCP, il peut donc poursuivre le désassemblage de la trame.
+Wireshark, à partir du champ protocole valant 0x06, détermine que les données IP qui suivent l'en-tête sont un message TCP, il peut donc poursuivre le désassemblage de la trame. Le format de l'en-tête TCP est donné figure~\vref{fig-header-TCP}. Les numéros de port déterminent quelle application est utilisée. Si un client va prendre un numéro quelconque (50651 dans la trace figure~\vref{fig-ws-GET}), les serveurs vont utiliser des numéros connus de tous. Ainsi, les serveur Web se vont vus attribuer la valeur 80. Ils peuvent en choisir d'autres, comme on l'a vu lors de la constructions des \ac{URL}. 
 
 
+\begin{figure}[tbp]
+
+	\center {
+    \begin{tikzpicture}
+
+	\draw (0.5, 5.5) node  [right] {\tiny{\tt{0..................7...................15...................23....................31}}};
+	
+	 \draw (0.5, 5) node (SP) [right, shade,  draw, minimum height=0.5cm, minimum width=4.8cm] {};
+	 \draw (SP) node [blue] {\tiny{Source Port}};
+
+	 \draw (5.3, 5) node (DP) [right, shade,  draw, minimum height=0.5cm, minimum width=4.8cm] {};
+	 \draw (DP) node [blue] {\tiny{Destination Port}};
+	 
+	 \draw (0.5, 4.5) node (seq) [right, shade,  draw, minimum height=0.5cm, minimum width=9.6cm] {};
+	 \draw (seq) node  {\tiny{Sequence}};	 
+
+	 \draw (0.5, 4) node (ack) [right, shade,  draw, minimum height=0.5cm, minimum width=9.6cm] {};
+	 \draw (ack) node  {\tiny{Acknowledgment}};	 
+
+	 \draw (0.5, 3.5) node (offset) [right, shade,  draw, minimum height=0.5cm, minimum width=1.2cm] {};
+	 \draw (offset) node  {\tiny{Offset}};	 
+	 
+	 \draw (1.7, 3.5) node (res) [right, shade,  draw, minimum height=0.5cm, minimum width=1.8cm] {};
+	 \draw (res) node  {\tiny{reserved}};	 
+	 
+	 \draw (5.3, 3.5) node (fin) [left, shade,  draw, minimum height=0.5cm, minimum width=0.3cm] {};
+	 \draw (fin) node [rotate=90] {\tiny{FIN}};	 
+	 \draw (5, 3.5) node (syn) [left, shade,  draw, minimum height=0.5cm, minimum width=0.3cm] {};
+	 \draw (syn) node [rotate=90] {\tiny{SYN}};	 	 
+	 \draw (4.7, 3.5) node (rst) [left, shade,  draw, minimum height=0.5cm, minimum width=0.3cm] {};
+	 \draw (rst) node [rotate=90] {\tiny{RST}};	 	 
+	 \draw (4.4, 3.5) node (psh) [left, shade,  draw, minimum height=0.5cm, minimum width=0.3cm] {};
+	 \draw (psh) node [rotate=90] {\tiny{PSH}};	
+	 \draw (4.1, 3.5) node (ack) [left, shade,  draw, minimum height=0.5cm, minimum width=0.3cm] {};
+	 \draw (ack) node [rotate=90] {\tiny{ACK}};	
+	 \draw (3.8, 3.5) node (urg) [left, shade,  draw, minimum height=0.5cm, minimum width=0.3cm] {};
+	 \draw (urg) node [rotate=90] {\tiny{URG}};	
+	 
+	 \draw (5.3, 3.5) node (win) [right, shade,  draw, minimum height=0.5cm, minimum width=4.8cm] {};
+	 \draw (win) node  {\tiny{Window}};	 	 
+	 
+	 \draw (0.5, 3) node (checksum) [right, shade,  draw, minimum height=0.5cm, minimum width=4.8cm] {};
+	 \draw (checksum) node  {\tiny{Checksum}};
+
+	 \draw (5.3, 3) node (urgent) [right, shade,  draw, minimum height=0.5cm, minimum width=4.8cm] {};
+	 \draw (urgent) node  {\tiny{Urgent pointer}};
+
+	 \draw (0.5, 2.5) node (option) [right,  draw, minimum height=1.5cm, minimum width=9.6cm] {};
+	 \draw (option) node  {\tiny{Options}};	 	 
+	 
+
+	\end{tikzpicture}
+	} %\center
+
+\caption{Format d'un en-tête TCP}
+\label{fig-header-TCP}
+\end{figure}
 
 
+Wireshark connaît cette liste de numéro de port bien connu et peut continuer à analyser la trame comme étant du HTTP.
 
+Sans entrer dans les détails, on peut aussi remarquer une série de valeurs binaires qui servent par exemple à ouvrir ou fermer une connexion TCP. Si l'on reprend la phase d'ouverture de la connexion (cf. figure~\vref{fig-ws-filtre}), l'ouverture de connexion se fait par~:
+\begin{itemize}
+    \item l'émission par le client d'un message TCP avec le bit SYN de positionné,
+    \item le serveur répond en positionnant les bits SYN et ACK dans son message,
+    \item le client répond en renvoyant un message avec le bit ACK de positionné.
+\end{itemize}
 
+Ces trois messages qui ne contiennent pas de données servent à synchroniser la valeur initiale du champ \texttt{sequence} à chaque bout de la connexion.
   
--
+\Question{Fermeture de connexion}{
+A l'aide de la figure~\vref{fig-ws-GET} ou de vos captures Wireshark, quels sont les messages impliqués dans la fermeture du connexion?}
+{La fermeture de déconnexion nécessite l'envoie de quatre message. L'une des extrémité, par forcement celle qui a ouvert la connexion, envoie un message avec le bit FIN positionné. Il est acquitté par l'autre entité qui a son tour envoie un message avec le bit FIN positionné qui sera acquitté pour définitivement fermer la connexion.
+}   
+
+\section{Do it yourself}
+
+Un serveur Web peut s'écrire en Python grâce au module \Index{Flask}. Le programme \texttt{simple\_server.py} permet de créer un serveur Web sur son ordinateur.
+
+ \pythonlst{simple\_server.py}
+ 
+ Ce script nécessite quelques explications :
+
+\begin{itemize}
+    \item Limport ligne 1 importe l'objet Flask à partir du module flask.
+    \item A la ligne 2 une instance d'un objet Flask, c'est-à-dire un serveur web, est créée. Un nom lui est associé à des fins de débogage.
+    \item A la ligne 4 contient la partie la plus délicate du script. \texttt{@} est un décorateur qui est utilisé en python pour ajouter des propriétés à une fonction. Ici, nous associons un chemin d'URI et une méthode REST à la fonction qui est ensuite définie. De cette façon, lorsque le serveur Flash recevra une requête GET sur ce chemin d'URI, il appellera la fonction \texttt{hello\_word}.
+    \item La fonction texttt{hello\_word} retourne simplement un texte que le navigateur affichera.
+    \item le serveur est lancé, ligne 8, en appelant la methode \pfunction{Flask}{run}. Il va attendre sur toutes les interfaces (adresse joker \texttt{0.0.0.0}) et sur le port 8080. 
+\end{itemize}
+
+  \vspace{1em}
+
+Pour lancer le serveur, vous devez d'abord installer le module \texttt{Flask} avec \texttt{\Index{pip}}.
+
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+# @\textbf{pip3 install Flask}@
+Collecting Flask
+  Downloading Flask-2.0.2-py3-none-any.whl (95 kB)
+     |                                  | 95 kB 4.3 MB/s 
+Collecting Jinja2>=3.0
+  Downloading Jinja2-3.0.3-py3-none-any.whl (133 kB)
+...
+\end{termc}
+
+  \vspace{1em}
+
+Une fois le paquetage installé, il suffit d'exécuter le programme:
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+# @\textbf{python3.9 simple\_server.py}@
+ * Serving Flask app 'My First Web Server' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production
+   deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production
+   deployment.
+ * Running on http://192.168.1.53:8080/ (Press CTRL+C to quit)
+127.0.0.1 - - [14/Dec/2021 21:06:55] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2021 21:06:59] "GET /favicon.ico HTTP/1.1" 404 -
+\end{termc}
+
+
+\Question{loopback}
+{Quelle URI devez vous entrer dans votre navigateur pour accéder en local à ce serveur.}
+{L'adresse de loopback est \texttt{127.0.0.1} et le port est 8080, le chemin d'URI est \texttt{/}. L'URI est donc \texttt{http://127.0.0.1:8080/}.}
+
+\Question{Nom du serveur}{
+A l'aide de Wireshark, pouvez vous déterminer dans la réponse les valeurs des options HTTP \texttt{\Index{Content-Type}} et \texttt{Server}.
+
+Ne pas oublier que le trafic passe par l'interface \textit{loopback}. Pour afficher le trafic sur un port particulier, vous pouvez utiliser le filtre \texttt{tcp.port==XXXX}.
+}{
+On trouve les valeurs suivantes~:
+\begin{itemize}
+    \item \texttt{Server: Werkzeug/2.0.2 Python/3.9.6}
+    \item \texttt{Content-Type: text/html; charset=utf-8}. La ressource est codée en HTML en utilisant un codage ASCII sur 8 bits.
+\end{itemize}
+}
