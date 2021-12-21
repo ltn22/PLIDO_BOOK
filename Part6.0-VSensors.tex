@@ -17,7 +17,7 @@ Ca fait longtemps qu'on parle d'Internet des Objets, il est temps de mettre en p
 \label{fig-deux-terminaux}
 \end{figure}
 
-\subsection{Serveur Minimal}
+\subsection{Serveur Minimal}\label{chap-mini-serv}
 
 \pythonlst{minimal\_server.py}
 
@@ -42,7 +42,7 @@ On lance le programme serveur. Comme personne lui parle, il n'affiche rien.
 
 Le module \Index{virtual\_sensor} avec la classe du même nom, reflète de manière à peu près réaliste le comportement d'un capteur. On voit dans le programme principal (ligne 23 à 37) que l'on créé trois capteurs virtuels : un pour la température (ligne 31), un autre pour la pression (ligne 32), et le troisième pour l'humidité (ligne 34). L'argument \texttt{start} précise la valeur de départ, \texttt{variation} la plage de variation entre deux mesures et \texttt{min} et \texttt{max} les valeurs à ne pas dépasser. La boucle sans fin qui affiche les différentes valeurs toutes les secondes.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 > @\textbf{python3 virtual\_sensor.py}@
  54.956    999.850  30.609
  54.963   1000.473  32.505
@@ -59,7 +59,7 @@ Des scripts utilisant ce module peuvent être écrit, comme par exemple le progr
 
 La variable \texttt{t} contient la température qui est émise sur le port 33033 à l’adresse de \textit{loopback}. On obtient ainsi une communication entre deux programmes dans votre ordinateur dont l'adresse IP locale est \texttt{127.0.0.1}. Mais quand on lance le programme \texttt{minimal\_client1.py}, on obtient l’erreur suivante :
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
  >python3.5 minimal_client1.py
 Traceback (most recent call last):
   File "minimal_client1.py", line 11, in <module>
@@ -100,7 +100,7 @@ La solution la plus simple est de mettre ces trois valeurs dans un tableau pytho
 
 Cette chaîne de caractères JSON est à son tour transformé en chaîne d'octets avec encode et envoyée au serveur. Dans notre cas, le serveur ne fait qu'afficher la chaîne de caractères mais vous pouvez utiliser la méthode \pfunction{json}{loads} du module \texttt{json} pour desérialiser et en faire une structure Python dans le serveur, sur laquelle il est maintenant facile d'effectuer des opérations comme, par exemple, un calcul de moyenne.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\tiny, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny, escapechar=@]
 % @\textbf{python3 minimal\_server.py}@
 b'[19.93044784157464, 999.1552628155773, 35.723583473834566]' => b'5b31392e39333034343738343135373436342c203939392e313535c...
 b'[19.940155545405723, 998.7581534530281, 35.820037116376184]' => b'5b31392e3934303135353534353430353732332c203939382e3735...
@@ -123,7 +123,7 @@ Le passage de JSON à CBOR est très simple. Il suffit de changer un module \tex
      \vspace{1em}
 
 
-Le programme \pprog{minimal\_serveur.py} n'est pas modifié puisqu'il ne fait qu'afficher ce qu'il reçoit. 
+Le programme \pprog{minimal\_server.py} n'est pas modifié puisqu'il ne fait qu'afficher ce qu'il reçoit. 
 
 
 
@@ -131,7 +131,7 @@ Le programme \pprog{minimal\_serveur.py} n'est pas modifié puisqu'il ne fait qu
 
 
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=#]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=#]
 > #\texttbf{python3 minimal\_server.py}#
 b'\x83... => b'83fb40341086f3e8b66bfb408f3b7791c8d61ffb403fac15ba06088e'
 b'\x83... => b'83fb40341d4d28495268fb408f33d502185c3dfb403d95a2c4981444'
@@ -173,7 +173,7 @@ Pour réduire la taille des données transmises, nous allons utiliser des nombre
 \pythonlst[firstline=17,lastline=18, firstnumber=17]{minimal\_client6.py}
 
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\tiny, escapechar=#]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny, escapechar=#]
 > #\texttbf{python3 minimal\_server.py}#
 b'\x83\x19\x07\xd7\x1a\x00\x01\x86O\x19\x0c\xa7' => b'831907d71a0001864f190ca7'
 b'\x83\x19\x07\xd4\x1a\x00\x01\x86f\x19\x0cJ' => b'831907d41a00018666190c4a'

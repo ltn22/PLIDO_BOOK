@@ -127,7 +127,7 @@ AQIzNA==
 b'\x01\x0234'
 \end{termc}
 
-À noter que l'utilisation du \texttt{ser.\pfunction{str}{decode()}}, ligne 6, pour transformer une chaîne d'octets en chaîne de caractères, c'est-à-dire supprimer le \texttt{b} du début, peut être utilisé dans certains cas.
+À noter que l'utilisation du \texttt{ser.\pfunction{str}{decode}()}, ligne 6, pour transformer une chaîne d'octets en chaîne de caractères, c'est-à-dire supprimer le \texttt{b} du début, peut être utilisé dans certains cas.
 
 
 
@@ -236,7 +236,7 @@ JSON est facilement exploitable dans d’autres langages. Par exemple en Python,
 
 Le programme \pprog{example\_json.py} reprend la structure précédente. La variable \texttt{struct\_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\tiny]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {'Image': {'IDs': [17, 2371, 234, 38793], 'Height': 600, 'Animated': False, 'Title': 'Empty picture', 'Thumbnail': 
 {'Url': 'http://www.example.com/image/481989943', 'Width': 100, 'Height': 125}, 'Width': 800, 'Copyright': None}}
 {'Image': {'Animated': False,
@@ -252,14 +252,14 @@ Le programme \pprog{example\_json.py} reprend la structure précédente. La vari
 
 Grâce à la fonction \pfunction{json}{dumps} du module \texttt{json}, la variable \texttt{struct\_python} est transformée en JSON. Les mots clé  \texttt{False} et  \texttt{None} sont remplacés par  \texttt{false} et  \texttt{null}. Le programme affiche une chaîne de caractères.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\tiny]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {"Image": {"IDs": [17, 2371, 234, 38793], "Height": 600, "Animated": false, "Title": "Empty picture", "Thumbnail": 
 {"Url": "http://www.example.com/image/481989943", "Width": 100, "Height": 125}, "Width": 800, "Copyright": null}}
 \end{termc}
 
 Pour le retransformer, de JSON en variable Python, on utilise la fonction inverse \pfunction{json}{loads} qui traduit une chaîne de caractères en variable Python.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\tiny]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {'Image': {'Animated': False,
            'Copyright': None,
            'Height': 600,
@@ -314,7 +314,7 @@ Les cinq bits suivants contiennent soit une valeur soit une longueur indiquant c
 \subsection{CBOR en python}
 Les exemples qui vont suivre peuvent être testés sur votre ordinateur avec Python3. Si une erreur se produit au moment de la définition du module \texttt{\Index{cbor2}}, vous devez l'installer sur votre ordinateur en tapant la commande :
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\texttt{pip3 install cbor2}@
 \end{termc}
 
@@ -354,7 +354,7 @@ Le programme \texttt{cbor-integer-ex1.py}  affiche les puissances de $10$ entre 
 
 Le programme donne le résultat suivant~:
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
  # @\textbf{python3 cbor-integer-ex1.py}@
   0                              1 01
   1                             10 0a
@@ -401,7 +401,7 @@ Ainsi, pour coder -15, on va coder la valeur 14, ce qui donne en binaire 001-1 1
 
 Le programme \texttt{cbor-integer-ex2.py} reprend le même code que le programme précédent, mais la variable \texttt{v} est initialisée avec la valeur -1. Ce programme va traiter les puissances de 10 négatives.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
   # @\textbf{python3.5 cbor-integer-ex2.py}@
   0                             -1 20
   1                            -10 29
@@ -455,7 +455,7 @@ Le programme \texttt{cbor-string.py} montre la représentation de chaînes de ca
  
 Le résultat est le suivant :
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\tiny, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny, escapechar=@]
 # @\textbf{python3.5 cbor-string.py}@
   1 674c6f526157414e
   2 6e4c6f526157414e4c6f526157414e
@@ -497,7 +497,7 @@ Le type Liste de paires ou Map est indiqué par la valeur \texttt{101}. Il fonct
 
 \pythonlst{cbor-mapped.py}
 
-Le programme \texttt{cbor-mapped.py} donne un exemple d'encodage. A noter que la structure à encoder n'est pas directement compatible avec JSON\footnote{json.\pfunction{json}{dumps aurait converti les clés numériques en chaînes de caractères \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}}, certaines clés ne sont pas des chaînes de caractères.
+Le programme \texttt{cbor-mapped.py} donne un exemple d'encodage. A noter que la structure à encoder n'est pas directement compatible avec JSON\footnote{json.\pfunction{json}{dumps} aurait converti les clés numériques en chaînes de caractères \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}, certaines clés ne sont pas des chaînes de caractères.
 
        \vspace{1em}
 
@@ -533,7 +533,7 @@ CBOR enrichit le typage des données ; ce qui permet de manipuler plus facilemen
 
 Par exemple, le programme \texttt{cbor-tag.py} retourne les résultats suivants:
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\textbf{python3.5 cbor-tag.py}@
 2018-05-22
 c074323031382d30352d32325430303a30303a30305a
@@ -544,7 +544,7 @@ c074323031382d30352d32325430303a30303a30305a
 
 
 La représentation canonique montre plus facilement le tag dans la séquence binaire :
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 C0                                      # tag(0)
    74                                   # text(20)
       323031382D30352D32325430303A30303A30305A # "2018-05-22T00:00:00Z"
@@ -633,7 +633,7 @@ Il s'agit du tag 4, voir le chapitre \textbf{3.4.4. Decimal Fractions and Bigflo
 
 \ac{SenML} est une une spécification qui exploite JSON ou CBOR. Elle liste un ensemble de noms/unités/mesures et les standardise en un nom de clé unique. En utilisant cette standardisation, on facilite l'interopérabilité. Les clés et valeurs sont donc règlementées et typées pour éviter tous conflits d'interopérabilité. Le format est défini dans la \rfc{8428} et repose sur une structure de tableau regroupant des objets comme le montre la figure suivante tirée de la RFC.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 [
  {"bn" : "urn:dev:ow:10e2073a01080063", "bt":1.320067464e+09,
   "bu" : "\%RH", "v":21.2},

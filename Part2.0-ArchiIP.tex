@@ -153,44 +153,43 @@ Les \ac{URI} permettent de désigner une ressource de manière non ambiguë, c'e
 
 Par exemple, pour identifier une image, on peut la nommer
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 image
-\end{lstlisting}
+\end{termc}
 
 \noindent
 
 mais il y a peu de chance que ce nom soit unique, d'autres personnes sur Terre ont sûrement eu la même idée. En revanche, si je la fais précéder de mon numéro de téléphone
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}, 
-                    basicstyle= \ttfamily]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 33667789078image
-\end{lstlisting}
+\end{termc}
+
 
 \noindent
  sera unique si je ne nomme qu'une seule ressource "image". Un autre utilisateur sur le même principe pourra nommer sa ressource :
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}, 
-                    basicstyle= \ttfamily]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 33667239018image
-\end{lstlisting}
+\end{termc}
+
 
 \noindent
 sans ambiguïté possible. Cependant, comme le numéro de téléphone est unique dans l'espace des numéros de téléphone, d'autres numéros uniques pourraient entrer en conflit dans d'autres espaces de numérotation. 
 
 Pour éviter les conflits, il est intéressant de donner, au début l'espace de numérotation, par exemple :
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}, 
-                    basicstyle= \ttfamily]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 tel:33667789078image
-\end{lstlisting}
+\end{termc}
 
 \noindent
 et
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}, 
-                    basicstyle= \ttfamily]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 ss:33667789078image
-\end{lstlisting}
+\end{termc}
+
 
 \noindent
 Les deux identifiants seront uniques, même si le hasard a fait que ce numéro de téléphone et ce numéro de sécurité sociale coïncident.
@@ -204,21 +203,21 @@ Les \ac{URI} formalisent ce principe. Le \rfc{3986} explique comment ils peuvent
 
 Par exemple~:
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}, 
-                    basicstyle= \ttfamily]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 mailto:mduerst@ifi.unizh.ch
 ssh://utilisateur@example.com
 ftp://ftp.is.co.za/rfc/rfc1808.txt
-\end{lstlisting}
+\end{termc}
+
 
       \vspace{1em}
 
 Ainsi, si je mets une ressource sur un site Web, celui-ci est identifié par un nom de domaine, par exemple \texttt{example.com}. Je suis propriétaire de ce nom. Je peux donc l’utiliser pour identifier de manière unique ma ressource. Si on reprend le principe de construction d’un URI, j’aurai :
 
-\begin{lstlisting}[backgroundcolor = \color{yellow!20}, 
-                    basicstyle= \ttfamily]
+\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily, escapechar=@]
 http://example.com/ma_ressource
-\end{lstlisting}
+\end{termc}
+
 
 Personne d’autre dans l’univers ne pourra identifier ses ressources avec cette chaîne de caractères puisque \texttt{example.com} m’appartient. Je dispose donc d’un espace de nommage infini qui me permet de désigner l’ensemble infini de ressources sans que personne d’autre ne puisse prendre les mêmes noms. Un \ac{URI} est une construction administrative permettant d’attribuer un identifiant unique global à une ressource spécifique.
 
