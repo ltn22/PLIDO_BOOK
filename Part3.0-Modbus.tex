@@ -82,8 +82,8 @@ La suite de la trame contient les données puis un \ac{CRC} pour valider qu'il n
 Regardons de plus près un exemple concret. On va utiliser un capteur de température et d'humidité, le \Index{XY-MD02} (cf. figure~\vref{fig-XYMD02}) dont les spécifications sont facilement accessibles via une recherche sur Internet. 
 
 \begin{figure}[tbp]
-\centerline{\includegraphics[width=0.5\columnwidth]{Pictures/XY-MD02.png}}
-\caption{XY-MD02}
+\centerline{\includegraphics[width=0.6\columnwidth]{Pictures/XY-MD02.png}\includegraphics[width=0.4\columnwidth]{Pictures/rs485-usb.png}}
+\caption{XY-MD02 et Adaptateur USB/RS-485}
 \label{fig-XYMD02}
 \end{figure}
 
@@ -95,13 +95,8 @@ La partie verte, se compose de quatre connecteurs dont la signification est indi
 \Youtube{https://youtu.be/mnRiYaYt2uI}
 \end{wrapfigure}
 
-Un adaptateur \Index{USB}/\Index{RS-485} (cf. figure~\vref{fig-USBRS485}) est connecté à un ordinateur. On y retrouve les deux bornes A+ et B- du bus RS-846. L'ordinateur joue le rôle de primaire qui va interroger le capteur de température.  
+Un adaptateur \Index{USB}/\Index{RS-485} (cf. figure~\vref{fig-XYMD02}) est connecté à un ordinateur. On y retrouve les deux bornes A+ et B- du bus RS-846. L'ordinateur joue le rôle de primaire qui va interroger le capteur de température.  
 
-\begin{figure}[tbp]
-\centerline{\includegraphics[width=0.3\columnwidth]{Pictures/rs485-usb.png}}
-\caption{Adaptateur USB/RS-485}
-\label{fig-USBRS485}
-\end{figure}
 
     \vspace{1em}
 

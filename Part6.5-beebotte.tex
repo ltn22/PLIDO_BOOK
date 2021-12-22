@@ -4,20 +4,22 @@
 \Youtube{https://youtu.be/xrdCY4iN40s}
 \end{wrapfigure}
 
-Les capteurs virtuels que nous avons programmés jusqu’à présent émettent les données à chaque fois que celles-ci sont mesurées. Cela permet au serveur de suivre en temps réel le comportement du système étudié. Mais dans certains cas, le temps réel n’est pas nécessaire et il est préférable de limiter le nombre d’émissions, par exemple pour économiser l'énergie du capteur.
+Les capteurs virtuels que nous avons programmés jusqu’à présent émettent les données à chaque fois que celles-ci sont mesurées. 
+Cela permet au serveur de suivre en temps réel le comportement du système étudié. 
+Mais dans certains cas, le temps réel n’est pas nécessaire et il est préférable de limiter le nombre d’émissions, par exemple pour économiser l'énergie du capteur.
 
 Pour ce faire, nous pouvons utiliser un tableau qui va accumuler les valeurs et l’envoyer quand le tableau atteint une certaine taille.
 
 
 \section{Envoi d'un tableau}
 
-Le programme \pprog{minimal\_humidity1.py} accumule les données dans un tableau \texttt{h\_humidity} quand celui-ci atteint 30 élements (ligne 17), les données sont envoyées au serveur.
+Le programme \pprog{minimal\_humidity1.py} accumule les données dans un tableau \texttt{h\_humidity} quand celui-ci atteint 30 éléments (ligne 17), les données sont envoyées au serveur.
 
 \pythonlst{minimal\_humidity1.py}
 
 
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=#]
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
 1 4 [3241]
 2 7 [3241, 2945]
 3 10 [3241, 2945, 2762]
@@ -30,23 +32,24 @@ Le premier chiffre de la ligne indique le nombre d'éléments et le second la ta
 
 \section{Codage par différence}
 
-On peut optimiser le volume de données transférées en utilisant un codage par delta (i.e. la variation de l'humidité). La première valeur du tableau correspond à la valeur mesurée tandis que les suivantes représentent la différence entre la valeur mesurée et la précédente.
+On peut optimiser le volume de données transférées en utilisant un codage par delta (i.e. la variation de l'humidité). 
+La première valeur du tableau correspond à la valeur mesurée tandis que les suivantes représentent la différence entre la valeur mesurée et la précédente.
 
 \pythonlst[firstline=17,lastline=26,  firstnumber=17]{minimal\_humidity2.py}%[firstline=282,lastline=19, firstnumber=282]
 
 Le programme \pprog{minimal\_humidity2.py} gère différemment le remplissage du tableau~:
 
 \begin{itemize}
-    \item ligne 14 et 15, si le tableau est vide, le tableau est créé avec la valeur msesurée,
+    \item ligne 14 et 15, si le tableau est vide, le tableau est créé avec la valeur mesurée,
     \item ligne 16 à 22, sinon si le tableau est plein, il est sérialisé en CBOR et envoyé au serveur, puis réinitialisé avec la valeur mesurée,
-    \iten ligne 23 et 24, sinon la différence entre la précédente valeur et celle mesurée est stockée dans le tableau.
+    \item ligne 23 et 24, sinon la différence entre la précédente valeur et celle mesurée est stockée dans le tableau.
 \end{itemize}
 
        \vspace{1em}
 
 Le listing suivant donne un exemple d'exécution.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=#]
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
 1 4 [2521]
 2 6 [2521, 79]
 3 8 [2521, 79, 224]
@@ -60,8 +63,10 @@ Le listing suivant donne un exemple d'exécution.
 
 Ceci met en valeur deux souplesses de CBOR :
 \begin{itemize}
-    \item la taille du tableau est dynamique. Si l’on change le nombre de valeurs à transmettre, le tableau l’indique et l’on n’a pas besoin de modifier le code du récepteur ;
-    \item la taille des données dépend de leur valeur. Pour les variations entre -24 et +23, un seul octet sera nécessaire. On le voit sur l’exemple précédent : l’ajout de la valeur '1' dans le tableau fait passer la taille de la représentation CBOR de 12 à135 octets. Les valeurs entre 256 et +255 sont transmises sur 2 octets ; il est donc possible de cette manière d’optimiser la transmission sans ajouter de contrainte. S’il y avait une brusque variation de l’humidité, la représentation CBOR s’adapterait pour la transmettre.
+    \item la taille du tableau est dynamique. Si l’on change le nombre de valeurs à transmettre, le tableau l’indique et l’on n’a pas besoin de modifier le code du récepteur ;
+    \item la taille des données dépend de leur valeur. 
+    Pour les variations entre -24 et +23, un seul octet sera nécessaire. 
+    On le voit sur l’exemple précédent : l’ajout de la valeur '1' dans le tableau fait passer la taille de la représentation CBOR de 12 à 135 octets. Les valeurs entre 256 et +255 sont transmises sur 2 octets ; il est donc possible de cette manière d’optimiser la transmission sans ajouter de contrainte. S’il y avait une brusque variation de l’humidité, la représentation CBOR s’adapterait pour la transmettre.
 \end{itemize}
 
 La taille est réduite d"un tiers (environ 66 octets) pour transmettre la même information.
@@ -93,7 +98,9 @@ Il existe plusieurs sites qui permettent de le faire. Nous allons utiliser \url{
 
 La première étape consiste à créer un compte en cliquant sur \textit{Sign Up} sur la page de garde et en remplissant un formulaire classique avec votre login, adresse de courrier électronique et mot de passe. Une fois le compte validé, le service est accessible.
 
-Le compte nous permet de nous authentifier pour gérer les données sur le site, mais il faut également disposer d’autorisation pour pouvoir y déposer des données via l’\Index{API REST}. Pour cela, il faut se rendre sur la page \textit{Account Setting} puis l’onglet \textit{Access Management}. Cette page (cf. figure~\vref{fig-bb-key}) donne une clé et un secret pour gérer l’ensemble des données sur le site. 
+Le compte nous permet de nous authentifier pour gérer les données sur le site, mais il faut également disposer d’autorisation pour pouvoir y déposer des données via l’\Index{API REST}.
+Pour cela, il faut se rendre sur la page \textit{Account Setting} puis l’onglet \textit{Access Management}. 
+Cette page (cf. figure~\vref{fig-bb-key}) donne une clé et un secret pour gérer l’ensemble des données sur le site. 
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/bb_root_token.png}}
@@ -104,7 +111,7 @@ Le compte nous permet de nous authentifier pour gérer les données sur le site,
 
 Notez ces valeurs et stockez les dans un fichier \pprog{config\_bbt.py} qui a cet aspect (vos valeurs sont forcément différentes) :
 
-\pythonlst{config_bbt.py}
+\pythonlst{config\_bbt.py}
 
 
 
@@ -171,13 +178,13 @@ La fonction \texttt{to\_bbt} fait l’essentiel du travail de transformation. El
        \vspace{1em}
 
 Cette fonction transforme le tableau Python suivant :
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=#]
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=\#]
 [3311, 124, -144, -188, -94, 289, -1, -72, 1 ...
 \end{termc}
 
 en un tableau de dictionnaire :
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=#]
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=\#]
 [{'data': 33.11, 'resource': 'humidity', 'ts': 1596730115000.0},
  {'data': 34.35, 'resource': 'humidity', 'ts': 1596730125000.0},
  {'data': 32.91, 'resource': 'humidity', 'ts': 1596730135000.0},
@@ -187,24 +194,24 @@ en un tableau de dictionnaire :
 
        \vspace{1em}
 
-Chaque dictionnaire contient trois éléments imposés par beebotte :
+Chaque dictionnaire contient trois éléments imposés par Beebotte :
 
 \begin{itemize}
-\item le nom de la ressource (\texttt{resource}) telle qu’elle a été définie sur l’interface pour le canal ;
+\item le nom de la ressource (\texttt{resource}) telle qu'elle a été définie sur l’interface pour le canal ;
 \item la valeur associée pour cette ressource (\texttt{data}) ;
-\item l’instant à laquelle cette mesure à été faite\texttt{ (}ts). Le temps est représenté suivant le format \Index{Epoch} qui compte le nombre de secondes depuis le 1er Janvier 1970\footnote{voir \url{https://www.epochconverter.com/} pour les conversions.}.
+\item l’instant à laquelle cette mesure a été faite (\texttt{ts}). Le temps est représenté suivant le format \Index{Epoch} qui compte le nombre de secondes depuis le premier Janvier 1970\footnote{voir \url{https://www.epochconverter.com/} pour les conversions.}.
 \end{itemize}
 
        \vspace{1em}
 
-Le calcul du timestamp (\textt{ts}) est l’opération la plus complexe de cette fonction mais les module \texttt{time} et \texttt{datetime} facilitent le calcul. 
+Le calcul du \textit{timestamp} (\texttt{ts}) est l’opération la plus complexe de cette fonction mais les module \texttt{time} et \texttt{datetime} facilitent le calcul. 
 Si l'argument \texttt{epoch} a été fourni lors de l'appel, la fonction prend cette valeur, sinon le calcule ligne 23. La fonction \pfunction{datetime}{now} retourne la date et l'heure courante, qui est transformé en un tuple grâce à la fonction \pfunction{datetime}{timetuple}. A partir de ce dernier, la fonction \pfunction{time}{maketime} le converti en epoch. 
 
 
 
 Ligne 25, l'epoch à laquelle la première mesure du tableau a été faite est calculé en prenant le temps actuel (cela suppose que l’on néglige le temps de traitement et de transmission) auquel on retranche la durée de la capture, c’est-à-dire comme le nombre d’éléments du tableau multiplié par l’intervalle entre chaque mesure (\texttt{period}). 
 
-Ligne 32 à 34 la structure attendue par Beebotte est construite. le résultat est envoyé, ligne 38, grâce à la fonction \pfunction{beebotte}{writeBulk} qui permet d'envoyer un ensemble de valeurs.
+Ligne 32 à 34 la structure attendue par Beebotte est construite. le résultat est envoyé, ligne 38, grâce à la fonction \pfunction{beebotte}{writeBulk} qui permet d'envoyer un ensemble de valeurs dans un tableau.
 
        \vspace{1em}
 
@@ -218,3 +225,142 @@ On peut vérifier que Beebotte a reçu des données en visualisant le canal capt
 
 \subsection{Visualisation des ressources}
 
+Maintenant que les ressources sont stockées dans les serveurs de Beebotte, il est possible de les visualiser graphiquement, en allant dans \textit{Dashboard} puis \textit{create Dashboard} et \textit {Add Widget} pour sélectionnez un widget comme \textit{Multi-line chart}.
+
+ 
+
+Puis, configurez le widget en définissant le canal et la ressource de ce canal comme le montre la figure~\vref{fig-widget}.
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=0.5\columnwidth]{Pictures/bb_new_widget.png}}
+       \vspace{1em}
+\centerline{\includegraphics[width=0.5\columnwidth]{Pictures/bb_conf_widget.png}}
+\caption{Création d'un widget}
+\label{fig-widget}
+\end{figure}
+
+
+En retournant sur le dashboard, on peut voir l’évolution de l’humidité au cours du temps (cf. figure~\vref{fig-bb-humidity}). 
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=1\columnwidth]{Pictures/bb_humidity.png}}
+\caption{Suivi de l'humidité}
+\label{fig-bb-humidity}
+\end{figure}
+
+\section{Interopérabilité}
+
+La chaîne de collecte de l'information que nous venons de construire allant du capteur à l'affichage, n'est pas complètement interopérable. Certes le capteur envoie des données au format CBOR qui peuvent être interprété par l'autre extrémité, mais le récepteur ne sait pas~:
+\begin{itemize}
+    \item qu'il s'agit d'une série temporelle codée avec des deltas~;
+    \item que les données ont été multipliée par 100 pour pouvoir envoyer des nombres entiers, plus compacts sans perdre trop de précision~;
+    \item que le pas de mesure est de 10 secondes
+    \item que les données concernent le taux d'humidité.
+\end{itemize}
+
+Ces informations ont été précisées dans le programme \pprog{display\_server.py}, de même la transformation de la structure de tableau de la série temporelle en un dictionnaire avec des mots clés spécifique à Beebotte on été gravé dans le programme. 
+
+       \vspace{1em}
+
+Nous verrons par la suite comment améliorer cette interopérabilité.
+
+\section{et SenML ?}
+
+Dans la communication avec Beebotte,  le site structure l’envoi des mesures en définissant un dictionnaire JSON avec des mots clés particuliers. Pour utiliser un autre site, le format des échanges doit êter modifié même si les informations restent identiques.
+
+       \vspace{1em}
+
+De plus, lors de la configuration des ressources sur le site de Beebotte, la nature de la mesure a du être précisée~; par exemple, s’il s’agit d’une température, d’un taux d’humidité... Il faut également parfois indiquer le type de la mesure (texte, entier, flottant...) voire les unités. 
+
+       \vspace{1em}
+
+\ac{SenML} défini dans le \rfc{8428} propose une structuration des données fournie par le capteur. 
+Pour réduire l’impact de la transmission, les noms des champs ont été choisis pour être le plus compact possible. 
+Par exemple, la lettre \texttt{v}  va indiquer une valeur (à comparer avec la clé \texttt{data} utilisée lors de la communication avec Beebotte). 
+Pour être encore plus compact, la représentation en CBOR utilisera des entiers courts au lieu de caractères.
+
+       \vspace{1em}
+
+Il est également possible de transporter l’unité de la mesure avec le mot clé \texttt{u} .
+
+
+SenML ne définit pas que des unités  du système international, mais également des unités secondaires pour limiter la taille de la représentation. Il sera plus compact de transmettre :
+
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
+{"u": "MHz", "v": 868}
+\end{termc}
+
+que
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=\#]
+{"u": Hz", "v": 868000000}.
+\end{termc}
+
+Le standard définit aussi des temps de base et des valeurs de base auxquelles les temps et les valeurs vont se référer ; ce qui permet également de réduire la taille des valeurs. Finalement, le ou les objets peuvent s’identifier dans les données transmises en définissant un nom de base (\texttt{bn} : \textit{base name}), le nom du capteur (\texttt{n} : \textit{name}) vient compléter le nom de base.
+
+\subsubsection{Émission}
+
+\pythonlst{minimal\_senml\_client.py}
+
+Le programme \pprog{minimal\_senml\_client.py} illustre le fonctionnement de SenML. Il repose sur deux objets~:
+\begin{itemize}
+\item l'objet \pfunction{kpn\_senml}{SenmlPack} inclus les informations commune à l'objet, comme le nom de base (ici \texttt{device1} ligne 23) ou la base de temps, ligne 24.
+\item l'objet \pfunction{kpn\_senml}{SenmlRecord} contient une mesure où l'on peut préciser son nom, son unité et sa valeur (lignes 32, 38 et 43). Le temps est également précisé ligne 35. Ces enregistrements sont ajoutés à l'objet \texttt{pack}.
+\end{itemize}
+
+Le programme récupère les trois valeurs de température, humidité et pression (lignes 27 à 29) en les arrondissant à 2 chiffres après la virgule pour la température et l'humidité et converti la pression, d'hecto Pascal en Pascal puisque c'est l'unité définie par SenML. 
+
+Les mesures se font toutes les 10 seconde (délais ligne 48) et quand le nombre de mesures défini ligne 13 est atteint, le codage SenML en CBOR est envoyé au serveur. 
+
+       \vspace{1em}
+
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
+[{'bn': 'device1', 'bt': 1640110457.0,  
+  'n': 'temperature', 't': 0.0, 'u': 'Cel',   'v': 19.98},
+ {'n': 'humidty', 'u': '%RH', 'v': 28.46},
+ {'n': 'pressure', 'u': 'Pa', 'v': 100093}]
+JSON length:  177 bytes
+CBOR length:  104 bytes
+\end{termc}
+
+Ce premier listing montre le premier enregistrement pour les trois grandeurs mesurées. Il s'agit d'un tableau de 3 éléments. Le premier contient les valeurs de bases (ici le nom et l'heure de référence) suivi de la grandeur à mesurer, de son unité et sa valeur. Le deuxième et le troisième éléments, mettent à jours le nom de la grandeur, son unité et sa valeur, les autres informations précédemment définies restent valables.
+
+
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=@]
+[@\textcolor{gray}{\{'bn': 'device1',  'bt': 1640110457.0,}@
+ @\textcolor{gray}{ 'n': 'temperature',  't': 0.0, 'u': 'Cel', 'v': 19.98\},}@
+ @\textcolor{gray}{\{'n': 'humidty', 'u': '\%RH', 'v': 28.46\},}@
+ @\textcolor{gray}{\{'n': 'pressure', 'u': 'Pa', 'v': 100093\},}@
+ {'n': 'temperature', 't': 10.0, 'u': 'Cel', 'v': 20.03},
+ {'n': 'humidty', 'u': '%RH', 'v': 26.86},
+ {'n': 'pressure', 'u': 'Pa', 'v': 100065}]
+JSON length:  318 bytes
+CBOR length:  188 bytes
+ \end{termc}
+ 
+ Quand on ajoute 10 secondes plus tard de nouvelles mesures,  un temps relatif de 10 secondes est indiqué pour l'enregistrement des températures et il reste valable pour les enregistrements suivants.
+ 
+ \Question{codage}
+ {A quoi correspond la clé \texttt{'u' : 'Cel'} que l'on retrouve dans la structure précédente ? }
+ {Unité = degrés Celcius}
+ 
+ \Question{Accroissement}
+ {Dans les deux représentations JSON et CBOR, de combien la taille est-elle accrue par l'ajout des mesures effectuées ? d'où viennent ces différences ?}
+ {
+ Si l'on regarde le listing précédent, l'ajout des trois mesures fait augmenter la taille de 141 octets pour JSON et 84 pour CBOR. La différence vient de l'utilisation de nombre plus que de chaînes de caractères pour les clés. Ainsi 't' demande 3 caractères en JSON avec les guillemets, codé en CBOR, il faudrait 2 octets, un nombre inférieur à 23 se code sur un seul octet. Il y a egalement les virgules, espaces et fermeture de crochets qui ne sont pas présent en CBOR. Les nombres flottant comme \texttt{19.98} ont une représentation plus compacte en JSON (5 octets) qu'en CBOR où ils consomment 9 octets. Dans tous les cas l'accroissement est fortement dépendant du nom des éléments. Ici, il faut répéter à chaque fois \texttt{temperature}, \texttt{humidity} et \texttt{pressure}, soit 26 caractères.
+ }
+ 
+ \Question {Une seule grandeur}
+ {Si on ne s'intéressait qu'à une seule grandeur, par exemple l'humidité. A quoi ressemblerait la structure SenML en JSON ?}
+ {
+ Chaque nouvelle entrée ajoute 35 octets à la structure~: 
+ [\{'bn': 'device1',  'bt': 1640110457.0, 'n': 'humidty', 'u': '\%RH', 'v': 28.46\},\\
+ \{'t': 10.0, 'v': 26.86\},\\
+ \{'t': 20.0, 'v': 26.96\},\\
+ \{'t': 30.0, 'v': 27.01\}]\\
+ }
+ 
+ \subsubsection{Réception}
+ 
+ Le traitement par le module SenML tel qu'il est mis en œuvre n'est pas complet, il ne gère pas correctement les timestamps. Mais, il n'est pas vraiment nécessaire pour traiter ces messages. En effet, comme on l'a vu précédemment, les objets SenML sont cumulatifs, une clé reste présente dans les enregistrements suivants sauf si elle est redéfinie. 
+ 
+ Le programme suivant transforme la séquence SenML en le tableau qui sera envoyé à Beebotte, le \textit{base name} est interprété comme le nom du canal.
