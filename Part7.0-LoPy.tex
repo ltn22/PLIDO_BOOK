@@ -14,7 +14,7 @@ Cependant, si vous le pouvez, nous vous invitons à le faire sur de vrais objets
 \label{fig-lopy-bme280}
 \end{figure}
 
-Un LoPY4 se programme en Python (ou plutôt \Index{MicroPython} qui est la version du langage pour systèmes embarqués) pour traiter les données. Dans un premier temps, nous allons utiliser le Wi-Fi pour communiquer avec votre ordinateur mais, par la suite, nous mettrons en place une communication via \Index{LoRaWAN} ou \Index{Sigfox} qui peut vous demander plus de configuration mais vous permettra de mieux comprendre ces protocoles.
+Un LoPY4 se programme en Python (ou plutôt \Index{micro-python} qui est la version du langage pour systèmes embarqués) pour traiter les données. Dans un premier temps, nous allons utiliser le Wi-Fi pour communiquer avec votre ordinateur mais, par la suite, nous mettrons en place une communication via \Index{LoRaWAN} ou \Index{Sigfox} qui peut vous demander plus de configuration mais vous permettra de mieux comprendre ces protocoles.
 
      \vspace{1em}
 
@@ -24,12 +24,16 @@ Même si vous n’avez pas de LoPy4, vous pouvez parcourir cette section pour vo
 \section{Installation d'Atom}
 
 \Index{Atom} est un éditeur de texte performant, spécifiquement conçu pour le codage en différents langages. 
-Atom va nous aider à programmer en Python et va également gérer la communication avec notre LoPy via le port \Index{USB} (grâce au plugin \Index{pymakr}). Atom fonctionne à peu près de la même manière sur \Index{Mac OS}, \Index{Windows} et \Index{Linux}, mais en s’adaptant aux particularités du système d’exploitation (place dans les menus, nom des liens séries...). Donc, il se peut que vous ayez quelques différences entre ce que vous avez dans cet ouvrage et l’écran de votre ordinateur. Les menus et sites Web indiqués peuvent également changer au cours du temps même si nous nous efforçons de faire des mises à jour régulières du cours.
+Atom va nous aider à programmer en Python et va également gérer la communication avec notre LoPy via le port \Index{USB} (grâce au plugin \Index{pymakr}). 
+Atom fonctionne à peu près de la même manière sur \Index{Mac OS}, \Index{Windows} et \Index{Linux}, mais en s’adaptant aux particularités du système d’exploitation (place dans les menus, nom des liens séries...). 
+Donc, il se peut que vous ayez quelques différences entre ce que vous avez dans cet ouvrage et l’écran de votre ordinateur. 
+Les menus et sites Web indiqués peuvent également changer au cours du temps même si nous nous efforçons de faire des mises à jour régulières du cours.
 
 
      \vspace{1em}
 
-Pour commencer à programmer avec votre LoPy, vous devez installer sur votre ordinateur le logiciel Atom (voir sur \url{http://atom.io}). Vous pouvez télécharger le package correspondant à votre système d'exploitation (cf. figure suivante).
+Pour commencer à programmer avec votre LoPy, vous devez installer sur votre ordinateur le logiciel Atom (voir sur \url{http://atom.io}). 
+Vous pouvez télécharger le package correspondant à votre système d'exploitation (cf. figure suivante).
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/atom_dl.png}}
@@ -44,7 +48,7 @@ Lancez Atom en cliquant sur l’icône ou, sous Linux, en tapant atom dans un te
 
      \vspace{1em}
 
-Lancez Atom en cliquant sur l’icône ou, sous Linux, en tapant atom dans un terminal. L’écran d’accueil apparaît.
+Lancez Atom en cliquant sur l’icône ou, sous Linux, en tapant atom dans un terminal. L’écran d’accueil apparaît.
 
 \subsection{Communiquez avec votre Pycom}
 
@@ -64,7 +68,10 @@ Une fois le café bu et l’installation terminée, une nouvelle fenêtre (termi
 
      \vspace{1em}
 
-Ce terminal (cf.figure~\vref{fig-page-pymakr}) vous permettra de dialoguer avec le LoPy. Branchez le LoPy à votre ordinateur. Vous devriez voir l’invite\texttt{ >{}>{}>{}} caractéristique d’un interpréteur Python\footnote{Sous Linux, vous devez être membre du groupe dialout pour pouvoir gérer la communication sur le port USB. Si vous ne voyez par l’invite, tapez sudo adduser login dialout en remplaçant login par le nom de votre compte Linux. Reconnectez-vous sous votre compte.}.
+Ce terminal (cf.figure~\vref{fig-page-pymakr}) vous permettra de dialoguer avec le LoPy.
+Branchez le LoPy à votre ordinateur.
+Vous devriez voir l’invite\texttt{ >{}>{}>{}} caractéristique d’un interpréteur Python\footnote{Sous Linux, vous devez être membre du groupe dialout pour pouvoir gérer la communication sur le port USB. 
+Si vous ne voyez par l’invite, tapez \texttt{sudo adduser \textit{login} dialout} en remplaçant login par le nom de votre compte Linux. Reconnectez-vous sous votre compte.}.
 
      \vspace{1em}
 
@@ -76,7 +83,7 @@ Ce terminal (cf.figure~\vref{fig-page-pymakr}) vous permettra de dialoguer avec 
 
 Toutes les commandes que vous allez taper dans cette fenêtre vont s’exécuter sur votre LoPy. Par exemple, si vous tapez\footnote{Les fenêtres sur fond gris montrent le code micropython et leur résultat.}~:
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@]
 Connecting to /dev/ttyUSB0...
 >>> @\textbf{1+1}@
 2
@@ -104,7 +111,7 @@ Sur la partie droite, l'onglet vertical \textit{Setting} permet de modifier les 
 
 Pour programmer le LoPy, il faut récupérer les modules micropython. Le dépôt ca être téléchargé dans le répertoire de votre choix :
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{gray!10},  basicstyle=\ttfamily\small, escapechar=@]
 > git clone https://github.com/ltn22/PLIDObis.git
 \end{termc}
 
@@ -112,7 +119,8 @@ Dans le menu \textit{Files>Open Folder} d’Atom, sélectionnez le répertoire \
 
      \vspace{1em}
 
-En cliquant dans la fenêtre \textit{\Index{pymakr}} sur le bouton \texiit{Upload project to device}, les fichiers de ce répertoire vont être copiés dans la mémoire du LoPy. Par la suite, si un module est modifié, il devra être resynchronisé dans la mémoire du LoPy.
+En cliquant dans la fenêtre \textit{\Index{pymakr}} sur le bouton \textit{Upload project to device}, les fichiers de ce répertoire vont être copiés dans la mémoire du LoPy. 
+Par la suite, si un module est modifié, il devra être resynchronisé dans la mémoire du LoPy.
 
 \section{Connexion au réseau Wi-Fi}
 
@@ -126,7 +134,7 @@ Pour rattacher de LoPY à un réseau \Index{Wi-Fi}, il doit dans un premier temp
 
 Le fichier \texttt{\Index{boot.py}} a été copié lors du téléversement des fichiers dans la mémoire du LoPy. Au démarrage du LoPy, ce programme va chercher à se connecte à un réseau Wi-Fi. Comme le nom du réseau et la clé sécrète n'ont pas été founie, il n’y arrive pas. Le LoPy se transforme  en point d’accès. Au démarrage, le LoPy a dû afficher le message suivant, indiquant que le LoPy devient point d'accès Wi-Fi et va déployer son propre réseau sur lequel votre ordinateur peut se connecter. Le nom de ce réseau de les la forme \texttt{PLIDO\_XXXX} où \texttt{XXXX} est une séquence hexadécimal propre à l'équipement. La clé est \texttt{www.pycom.io}. Le LoPy à l'adresse \texttt{192.168.4.1} sur ce réseau.  
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{gray!10},  basicstyle=\ttfamily\small, escapechar=@]
 Failed to connect to any known network, going into AP mode
 To connect look for 'PLIDO_5bac' access point, key = 'www.pycom.io'
 \end{termc}
@@ -140,7 +148,7 @@ Mais ce n'est pas très intéressant car votre ordinateur va perdre sa connexion
 
 Le Pycom redémarre et doit maintenant afficher un message du genre :
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@]
 net to use ['MONWIFI']
 Connected to MONWIFI with IP address: @\ul{192.168.1.76}@
 Pycom MicroPython 1.20.2.r1 [v1.11-a5aa0b8] on 2020-09-09; LoPy4 with ESP32
@@ -152,11 +160,11 @@ Type "help()" for more information.
 
 Il est possible de pinguer ou de se connecter avec \Index{FTP} ou \Index{telnet} en utilisant cette adresse IP.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=@]
 # @\textbf{telnet \ul{192.168.1.76}}@
 Trying 192.168.1.86...
 Connected to 192.168.1.86.
-Escape character is ’ˆ]’.
+Escape character is '^]'.
 MicroPython v1.8.6-760-g90b72952 on 2017-09-01; LoPy with ESP32
 Login as: micro
 Password: python
@@ -188,7 +196,7 @@ Si le serveur tourne sur un serveur à l'extérieur (i.e. le \textit{cloud}), l'
 
 La commande suivante est tapée depuis le terminal de l'ordinateur, on remarque les deux interfaces disponibles l'une pour le réseau Ethernet ou Wi-Fi et l'une pour le \textit{\Index{loopback}}, les noms des interfaces peuvent changer d'une configuration à une autre~:
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=@]
 > @\textbf{ifconfig}@
 eth1      Link encap:Ethernet  HWaddr 10:65:30:b0:54:bf
           inet addr:@\ul{192.168.1.237}@  Bcast:192.168.1.255  Mask:255.255.255.0
@@ -217,7 +225,7 @@ Le programme \pprog{minimal\_server.py} présenté au chapitre~\vref{chap-mini-s
 
 Le programme \pprog{minimal\_server.py} doit être modifié (ligne 4) pour prendre en compte l'adresse IP du serveur obtenue avec la commande \texttt{ifconfig}. Si à chaque exécution sur le LoPy de ce programme, le serveur reçoit la valeur, la communication est établie entre les deux équipements.
 
-\begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
 > @\textbf{python3 minimal\_server.py}@
 b'message' => b'6d657373616765'
 b'message' => b'6d657373616765'
@@ -462,7 +470,7 @@ Pour ce faire, il faut connecter:
 
 Si le BME280 est connecté correctement sur les connecteurs du LoPy, vous devez obtenir le résultat suivant~:
 
-\begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\tiny, escapechar=@]
+\begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\tiny, escapechar=@]
 >>> Running BME280.py
 
 >>> 
@@ -487,7 +495,7 @@ Le programme \pprog{BME280.py} peut fonctionner comme un module mais la dernièr
 
 \item Le programme principal commence par importer (ligne 283) le module gérant le bus I2C. Il est invoqué à la ligne 286. Le LoPy va gérer la communication avec le BME280, donc l’adresse est \texttt{0} et son statut est\texttt{MASTER}. La vitesse de communication est ensuite spécifiée.
 
-\item La ligne suivante scanne le bus pour trouver des composants. Si tout va bien, il devrait en trouver un à l’adresse 118 qui correspond à l’adresse par défaut du BME280\footnote{Si une autre valeur est indiquée, vous pouvez à l'instantiation du module BME280, ligne 289, ajouter le paramètre \texttt{addr=\textit{valeur}}. }. Sinon, revoyez votre câblage.
+\item La ligne suivante scanne le bus pour trouver des composants. Si tout va bien, il devrait en trouver un à l’adresse 118 qui correspond à  l’adresse par défaut du BME280\footnote{Si une autre valeur est indiquée, vous pouvez à l'instantiation du module BME280, ligne 289, ajouter le paramètre \texttt{addr=\textit{valeur}}. }. Sinon, revoyez votre câblage.
 
 \item Le module BME280 est initialisé en lui passant en paramètre la référence du bus I2C précédemment défini.
 
@@ -498,4 +506,35 @@ Ainsi, les première et deuxième colonnes donnent les températures brute et ca
 \end{itemize}
 
 \section{Thermomètre Wi-Fi}
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/Ie-hGkkhsMQ}
+\end{wrapfigure}
+
+Vous avez maintenant tous les outils pour récupérer la température de votre logement, la transmettre à votre ordinateur via le Wi-Fi, et la transmettre à Beebotte pour l'afficher. Il y a très peu de changement par rapport à la version complètement sur ordinateur. Le programme de transformation de la structure CBOR de représentation des séries temporelles en JSON compréhensible par Beebottte reste le même. Il faudra juste modifier le nom du capteur d'humidité à température.
+
+Le programme que vous avez construit lors du TP précédent utilisait le module \texttt{virtual\_sensor} pour produire des séries temporelles aléatoires symbolisant le comportement d'un capteur. Maintenant que nous avons un \Index{BME280}, nous allons pouvoir traiter de vraies valeurs.
+
+     \vspace{1em}
+
+Le programme \pprog{wifi\_temperature.py} montre cette adaptation.
+
+\pycomlst{wifi\_temperature.py}\label{prog-wifi-temp}
+
+Au niveau des importations de modules, \texttt{BME280} et \texttt{\index{I2C}} remplacent \texttt{virtual\_sensor}, et le module \texttt{CBOR} est celui de \texttt{\Index{kpn\_senml}}. 
+Mais son comportement reste le même, en particulier la fonction \pfunction{kpn\_senml}{dumps} qui convertit une structure Python en CBOR. Il vous reste à adapter la ligne 26 pour mettre l’adresse IP de votre ordinateur.
+
+     \vspace{1em}
+
+Côté ordinateur, vous devez relancer le programme \pprog{display\_server.py}, mais en modifiant le nom du capteur de "humidity" à "temperature". 
+
+     \vspace{1em}
+
+Sur votre compte Beebotte, au bout de 300 secondes, vous devez voir des données associées au capteur "temperature".
+
+\Question{changement de pas}
+{Que se passe-t-il si dans le programme \pprog{wifi\_temperature.py} vous modifiez le pas de mesure ligne 36, pour le mettre par exemple à 60 secondes.}
+{
+Le programme \pprog{display\_server.py} doit être modifié également en ajoutant l'argument \texttt{period=60} à l'appel de \texttt{to\_bbt}.
+}
 

@@ -316,7 +316,7 @@ Les mesures se font toutes les 10 seconde (délais ligne 48) et quand le nombre 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
 [{'bn': 'device1', 'bt': 1640110457.0,  
   'n': 'temperature', 't': 0.0, 'u': 'Cel',   'v': 19.98},
- {'n': 'humidty', 'u': '%RH', 'v': 28.46},
+ {'n': 'humidity', 'u': '%RH', 'v': 28.46},
  {'n': 'pressure', 'u': 'Pa', 'v': 100093}]
 JSON length:  177 bytes
 CBOR length:  104 bytes
@@ -328,10 +328,10 @@ Ce premier listing montre le premier enregistrement pour les trois grandeurs mes
 \begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=@]
 [@\textcolor{gray}{\{'bn': 'device1',  'bt': 1640110457.0,}@
  @\textcolor{gray}{ 'n': 'temperature',  't': 0.0, 'u': 'Cel', 'v': 19.98\},}@
- @\textcolor{gray}{\{'n': 'humidty', 'u': '\%RH', 'v': 28.46\},}@
+ @\textcolor{gray}{\{'n': 'humidity', 'u': '\%RH', 'v': 28.46\},}@
  @\textcolor{gray}{\{'n': 'pressure', 'u': 'Pa', 'v': 100093\},}@
  {'n': 'temperature', 't': 10.0, 'u': 'Cel', 'v': 20.03},
- {'n': 'humidty', 'u': '%RH', 'v': 26.86},
+ {'n': 'humidity', 'u': '%RH', 'v': 26.86},
  {'n': 'pressure', 'u': 'Pa', 'v': 100065}]
 JSON length:  318 bytes
 CBOR length:  188 bytes
@@ -363,4 +363,66 @@ CBOR length:  188 bytes
  
  Le traitement par le module SenML tel qu'il est mis en œuvre n'est pas complet, il ne gère pas correctement les timestamps. Mais, il n'est pas vraiment nécessaire pour traiter ces messages. En effet, comme on l'a vu précédemment, les objets SenML sont cumulatifs, une clé reste présente dans les enregistrements suivants sauf si elle est redéfinie. 
  
- Le programme suivant transforme la séquence SenML en le tableau qui sera envoyé à Beebotte, le \textit{base name} est interprété comme le nom du canal.
+ 
+ \pythonlst{minimal\_senml\_server.py}
+ 
+ Le programme \pprog{minimal\_senml\_server.py} va convertir le format SenML codé en CBOR dans le format attendu par Beebotte. 
+ La version CBOR utilise ds nombres plutôt que des tags.
+ Le dictionnaire \texttt{naming\_map} defini lignes 10 à 12 permet la correspondance utilisé par la suite pour rendre le code plus lisible.
+ 
+ Les lignes 14 à 17 initialisent les communications venant du capteur et celles allant à Beebotte. 
+ 
+ Les données reçues ligne 21 sont transformée en structure Python ligne 23. Cette correspondance est possible car Python autorise des clés numériques et celles-ci ne sont pas répétées plusieurs fois dans une map CBOR.
+ 
+La boucle commençant ligne 28 permet d'explorer tous les éléments du tableau SenML, les nouvelles entrées sont fusionnées avec les anciennes (ligne 29)\footnote{Dans les version plus récentes de Python, il est possible d'utiliser l'opérateur \texttt{|}.}. 
+
+Les informations concernant le temps sont ensuite recherchées. 
+D'abord le temps (ligne 32) et s'il un temps de base existe (ligne 33) il est ajouté. On procède de même pour la valeur (lignes 38 à 40). Pour le nom, il n'y a pas de concaténation car le nom de base sera utilisé comme canal Beebotte, il est récupéré à la fin ligne 46.
+
+A partir de ces informations, la structure attendue par Beebotte est construite ligne 43 en ajoutant le dictionnaire dans le tableau \texttt{bbt\_record}.
+
+Ligne 47, l'information est envoyée à Beebotte. Si les clés d'authentification, le nom du canal et des ressources sont correct, les information s'affiche sur le site, comme précédemment. 
+
+\begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\tiny, escapechar=@]
+{0: 'temperature', 1: 'Cel', 2: 19.44, 6: 0.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'humidity', 1: '%RH', 2: 24.13, 6: 0.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'pressure', 1: 'Pa', 2: 101080, 6: 0.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'temperature', 1: 'Cel', 2: 19.48, 6: 10.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'humidity', 1: '%RH', 2: 21.85, 6: 10.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'pressure', 1: 'Pa', 2: 101090, 6: 10.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'temperature', 1: 'Cel', 2: 19.57, 6: 20.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'humidity', 1: '%RH', 2: 21.09, 6: 20.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'pressure', 1: 'Pa', 2: 101058, 6: 20.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'temperature', 1: 'Cel', 2: 19.52, 6: 30.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'humidity', 1: '%RH', 2: 20.39, 6: 30.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'pressure', 1: 'Pa', 2: 101120, 6: 30.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'temperature', 1: 'Cel', 2: 19.44, 6: 40.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'humidity', 1: '%RH', 2: 21.94, 6: 40.0, -3: 1640168049.0, -2: 'device1'}
+{0: 'pressure', 1: 'Pa', 2: 101128, 6: 40.0, -3: 1640168049.0, -2: 'device1'}
+[{'data': 19.44, 'resource': 'temperature', 'ts': 1640168049000.0},
+ {'data': 24.13, 'resource': 'humidity', 'ts': 1640168049000.0},
+ {'data': 101080, 'resource': 'pressure', 'ts': 1640168049000.0},
+ {'data': 19.48, 'resource': 'temperature', 'ts': 1640168059000.0},
+ {'data': 21.85, 'resource': 'humidity', 'ts': 1640168059000.0},
+ {'data': 101090, 'resource': 'pressure', 'ts': 1640168059000.0},
+ {'data': 19.57, 'resource': 'temperature', 'ts': 1640168069000.0},
+ {'data': 21.09, 'resource': 'humidity', 'ts': 1640168069000.0},
+ {'data': 101058, 'resource': 'pressure', 'ts': 1640168069000.0},
+ {'data': 19.52, 'resource': 'temperature', 'ts': 1640168079000.0},
+ {'data': 20.39, 'resource': 'humidity', 'ts': 1640168079000.0},
+ {'data': 101120, 'resource': 'pressure', 'ts': 1640168079000.0},
+ {'data': 19.44, 'resource': 'temperature', 'ts': 1640168089000.0},
+ {'data': 21.94, 'resource': 'humidity', 'ts': 1640168089000.0},
+ {'data': 101128, 'resource': 'pressure', 'ts': 1640168089000.0}]
+ \end{termc}
+ 
+ Le listing précédent montre cette transformation.
+ Les premières lignes correspondent aux enregistrements fusionnées et le tableau final, ce qui a été envoyé à Beebotte.
+ 
+ \Question{base value}
+ {
+ Pourrait-on utiliser le champ SenML \textit{base value} pour diminuer la taille des données de pression atmosphérique~?
+ }
+ {
+Cela serait possible, si cette ressource était envoyée seule.
+ }

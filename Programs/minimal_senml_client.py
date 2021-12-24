@@ -10,7 +10,7 @@ import time
 import pprint
 
 
-NB_ELEMENT = 2
+NB_ELEMENT = 5
 
 
 temperature = virtual_sensor(start=20, variation = 0.1)
@@ -35,12 +35,12 @@ while True:
         rec.time = time.mktime(datetime.datetime.now().timetuple())
         pack.add(rec)
 
-        rec = senml.SenmlRecord("humidty",
+        rec = senml.SenmlRecord("humidity",
             unit=senml.SenmlUnits.SENML_UNIT_RELATIVE_HUMIDITY,
             value=h)
         pack.add(rec)
 
-        rec = senml.SenmlRecord("presure",
+        rec = senml.SenmlRecord("pressure",
             unit=senml.SenmlUnits.SENML_UNIT_PASCAL,
             value=p)
         pack.add(rec)
