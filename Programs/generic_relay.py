@@ -69,7 +69,6 @@ def get_from_sigfox():
 @app.route('/TTN', methods=['POST']) # API V2 obsolete
 def get_from_TTN():
     fromGW = request.get_json(force=True)
-    pprint.pprint(fromGW)
 
     downlink = None
     if "payload_raw" in fromGW:
@@ -86,7 +85,6 @@ def get_from_TTN():
         print (downlink_msg)
         x = requests.post(fromGW["downlink_url"], data = json.dumps(downlink_msg))
 
-        print(x)
 
     resp = Response(status=200)
     print (resp)
@@ -94,26 +92,25 @@ def get_from_TTN():
 
 @app.route('/ttn', methods=['POST']) # API V3 current
 def get_from_ttn():
-    from ttn_config import TTN_Downlink_Key
-
     fromGW = request.get_json(force=True)
-    pprint.pprint(fromGW)
 
     downlink = None
     if "uplink_message" in fromGW:
+
         payload = base64.b64decode(fromGW["uplink_message"]["frm_payload"])
         downlink = forward_data(payload)
 
-        #downlink = b"downkink test"
-
         if downlink != None:
+            from ttn_config import TTN_Downlink_Key
+
             downlink_msg = {
                 "downlinks": [{
                     "f_port":   fromGW["uplink_message"]["f_port"],
                     "frm_payload": base64.b64encode(downlink).decode()
                 }]}
-            downlink_url = "https://eu1.cloud.thethings.network/api/v3/as/applications/" + \
-                            fromGW["end_device_ids"]["application_ids"]["application_id"] + \
+            downlink_url = \
+            "https://eu1.cloud.thethings.network/api/v3/as/applications/" + \
+            fromGW["end_device_ids"]["application_ids"]["application_id"] + \
                             "/devices/" + \
                             fromGW["end_device_ids"]["device_id"] + \
                             "/down/push"
@@ -126,12 +123,11 @@ def get_from_ttn():
             print(downlink_url)
             print (downlink_msg)
             print (headers)
-            x = requests.post(downlink_url, data = json.dumps(downlink_msg), headers=headers)
-
-            print(x)
+            x = requests.post(downlink_url, 
+                                data = json.dumps(downlink_msg), 
+                                headers=headers)
 
     resp = Response(status=200)
-    print (resp)
     return resp
 
 @app.route('/lns', methods=['POST'])

@@ -15,7 +15,7 @@ Les LoPy peuvent utiliser le réseau et bénéficie d'un an de connectivité gra
 
 Dans un premier temps, vous devez enregistrez votre capteur sur le site de Sigfox. Il vous faut deux éléments : son identifiant et son mot de passe appelé PAC (Porting Authorization Code). Ce dernier doit rester secret car il permet à toute personne qui le possède d’enregistrer un objet ou d’en changer le propriétaire.
 
-Le programme \pprog{sigfox\_id.py} permet d’afficher ces deux valeurs et d’envoyer un message sur le réseau Sigfox. 
+Le programme \lprog{sigfox\_id.py} permet d’afficher ces deux valeurs et d’envoyer un message sur le réseau Sigfox. 
 Avant de l’exécuter, vérifiez que vous avez branché une antenne sur le connecteur de droite, celui opposé au bouton Reset sur le Pycom, coté LED.
 
 \pycomlst{sigfox\_id.py} 
@@ -34,7 +34,7 @@ Maintenant que vous avez les précieux identifiants Sigfox, connectez-vous avec 
 
 \begin{itemize}
     \item indiquez votre pays ;
-\item remplissez le formulaire avec l'identifiant de l'objet et le \Index{PAC} que vous avez obtenus avec le programme \pprog{sigfox\_id.py} ;
+\item remplissez le formulaire avec l'identifiant de l'objet et le \Index{PAC} que vous avez obtenus avec le programme \lprog{sigfox\_id.py} ;
 \item indiquez à des fins de statistique ce qui vous amène ici ;
 \item créez votre compte Sigfox ;
 \end{itemize}
@@ -121,7 +121,7 @@ Une page similaire à la figure~\vref{fig-sigfox-api} s'affiche. Donnez un nom a
 
 Vous voyez apparaître une nouvelle page avec deux champs en hexadécimal : \textit{login} et \textit{password}, que vous devez, comme pour l'API de Beebotte, noter quelqe part ou apprendre par cœur pour la suite.
 
-Le mieux étant de remplir un fichier de configuration avec ces valeurs comme le montre le programme \pprog{config\_sigfox.py}.
+Le mieux étant de remplir un fichier de configuration avec ces valeurs comme le montre le programme \lprog{config\_sigfox.py}.
 
 \pycomlst{config\_sigfox.py}
 
@@ -200,7 +200,7 @@ La fin de la trace affiche un résumé plus lisble de l'information reçue~:
 
 \subsection{Sur le LoPy}
 
-Le programme \pprog{sigfox\_temperature.py} est une adaptation de \pprog{wifi\_temperature.py}, listing~\vref{prog-wifi-temp} dédié au Wi-Fi pour des transmission sur le réseau Sigfox.
+Le programme \lprog{sigfox\_temperature.py} est une adaptation de \lprog{wifi\_temperature.py}, listing~\vref{prog-wifi-temp} dédié au Wi-Fi pour des transmission sur le réseau Sigfox.
 
 \pycomlst{sigfox\_temperature.py}
 
@@ -253,7 +253,7 @@ Le  programme \pprog{device\_messages.py} récupère également ces valeurs depu
 
 Attention suivant les variations de la température, le message CBOR grandit plus au moins vite. Dans le cas précédent, il y avait une émission toutes les 90 secondes, or l'abonnement au réseau Sigfox limite le nombre d'émission à 140 messages par jours. Au bout de 3 heures le quota de message sera épuisé. Cette petite période d'émission permet de tester plus rapidement les solutions, mais il convient d'augmenter la période pour une utilisation régulière.
 
-\subsection{requête GET depuis le serveur}
+\subsection{requête GET depuis le serveur}\label{chap-sigfox-GET}
 
 Côté ordinateur, la stratégie la plus simple à mettre en œuvre consiste à étendre le programme \pprog{device\_message.py} vu précédemment et d'interroger périodiquement le \textit{backend} de Sigfox pour voir si de nouvelles données sont arrivées. Cela donne le programme \pprog{display\_sigfox.py} suivant~:
 
@@ -296,7 +296,7 @@ Ligne 91 et 92, la fonction \texttt{\Index{to\_btt}} (ligne 16 à 39 non représ
 Le programme attend 60 seconde avant de faire une nouvelle requête.
 
 
-\subsection{requête POST vers le serveur}
+\subsection{requête POST vers le serveur}\label{chap-sigfox-POST}
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/3y0U2E6x4kE}
@@ -371,7 +371,7 @@ Le programme \pprog{display\_server.py} attendant les données sur ce port pourr
 
  A noter que la fonction \texttt{forward\_data} peut retourner une réponse qui sera envoyée au client HTTP. Pour Sigfox, cette possibilité n'est pas prise en compte car Sigfox n'autorise que 4 messages descendant par jour. Nous détaillerons son fonctionnement lorsque nous étudierons les réseaux LoRaWAN.
  
- \pythonnxt[firstline=199,lastline=216, firstnumber=199]{generic\_relay.py}
+ \pythonnxt[firstline=195,lastline=217, firstnumber=195]{generic\_relay.py}
  
  La partie principale du programme analyse les arguments utilisés lors de son appel. Si l'option \texttt{-v} est utilisé, le programme affichera les messages relayés. D'autres options sont définies pour modifier les numéro de port. Ces dernières sont utiles si ces programmes sont lancés sur un même machine dans le cloud.
  
@@ -379,7 +379,7 @@ Le programme \pprog{display\_server.py} attendant les données sur ce port pourr
  
 L'exemple suivant trace le parcours d'une série temporelle depuis un LoPy jusuq'à son envoie au serveur Beebotte pour visualisation.
 
-\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@] 
+\begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 >>> Running sigfox_temperature.py
 
 >>>

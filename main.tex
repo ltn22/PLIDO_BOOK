@@ -88,6 +88,7 @@ showstringspaces=false
 
 \newcommand\glos[1]{\gls{#1}\index{#1}}
 \newcommand\pprog[1]{\texttt{#1}\index{Programmes Python!#1}}
+\newcommand\lprog[1]{\texttt{#1}\index{Programmes micro-python!#1}}
 
 
 % QUESTION
@@ -179,7 +180,7 @@ showstringspaces=false
   commentstyle=\itshape\color{purple!40!black},
   identifierstyle=\color{blue},
   stringstyle=\color{orange},
-  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single, #1] {Programs/#2}\index{Programmes Python!#2}
+  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single, #1] {Programs/#2}
   }
   
   
@@ -192,6 +193,14 @@ showstringspaces=false
   numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single, #1] {Programs/#2}\index{Programmes micro-python!#2}
   }
 
+\newcommand\pycomnxt[2][]{
+\lstinputlisting[language=Python, backgroundcolor=\color{gray!10},   basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+  numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=single, #1] {Programs/#2}
+  }
 
 
 
@@ -261,16 +270,16 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-\input{Part1.0-Intro}
-\input{Part2.0-ArchiIP}
-\input{Part2.5-Wireshark}
-\input{Part3.0-Modbus}
-\input{Part4.0-ArchiIoT}
-\input{Part5.0-Data}
-\input{Part6.0-VSensors}
-\input{Part6.5-beebotte}
-\input{Part7.0-LoPy}
-\input{Part8.0-Sigfox}
+%\input{Part1.0-Intro}
+%\input{Part2.0-ArchiIP}
+%\input{Part2.5-Wireshark}
+%\input{Part3.0-Modbus}
+%\input{Part4.0-ArchiIoT}
+%\input{Part5.0-Data}
+%\input{Part6.0-VSensors}
+%\input{Part6.5-beebotte}
+%\input{Part7.0-LoPy}
+%\input{Part8.0-Sigfox}
 \input{Part9.0-LoRaWAN}
 
 

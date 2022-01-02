@@ -1,0 +1,456 @@
+\chapter{LoRaWAN}
+
+
+\begin{wrapfigure}{r}{4cm}
+\includegraphics[width=.3\columnwidth]{Pictures/LORAWAN-logo.png}
+\end{wrapfigure}
+
+
+Avec \Index{Sigfox}, ce n’était que du bonheur ! Nous avions un environnement unique développé par un seul acteur. L’attachement d’un objet au réseau, la récupération des données s’en trouve grandement simplifiée.
+
+Avec \Index{LoRaWAN}, l'écosystème est plus complexe. Pour rappel, \Index{LoRa} est une modulation longue portée et LoRaWAN un protocole de niveau 2 qui a pour but de fédérer les acteurs (fabricants d’objets, utilisateurs d’objets, opérateur de réseaux) autour de la communication radio entre l’objet et le cœur de réseau appelé ici \ac{LNS} . Mais l’enregistrement des objets, le lien entre les applications et le LNS diffèrent d’un réseau à un autre.
+
+     \vspace{1em}
+
+Même si vous n’avez pas l’intention de mettre en œuvre le réseau Sigfox, nous vous recommandons de lire le chapitre précédent (ou à la rigueur de le survoler) car nous y ferons référence dans la suite du texte.
+
+     \vspace{1em}
+
+LoRaWAN, comme Sigfox, opère dans la même bande de fréquences non licenciées. Il existe plusieurs opérateurs de réseaux LoRaWAN :
+
+\begin{itemize}
+    \item  \ac{TTN}\footnote{\url{https://www.thethingsnetwork.org/}} propose une approche communautaire. Chaque personne peut mettre à disposition des passerelles radio pour la communauté et inscrire des objets. TTN gère le cœur de réseau. Si cette approche est sympathique, la couverture va être très parcellaire et va dépendre de la densité de geeks dans une région. De plus, la couverture du réseau va dépendre de la position des antennes qui doivent être placées sur un point haut. Avoir une antenne sur son balcon n’implique pas une grande couverture de la zone. Si vous avez de la chance, vous pourrez peut-être bénéficier d’un accès via TTN. Nous verrons comment s’y connecter.
+    \item des opérateurs nationaux comme, en France, \Index{Orange} ou \Index{Bouygues Télécom}. Mais il faut généralement bourse délier pour connecter les objets et pour limiter l’usage du downlink ; l’envoi des messages vers les capteurs est facturé en supplément. En revanche, la couverture est supérieure.
+    \item les réseaux privés. Il est possible de faire tourner son propre LNS. Cela implique d’acheter des composants pour faire une passerelle radio. Mais il existe des mises en oeuvre ouvrete du LNS comme \Index{chirpstack}\footnote{\url{https://www.chirpstack.io/}}. 
+
+\end{itemize}
+
+\Section{Information sur le LoPy}
+
+Chaque objet va avoir un identifiant unique codé sur 64 bits appelé \textit{\Index{devEUI}}. Cette information est nécessaire pour faire entrer un équipement sur le réseau. Le programme \lprog{lorawan\_devEUI.py} donne accès à cette valeur qui est unique pour chaque LoPy.
+
+\pycomlst{lorawan\_devEUI.py}\label{prog-devEUI}
+
+L’objet Python \pfunction{network}{LoRa} est importé du module \texttt{network} et une instance est créée ligne 5. La variable \texttt{mac} va stocker l’adresse MAC (autre nom du \textit{devEUI}) retournée par l’objet \texttt{lora} et l'afficher en hexadécimal, comme le montre l’exemple suivant~:
+
+\begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
+>>> Running lorawan_devEUI.py
+
+>>>
+>>>
+devEUI:  b'70b3d54994c61237'
+\end{termc}
+
+On a le \textit{devEUI}. Il manque encore 3 informations :
+
+\begin{itemize}
+    \item \textit{\Index{appEUI}} : c’est un identifiant sur 64 bits comme le \textit{devEUI} qui va servir à identifier l’application. On peut le mettre à 0 ;
+   \item \textit{\Index{AppKey}} : c’est une valeur sur 128 bits qui n’est connue que de l’objet et du LNS. Elle permet de dériver les clés de chiffrement utilisées par la suite ;
+
+\end{itemize}
+
+     \vspace{1em}
+
+Et sur le LNS, il faudra aussi configurer le connecteur~: il s’agit d’indiquer au LNS comment envoyer les données vers une application. Il peut s’agir de POST HTTP comme nous avons vu avec la configuration du \textit{\Index{backend}} avec Sigfox. Bien entendu, une fois ces grands principes établis, ça serait trop simple si tous les réseaux fonctionnaient de la même façon. Nous allons donc voir comment faire avec le réseau TTN. 
+
+\section{The Things Network}
+
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/G69mjg80-mA}
+\end{wrapfigure}
+
+
+The Things Network, ou TTN pour les intimes, est un réseau communautaire qui permet à tout un chacun de connecter soit une passerelle radio pour le bénéfice de la communauté, soit un objet. TTN se charge de faire tourner un LNS et de renvoyer les informations collectées à son propriétaire .On espère qu'un bon samaritain a déployé une antenne près de chez vous pour capter votre trafic. On n'a aucun moyen de savoir, si on n'essaye pas. 
+
+     \vspace{1em}
+
+La première étape consiste à se créer un compte, gratuit comme il se doit, sur le site de TTN~: \url{https://www.thethingsnetwork.org/}.
+
+     \vspace{1em}
+
+
+Une fois le formulaire de création de compte rempli et validé, vous disposez d’un accès au réseau TTN. 
+Votre identifiant apparaît en haut à droite de la page Web. 
+
+\begin{itemize}
+    \item Cliquez sur votre nom,
+    \item sélectionnez Console,
+    \item puis votre zone géographique (cela n'a rien à voir avec le plan de fréquence. Il est préférable de choisir le serveur le plus proche pour optimiser les communications).
+\end{itemize}
+
+
+On peut soit définir une application et y associer des objets, soit connecter une passerelle radio (\textit{Go To Gateways}). Par la suite, nous explorerons cette option si vous voulez installer votre propre passerelle radio. Nous allons nous intéresser à lma création d'application en choissant \textit{Go To Applications}. TTN vous invite à créer notre première application ; cliquez sur le lien \textit{+Add Application}.
+
+\subsection*{Définir une application}
+
+Une application pour TTN va intégrer plusieurs objets LoRaWAN qui enverrons leur information à une application tournant sur un \ac{AS}. 
+Il faut remplir le formulaire (cf. figure~\vref{fig-ttn-app}) en indiquant :
+\begin{itemize}
+    \item l'identifiant de l'application. Il s'agit d'un nom uniquement composé de lettres et de chiffres ainsi que du tiret. Il doit être unique pour TTN. Donc, faites preuve d'imagination car il doit être unique pour TTN. Ce nom se retrouvera dans les URI permettant de piloter l'application ;
+    \item le nom de l'application qui apparaîtra dans les menus. Il n'y a pas de contraintes ; il vaut mieux choisir quelque chose d'explicite ;
+    \item une description de l'application si nécessaire.
+\end{itemize}
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=0.7\columnwidth]{Pictures/ttn-app.png} }
+\caption{Configuration d'une application.}
+\label{fig-ttn-app}
+\end{figure}
+
+     \vspace{1em}
+
+Cliquez sur Create Application pour enregistrer cette application. Vous arrivez sur un page de contrôle de votre application.
+
+\subsubsection*{Ajout d'un objet}
+
+Nous devons enregistrer un ou plusieurs objets dans notre application~:
+
+\begin{itemize}
+    \item Cliquez sur \textit{end devices} dans le menu de gauche~;
+    \item puis \textit{+ Add end device}~;
+    \item et \textit{try manual registration} en dessous du menu déroulant. TTN offre des aides à la configuration pour certains objets, mais comme nous sommes des experts, nous n'en n'avons pas besoin.
+\end{itemize}
+
+     \vspace{1em}
+
+
+Le menu, décrit figure~\vref{fig-ttn-device} apparaît~:
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=.7\columnwidth]{Pictures/ttn-device.png} }
+\caption{Ajout d'un objet.}
+\label{fig-ttn-device}
+\end{figure}
+
+\begin{itemize}
+    \item Entrez le plan fréquence compatible avec votre région. En Europe, vous pouvez choisir d'avoir la voie descendante en SF9~\footnote{Le \acl{SF} definit la vitesse de transmission de l'information, elle diminue de moitié à chaque incrémentation doc le SF12 est 16 fois plus lent que le SF9, mais beaucoup plus robuste.} ou en SF12. Le premier est un bon compromis entre la portée et la durée d'émission ; le second est à choisir si votre objet est difficilement accessible (profondément enfoui ou loin d'une passerelle radio) ;
+    \item la version du protocole LoRaWAN compatible avec les LoPy  :\texttt{MAC V1.0.2}~;
+    \item les paramètres de la couche physique du LoPy : \texttt{PHY V1.0.2 REV A}~;
+    \item Vous devez récupérer le \textit{devEUI} de votre LoPY en lançant sur Atom le programme \lprog{lorawan\_devEUI.py} (cf. Listing~\vref{prog-devEUI})~;
+    \item mettez l'\textit{\Index{AppEUI}} à 0,
+    \item et générez une clé de chiffrement \textit{\Index{AppKey}} et n'oubliez surtout pas de copier sa valeur quelque part, on en aura besoin pour configurer notre objet.
+    
+         \vspace{1em}
+
+L'interface de TTN vous propose un identifiant pour l'objet basé sur son \textit{devEUI}. Vous pouvez le garder, à moins de vouloir quelque chose de plus explicite.
+
+         \vspace{1em}
+
+Finalement, cliquez sur \textit{register end device} pour sauvegarder votre oeuvre.
+
+         \vspace{1em}
+
+L'interface affiche une page récapitulative. Si vous avez oublié de le faire à l'étape précédente, copiez l'\textit{AppKey} pour la mettre dans le programme \lprog{lorawan\_send\_and\_receive.py}.
+\end{itemize}
+
+\subsubsection*{Connexion de l'objet}
+
+\pycomlst[firstline=1,lastline=10, firstnumber=1]{lorawan\_send\_and\_receive.py}
+
+Le programme \lprog{lorawan\_send\_and\_receive.py} commence, comme \lprog{lorawan\_devEUI.py}, par créer un objet \texttt{lora} et afficher le \textit{devEUI} de l'objet, c'est toujours partique pour le deboguage.
+
+
+\pycomnxt[firstline=12,lastline=18, firstnumber=12]{lorawan\_send\_and\_receive.py}
+
+On met dans deux variables, les identifiants présents sur le LNS de TTN, à savoir le \textit{app\_eui} que l'on avait mis à zéro et de \textit{app\_key} que l'on généré aléatoirement sur le site de TTN et que l'on vous avait demandé de copier quelque part.
+
+Pour éviter de manipuler des séquences binaires, ces valeurs sont vues comme des chaînes de caractères (des espaces peuvent être insérés pour plus de lisibilité, la fonction \texttt{replace} permet de les éliminer). La séquence binaire est obtenue grâce à la fonction \pfunction{binascii}{unhexlify}.
+
+
+\pycomnxt[firstline=19,lastline=20, firstnumber=19]{lorawan\_send\_and\_receive.py}
+
+On arrête le clignotement périodique bleu de la LED du LoPy en appelant la pfunction{pycom}{heartbeat} avec l'argument \texttt{False}. Puis on allume la LED en blanc avec la fonction \pfunction{pycom}{rgbled}. L'argument donne l'intensité des trois composantes Rouge, Vert et Bleu. 
+
+La LED va nous permettre de suivre pas à pas l'état du LoPy.
+
+\pycomnxt[firstline=22,lastline=30, firstnumber=22]{lorawan\_send\_and\_receive.py}
+
+Le LoPy effectue la connexion au réseau, cette procédure est appelée \textit{\Index{Join}}. Elle correspond à l'émission d'un message vers le LNS. Si celui-ci reconnaît et accepte l'objet, il renverra quelques secondes plus tard un message \texttt{Accept}. Cette phase permet à l'Objet d'obtenir les clés de chiffrement des messages et une adresse plus courte appelé \textit{\Index{devAddr}}.
+
+Pour se faire, le programme appelle la fonction \pfunction{lora}{join} avec les paramètres suivants~: 
+\begin{itemize}
+    \item e type de connexion, très souvent \ac{OTAA} pour récupérer dynamiquement les paramètres\footnote{Il existe aussi une méthode appelé \ac{ABP} qui consiste à configurer l'objet avec tous ses paramètres (comme pour Sigfox), mais elle est moins souple et moins adaptée à l'environnement LoRaWAN où plusieurs opérateurs coexistent sur les mêmes fréquences.}  
+    \item les paramètres nécessaires, à savoir l'\textit{AppEUI} et l'\textit{AppKey} que nous avons précédemment configurés.
+    \item un temporisateur (\textit{timeout}). La valeur à 0 indique que l'objet va essayer de joindre le réseau jusqu'à ce que celui-ci l'accepte.
+\end{itemize}
+         \vspace{1em}
+
+La fonction \pfunction{lora}{join} n'étant pas bloquante, la procédure de \textit{join} va se dérouler en tâche de fond. La fonction \pfunction{lora}{has\_joined} permet de suivre l'état du LoPy. D'où la boucle (lignes 26 à 28) dont on ne sortira que lorsque le LoPy sera accepter sur le réseau. 
+
+Toutes de 2.5 seconde un message sera affiché pour dire qu'il est toujours en attente d'une réponse. Ces messages ne sont absolument pas synchronisés avec l'envoi des trames \texttt{Join} qui ont lieu toutes les 15 secondes.
+
+L'extinction de la LED (ligne 30) indique que le LoPy a joint le réseau LoRaWAN.
+
+\pycomnxt[firstline=32,lastline=34, firstnumber=32]{lorawan\_send\_and\_receive.py}
+
+Le programme ouvre la socket, le premier paramètre est \texttt{\Index{AF\_LORA}} pour indiquer que l'on utilise le protocole LoRaWAN. Les deux lignes suivantes, avec les fonctions \pfunction{socket}{setsockopt}, permettent de configurer des paramètres LoRaWAN, comme~:
+\begin{itemize}
+\item le \ac{DR}. Sous ce terme, plusieurs paramètres des la couche physique sont réunis. Plus le \ac{DR} est élevé, plus la transmission est rapide. En contre partie, elle est moins robuste et peut porter moins lion. Le \ac{DR} varie entre 0 et 6.
+\item la capacité de LoRaWAN a acquitter les trames. Il n'est pas recommandé de l'activer car cela induit des émissions qui sont prises en compte dans le calcul du \Index{Duty Cycle} (voir chapitre~\vref{chap-star}).
+\end{itemize}
+
+
+
+\pycomnxt[firstline=36,lastline=46, firstnumber=36]{lorawan\_send\_and\_receive.py}
+
+On entre dans une boucle sans fin pour envoyer et recevoir périodiquement des messages~:
+\begin{itemize}
+    \item ligne 37, la LED éclaire en rouge pour indiquer une transmission.
+    \item ligne 38, les appels aux sockets sont rendu bloquant, c'est-à-dire qu'il ne finiront que quand l'action sera effectuée par la couche inférieure.
+    \item ligne 39, par contre au bout de 10 secondes d'attente une erreur sera déclanchée.
+    \item ligne 41, on récupère cette erreur grâce aux instructions \texttt{\Index{try}} et \texttt{\Index{except}} de Python. Si l'appel à \pfunction{socket}{send} reste bloqué plus des 10 secondes, le traitement de l'exception affiche \texttt{timeout in sending}. Cet événement est rare et est causé par une défaillance locale à la couche 2\footnote{Il faut rester vigilant sur cette erreur, par exemple si l'on essaie d'envoyer un entier sans sérialisation, cela conduira à une erreur qui sera prise en compte de cette manière.}.
+    \item ligne 46 dans tous les cas, la LED passe en bleu.
+\end{itemize}
+
+\pycomnxt[firstline=49,lastline=59, firstnumber=49]{lorawan\_send\_and\_receive.py}
+
+Finalement, on attend des données. Dans le mode le plus fréquent de LoRaWAN, un équipement ne peut recevoir des données que dans une courte fenêtre après une émission. Si des données arrivent en dehors de cette fenêtre, le LNS mémorise l'information et la transmettra quand il recevra une trame de l'objet. Cela permet d'économiser beaucoup d'énergie car le capteur peut dormir de ses deux oreilles, il sait qu'il ne manquera pas une information.
+
+La voie descendante est une ressource rare, et il ne faut généralement pas trop l'utiliser\footnote{TTN ne facture pas les données descendantes, mais d'autres opérateurs le font, faites attention si vous adaptez ces exemples à d'autres environnements, car dans les premiers tests, nous utiliseront la voie de retour.}, donc il ne devrait pas y avoir souvent de messages en retour. Sauf ici, pour tester toute la chaîne de transmission~:
+\begin{itemize}
+    \item ligne 49, l'appel à \pfunction{socket}{recv} est aussi bloquant tant que des données ne sont pas arrivées. 
+    \item lignes 51 et 52, si des données arrivent, elles sont affichées et la LED passe au vert.
+    \item lignes 53 à 55, si aucune données arrivent, le temporisateur se déclenche au bout de 10 secondes générant l''exception. Un message averti l'utilisateur de l'absence de données et la LED est éteinte.
+\end{itemize}
+
+         \vspace{1em}
+
+Si tout va bien, qu'une passerelle radio est à portée de votre objet, le programme  \lprog{lorawan\_send\_and\_receive.py} va se connecter au réseau après avoir affiché 3 fois \texttt{Not yet joined...}~:
+
+
+\begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
+>>> Running lorawan_send_and_receive.py
+
+>>>
+>>>
+devEUI:  b'70b3d54994c61237'
+Not yet joined...
+Not yet joined...
+Not yet joined...
+timeout in receive
+timeout in receive
+\end{termc}
+
+
+\noindent correspondant au 5 secondes prévues par le standard avant d'envoyer le message d'acceptation de l'objet. 
+La LED passe du blanc au rouge indiquant qu'un message a été émis puis doit s'éteindre et le message \texttt{timeout in receive} est affiché indiquant que l'Objet n'a pas reçu de message en réponse à son émission.
+
+\subsubsection{Analyse des traces}
+
+Côté LNS, il est possible de voir le trafic sur la page résumant les caractéristiques de l'objet dans la fenêtre \textit{live data} (cf. figure~\vref{fig-lora-join}).
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=.7\columnwidth]{Pictures/lora-join.png} }
+\caption{Trace d'un objet.}
+\label{fig-lora-join}
+\end{figure}
+
+Les évéments sur la figure se lisent de bas en haut comme le confirme l'horodatage, en cliquant sur la ligne correspandante, TTN affiche les messages JSON utilisés par le LNS pour traiter l'information. On y retrouve les données échangées~:
+
+\begin{itemize}
+    \item L'événement \textit{Accept \Index{Join-request}} indique que le LNS a reçu le message Join de l'objet, indiquant qu'il voulait rejoindre le réseau. Le LNS l'a traité, a vérifié qu'il y avait un objet déclaré avec le bon \textit{\Index{devEUI}} et que l'\textit{\Index{AppKey}} utilisée par l'objet pour signer sa demande était identique à la valeur configurée. Dans la trace suivante, on peut retrouver le \textit{\Index{devEUI}} de l'objet et la \textit{\Index{devAddr}}, qui lui a été attribuée temporairement. Cette dernière sera utilisée par la suite.
+    
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@] 
+    "device_ids": {
+        "device_id": "eui-70b3d54994c61237",
+        "application_ids": {
+          "application_id": "plido-appl"
+        },
+        "dev_eui": "70B3D54994C61237",
+        "join_eui": "0000000000000000",
+        "dev_addr": "260B1035"
+      }
+\end{termc}
+
+    \item L'événement \textit{Forward \Index{Join-accept} message} indique que le LNS envoie un message d'acceptation à l'Objet. Ce message est différé de 5 secondes pendant lesquelles l'Objet dort. 
+    
+    \item L'événement \textit{Successfully processed data message} montre que le LNS a reçu correctement le message de données émis par l'Objet. La trace donne des indications sur certains paramètres physique, tels que le \acl{SF} (ici SF7 soit la modulation la plus rapide et la moins robuste), le SNR qui indique le ratio entre la puissance du signal reçu par rapport au bruit et le \ac{RSSI} donnant la force du signal.   
+    
+    
+    \item L'événement \textit{Forward uplink data message} donne plus d'information sur le message et son contenu. Le champs \texttt{frm\_payload} donne le contenu déchiffré par le LNS mais codé en \Index{base64}. On y retrouve le message d'origine \texttt{Hello LoRa}. 
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@] 
+    "uplink_message": {
+      "session_key_id": "AX4VNOuMbClcPKF63sKy6A==",
+      "f_port": 2,
+      "frm_payload": "SGVsbG8gTG9SYQ==",
+      "rx_metadata": [
+        {
+          "gateway_ids": {
+            "gateway_id": "gateway-lo",
+            "eui": "B827EBFFFE08F8A8"
+          },
+          "time": "2022-01-01T10:35:04.247807Z",
+          "timestamp": 2661650827,
+          "rssi": -27,
+          "channel_rssi": -27,
+          "snr": 10,
+          "uplink_token": "ChgKFgoKZ2F0ZX....",
+          "channel_index": 1
+        }
+      }
+\end{termc}
+
+
+\end{itemize}
+
+
+    
+\Question{Mauvais appKey}
+{Quel message de trace obtenez vous du LNS, si l'Objet n'est pas configuré avec le même \yexyit{\Index{AppKey}} que le LNS~?}
+{
+\texttt{12:52:11 Join-request to cluster-local Join Server failed MIC mismatch}\\
+\texttt{12:52:01 Join-request to cluster-local Join Server failed MIC mismatch}\\
+\texttt{12:51:51 Join-request to cluster-local Join Server failed MIC mismatch}\\
+
+}
+
+\Question{Autonomie}
+{Quel impact sur les batteries~?}
+{Le LoPy va émettre périodiquement tous les 10 secondes un message de type \Index{Join-request}. Le but est pouvoir se connecter, même si la transmission n'est pas optimale. mais en cas de mauvaise configuration, cela va se traduire par une occupation plus importante du réseau, mais surtout un impact sur l'autonomie de l'Objet.}
+
+Le \Index{fPort} que l'on retrouve dans les trames de données LoraWAN permet d'indiquer le programme qui va traiter l'information. La valeur 0 est spéciale et indique une trame de configuration de la couche LoRaWAN, les autres valeurs jusquà 223 désignent des applications spécifiques. Bien qu'il soit peu utilisé, il est parfois utile de la changer. 
+
+\Question{fPort}
+{Dans les traces précédentes, quelle est la valeur du fPort par défaut utilisé par le LoPy~? }
+{\texttt{  "f\_port": 2,}}
+
+\Question{Changement de fPort}
+{L'instruction \pfunction{socket}{bind} permet de modifier le \Index{fPort} pour une transmission. Modifiez le programme pour utiliser le fPort 10 et vérifiez l'effet dans les traces de TTN. }
+{Le programme doit être modifié par exemple après les instructions \pfunction{socket}{setsockopt} en ajoutant la ligne~:\\
+\texttt{s.bind(10)}\\
+}
+
+\subsubsection{Configuration du connecteur}
+
+Le LNS n'a pas été configuré pour envoyer le message à un Serveur d'Application (\acl{AS}). Comme pour \Index{Sigfox}, il faut définir une URI pour indiquer au LNS où poster les données.
+
+         \vspace{1em}
+
+
+Pour configurer un connecteur, il faut aller sur le menu de gauche \textit{Integrations}. TTN propose des intégrations directes avec des services cloud existants, mais il est également possible de configurer son propre connecteur~:
+\begin{itemize}
+    \item via \Index{MQTT}, TTN joue le rôle de \Index{\textit{broker}} et fourni le nom du \Index{topic} et le secret.
+    \item en stockant localement des données par le choix \textit{\Index{Storage integration}} et en y accédant par une requête GET, comme Sigfox le propose (cf. chapitre~\vref{chap-sigfox-GET}). Cela permet de recevoir les données si l'on est situé derrière un \ac{NAT}, mais rend la réception asynchrone puisque l'application doit interroger régulièrement le serveur de TTN.
+    \item en configuration une URI sur le serveur pour que celui-ci produit une requête POST quand une trame de donnée est reçue (choix \textit{\Index{Webhooks}}).
+\end{itemize}
+
+         \vspace{1em}
+
+Nous allons également privilégier pour TTN ce dernier mode de fonctionnement, car si il nécessite une configuration du \ac{NAT}, il permet de recevoir les données de manière synchrone lorsqu'elles sont traitées par le LNS.
+
+
+Il faut cliquer sur \Index{Webhooks}. Un certain nombre de services sont proposés, mais nous allons définir le nôtre à l'instar de ce que nous avons fait avec Sigfox (cf. chapitre~\vref{chap-sigfox-POST}). Pour préparer la connectivité, il est nécessaire~:
+\begin{itemize}
+    \item Si vous êtes dans le cloud, l'adresse s'obtient en tapant la commande \texttt{\Index{ifconfig}}.
+    \item Si vous êtes derrière une box ou le routeur de votre fournisseur d'accès, vous avez une adresse privée. Un site web comme \url{myip.wtf} vous retournera l'adresse IPv4 publique. Vous devez ensuite configurer votre router d'accès pour qu'il envoie les paquets TCP ayant le numéro de port 9999 à votre ordinateur.
+\end{itemize}
+
+         \vspace{1em}
+
+
+Cela va permette de former l'URI suivante~:
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
+http://@\textit{aaa.bbb.ccc.ddd}@:9999/ttn
+\end{termc}
+
+\noindent où \textit{aaa.bbb.ccc.ddd} représente l'adresse IP publique de votre équipement. Comme cette adresse peut changer au cours du temps, il est préférable d'utiliser un service de DNS dynamique pour obtenir un nom de domaine plus stable sur la durée.
+
+         \vspace{1em}
+
+La page listant les \textit{\Index{Webhooks}} associés à l'application est vide. Il faut cliquer sur \textit{} pour en ajouter un nouveau, il convient de choisir \textit{Custom webhook}, les autres définissent les connecteurs vers des services de gestion des données (cf. figure~\vref{fig-ttn-webhook}).
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=.7\columnwidth]{Pictures/ttn-webhook.png} }
+\caption{Configuration d'un webhook.}
+\label{fig-ttn-webhook}
+\end{figure}
+
+Dans ce menu, il faut indiquer~:
+\begin{itemize}
+    \item l'identifiant du webhook~:
+    \item le format JSON~:
+    \item l'URI que nous venons de construire~:
+    \item il n'est pas nécessaire pour l'instant de remplir la \textit{Download API Key} qui servira pour envoyer des données à l'Objet. Nous y reviendrons par la suite.
+    \item il faut choisir les événements qui déclencheront une requête POST. Dans notre cas, on ne choisi que la récéption d'un message montant (\textit{Uplink message}).  On peut compléter le chemin de l'URI précédemment définie avec des éléments qui permettrons au serveur REST de mieux identifier le type de requête. Dans notre cas, cela n'est pas nécessaire. \texttt{/ttn} identifie par conséquent les messages reçus par le LNS des Objets.
+\end{itemize}
+Une fois le \textit{webhook} validé, le programme \pprog{generic\_relay.py} doit être lancé. Il va créer un serveur Web qui va attendre les requêtes POST du LNS de TTN.
+
+         \vspace{1em}
+
+ \pythonnxt[firstline=93,lastline=131, firstnumber=93   ]{generic\_relay.py}
+ 
+ Ce programme utilise le module \Index{Flask} pour créer un serveur Web. Il associe le chemin \texttt{/ttn} à la fonction \texttt{get\_from\_ttn} pour les requêtes de type POST (lignes 93 et 94). Quand une requête de ce type arrive, la variable 
+\texttt{fromGW} contient l'objet JSON\footnote{convertie implicitement en dictionnaire Python.} (ligne 95). Si elle contient la clé \texttt{uplink\_message}, les données sont extraites (ligne 100) pour être envoyé au travers de l'interface \textit{\Index{loopback}}  grâce à la fonction \texttt{\Index{forward\_data}} à un programme qui les traite. Si cette fonction retourne la valeur \texttt{None}, le programme ne souhaite pas répondre à l'Objet, le serveur Web acquitte positivement (code \texttt{200}) la requête venant du LNS (ligne 130 et 131).
+
+ \pythonnxt[firstline=27,lastline=50, firstnumber=27]{generic\_relay.py}\label{chap—forward-data}
+
+
+Si le mode \texttt{verbose} est activé, le message à envoyer au programme de traitement des données est affiché en hexadécimal grâce à la fonction \pfunction{binascii}{hexlify} (lignes 33 et 34). Puis le message est effectivement émis (ligne 35)\footnote{l'adresse du destinataire et le port sont configurés lors de l'analyse des paramètres.}
+
+Pour attendre une réponse qui n'est pas systématique, on ne peut pas utiliser l'appel \pfunction{socket}{recvfrom} car celui-ci est bloquant. A la place, on utilise l'appel \pfunction{select}{select} du module du même nom. Il permet d'attendre sur plusieurs événements à la fois provenant de différentes sockets (ligne 37) où~:
+\begin{itemize}
+    \item \texttt{inputs} est un tableau des sockets pouvant avoir reçu des données. Dans notre cas (ligne 30) il est initialisé avec la socket dialoguant avec le programme traitant les données~;
+    \item \texttt{outputs} est un tableau qui contient les sockets dans lesquelles il serait possible d'écrire. Dans notre cas, ce tableau est vide (ligne 31).
+    \item le troisième concerne les exceptions. Dans notre cas, on répète le tableau des sockets \texttt{inputs}
+    \item finalement le quatrième praramètre indique la durée d'attente dans la fonction \pfunction{select}{select}. Dans notre cas, il est fixé à 0.1 seconde. ce temps est a la fois compatible avec une réponse du programme de traitement des données, et la réponse que l'on doit envoyer au LNS pour que la réponse soit associée au message montant.
+\end{itemize}
+
+\pfunction{select}{select} retourne dans un tuple de trois éléments, la ou les sockets qui ont déclenché son retour. Dans notre cas, se sont~:
+\begin{itemize}
+    \item soit l'expiration du temporisateur, dans ce cas, la variable \texttt{readable} qui contient la liste des sockets ayant recues des données est vide (ligne 39) et la valeur \texttt{None} est retournée.
+    \item soit des données qui sont arrivées dans une ou plusieurs socket. la variable \texttt{readable} contient le tableau de ces sockets. La variable \texttt{s} contient la première socket du tableau, les données sont lues et envoyées en retour.
+\end{itemize}
+
+         \vspace{1em}
+
+Le programme \pprog{generic\_relay.py}, lancé avec l'option \texttt{-v} montre de manière synthétique le trafic. 
+
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
+>python3 generic_relay.py -v
+--UP-> b'48656c6c6f204c6f5261'
+no DW
+63.34.43.96 - - [01/Jan/2022 18:27:45] "POST /ttn HTTP/1.1" 200 -
+--UP-> b'48656c6c6f204c6f5261'
+no DW
+34.255.49.188 - - [01/Jan/2022 18:28:31] "POST /ttn HTTP/1.1" 200 -
+\end{termc}
+
+Le contenu du message montant est affiché en hexadécimal et correspond au fameux contenu \texttt{Hello LoRa}. Comme il n'y a pas de réponse, \texttt{no DW} est ensuite affiché.
+
+\subsubsection{Traitement des données}
+
+La fonction \texttt{\Index{forward\_data}} du programme \pprog{generic\_relay.py} envoie les données à l'adresse de \textit{\Index{loopback}} \texttt{127.0.0.1} et sur le port \texttt{33033}\footnote{Ces deux valeurs peuvent être respectivement changées  en utilisant les arguments \texttt{-{}-forward\_address} et  \texttt{-{}-forward\_port}.}.
+
+Le programmme \pprog{display\_receive\_and\_send.py} traite les données de l'Objet.
+
+\pythonlst{display\_receive\_and\_send.py}
+
+Il attend les données sur le port 33033. La fonction \pfunction{socket}{recvfom} retourne les données stockées dans la variable \texttt{data} et l'adresse de celui qui a envoyé les données stockée dans la variable \texttt{addr}. Les données sont affichée ligne 9 et le message \texttt{Pleased to meet you} est retourné à l'émetteur, en ligne 10 grâce à la fonction \pfunction{socket}{sendto}.
+
+         \vspace{1em}
+
+En lançant le programme dans une nouvelle fenêtre, on reçoit correctement le message du LoPy.
+
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
+>python3 display_receive_and_send.py
+b'Hello LoRa'
+\end{termc}
+
+En revanche, le programme \pprog{generic\_relay.py} produit une erreur.
+
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
+--UP-> b'48656c6c6f204c6f5261'
+<-DW-- b'506c656173656420746f206d65657420796f7521'
+63.34.43.96 - - [01/Jan/2022 19:06:51] "POST /ttn HTTP/1.1" @\textcolor{red}{500}@ -
+Traceback (most recent call last):
+...
+\end{termc}
+
+Le message en retour a été reçu par la fonction \texttt{\Index{forward\_data}}, mais la voie descendante n'a pas encore été configurée. L'erreur est liée à l'absence du fichier \pprog{ttn\_config.py}, ligne 104, ce qui force Flask a retourner le status \texttt{500} et afficher les fonctions qui ont conduit à l'erreur.
+
+\subsubsection{Voie retour}
+
+Il n'y a aucun problème de sécurité quand le LNS envoie au serveur d'application des données reçues de capteurs, car l'endroit où il les transmet a été configuré par leur propriétaire. Par contre, dans l'autre sens, le LNS doit s'assurer que les données à transmettre à l'Objet, proviennent bien d'un serveur d'application autorisé.
+
+Comme pour Beebotte, une clé secrète va être utilisée. A cette clé, le LNS peut associer des droits pour plus ou mois limiter les accès.
