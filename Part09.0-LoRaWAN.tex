@@ -25,9 +25,9 @@ LoRaWAN, comme Sigfox, opère dans la même bande de fréquences non licenciées
 
 \end{itemize}
 
-\Section{Information sur le LoPy}
+\section{Information sur le LoPy}
 
-Chaque objet va avoir un identifiant unique codé sur 64 bits appelé \textit{\Index{devEUI}}. Cette information est nécessaire pour faire entrer un équipement sur le réseau. Le programme \lprog{lorawan\_devEUI.py} donne accès à cette valeur qui est unique pour chaque LoPy.
+Chaque objet va avoir un identifiant unique codé sur 64 bits appelé \textit{\Index{devEUI}}. Cette information est nécessaire pour faire entrer un équipement sur le réseau. Le programme \lprog{lorawan\_devEUI.py}{pycom} donne accès à cette valeur qui est unique pour chaque LoPy.
 
 \pycomlst{lorawan\_devEUI.py}\label{prog-devEUI}
 
@@ -80,7 +80,7 @@ Votre identifiant apparaît en haut à droite de la page Web.
 \end{itemize}
 
 
-On peut soit définir une application et y associer des objets, soit connecter une passerelle radio (\textit{Go To Gateways}). Par la suite, nous explorerons cette option si vous voulez installer votre propre passerelle radio. Nous allons nous intéresser à lma création d'application en choissant \textit{Go To Applications}. TTN vous invite à créer notre première application ; cliquez sur le lien \textit{+Add Application}.
+On peut soit définir une application et y associer des objets, soit connecter une passerelle radio (\textit{Go To Gateways}). Par la suite, nous explorerons cette option si vous voulez installer votre propre passerelle radio. Nous allons nous intéresser à la création d'application en choisissant \textit{Go To Applications}. TTN vous invite à créer notre première application ; cliquez sur le lien \textit{+Add Application}.
 
 \subsection*{Définir une application}
 
@@ -127,7 +127,7 @@ Le menu, décrit figure~\vref{fig-ttn-device} apparaît~:
     \item Entrez le plan fréquence compatible avec votre région. En Europe, vous pouvez choisir d'avoir la voie descendante en SF9~\footnote{Le \acl{SF} definit la vitesse de transmission de l'information, elle diminue de moitié à chaque incrémentation doc le SF12 est 16 fois plus lent que le SF9, mais beaucoup plus robuste.} ou en SF12. Le premier est un bon compromis entre la portée et la durée d'émission ; le second est à choisir si votre objet est difficilement accessible (profondément enfoui ou loin d'une passerelle radio) ;
     \item la version du protocole LoRaWAN compatible avec les LoPy  :\texttt{MAC V1.0.2}~;
     \item les paramètres de la couche physique du LoPy : \texttt{PHY V1.0.2 REV A}~;
-    \item Vous devez récupérer le \textit{devEUI} de votre LoPY en lançant sur Atom le programme \lprog{lorawan\_devEUI.py} (cf. Listing~\vref{prog-devEUI})~;
+    \item Vous devez récupérer le \textit{devEUI} de votre LoPY en lançant sur Atom le programme \lprog{lorawan\_devEUI.py}{pycom} (cf. Listing~\vref{prog-devEUI})~;
     \item mettez l'\textit{\Index{AppEUI}} à 0,
     \item et générez une clé de chiffrement \textit{\Index{AppKey}} et n'oubliez surtout pas de copier sa valeur quelque part, on en aura besoin pour configurer notre objet.
     
@@ -141,14 +141,14 @@ Finalement, cliquez sur \textit{register end device} pour sauvegarder votre oeuv
 
          \vspace{1em}
 
-L'interface affiche une page récapitulative. Si vous avez oublié de le faire à l'étape précédente, copiez l'\textit{AppKey} pour la mettre dans le programme \lprog{lorawan\_send\_and\_receive.py}.
+L'interface affiche une page récapitulative. Si vous avez oublié de le faire à l'étape précédente, copiez l'\textit{AppKey} pour la mettre dans le programme \lprog{lorawan\_send\_and\_receive.py}{pycom}.
 \end{itemize}
 
 \subsubsection*{Connexion de l'objet}
 
 \pycomlst[firstline=1,lastline=10, firstnumber=1]{lorawan\_send\_and\_receive.py}
 
-Le programme \lprog{lorawan\_send\_and\_receive.py} commence, comme \lprog{lorawan\_devEUI.py}, par créer un objet \texttt{lora} et afficher le \textit{devEUI} de l'objet, c'est toujours partique pour le deboguage.
+Le programme \lprog{lorawan\_send\_and\_receive.py}{pycom} commence, comme \lprog{lorawan\_devEUI.py}{pycom}, par créer un objet \texttt{lora} et afficher le \textit{devEUI} de l'objet, c'est toujours partique pour le deboguage.
 
 
 \pycomnxt[firstline=12,lastline=18, firstnumber=12]{lorawan\_send\_and\_receive.py}
@@ -216,7 +216,7 @@ La voie descendante est une ressource rare, et il ne faut généralement pas tro
 
          \vspace{1em}
 
-Si tout va bien, qu'une passerelle radio est à portée de votre objet, le programme  \lprog{lorawan\_send\_and\_receive.py} va se connecter au réseau après avoir affiché 3 fois \texttt{Not yet joined...}~:
+Si tout va bien, qu'une passerelle radio est à portée de votre objet, le programme  \lprog{lorawan\_send\_and\_receive.py}{pycom} va se connecter au réseau après avoir affiché 3 fois \texttt{Not yet joined...}~:
 
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
@@ -246,7 +246,7 @@ Côté LNS, il est possible de voir le trafic sur la page résumant les caracté
 \label{fig-lora-join}
 \end{figure}
 
-Les évéments sur la figure se lisent de bas en haut comme le confirme l'horodatage, en cliquant sur la ligne correspandante, TTN affiche les messages JSON utilisés par le LNS pour traiter l'information. On y retrouve les données échangées~:
+Les événements sur la figure se lisent de bas en haut comme le confirme l'horodatage, en cliquant sur la ligne correspondante, TTN affiche les messages JSON utilisés par le LNS pour traiter l'information. On y retrouve les données échangées~:
 
 \begin{itemize}
     \item L'événement \textit{Accept \Index{Join-request}} indique que le LNS a reçu le message Join de l'objet, indiquant qu'il voulait rejoindre le réseau. Le LNS l'a traité, a vérifié qu'il y avait un objet déclaré avec le bon \textit{\Index{devEUI}} et que l'\textit{\Index{AppKey}} utilisée par l'objet pour signer sa demande était identique à la valeur configurée. Dans la trace suivante, on peut retrouver le \textit{\Index{devEUI}} de l'objet et la \textit{\Index{devAddr}}, qui lui a été attribuée temporairement. Cette dernière sera utilisée par la suite.
@@ -374,16 +374,17 @@ Dans ce menu, il faut indiquer~:
     \item il n'est pas nécessaire pour l'instant de remplir la \textit{Download API Key} qui servira pour envoyer des données à l'Objet. Nous y reviendrons par la suite.
     \item il faut choisir les événements qui déclencheront une requête POST. Dans notre cas, on ne choisi que la récéption d'un message montant (\textit{Uplink message}).  On peut compléter le chemin de l'URI précédemment définie avec des éléments qui permettrons au serveur REST de mieux identifier le type de requête. Dans notre cas, cela n'est pas nécessaire. \texttt{/ttn} identifie par conséquent les messages reçus par le LNS des Objets.
 \end{itemize}
-Une fois le \textit{webhook} validé, le programme \pprog{generic\_relay.py} doit être lancé. Il va créer un serveur Web qui va attendre les requêtes POST du LNS de TTN.
+Une fois le \textit{webhook} validé, le programme \pprog{generic\_relay.py}{plido-tp3} doit être lancé. Il va créer un serveur Web qui va attendre les requêtes POST du LNS de TTN.
 
          \vspace{1em}
 
- \pythonnxt[firstline=93,lastline=131, firstnumber=93   ]{generic\_relay.py}
+ \pythonnxt[firstline=93,lastline=128, firstnumber=93   ]{generic\_relay.py}
  
  Ce programme utilise le module \Index{Flask} pour créer un serveur Web. Il associe le chemin \texttt{/ttn} à la fonction \texttt{get\_from\_ttn} pour les requêtes de type POST (lignes 93 et 94). Quand une requête de ce type arrive, la variable 
 \texttt{fromGW} contient l'objet JSON\footnote{convertie implicitement en dictionnaire Python.} (ligne 95). Si elle contient la clé \texttt{uplink\_message}, les données sont extraites (ligne 100) pour être envoyé au travers de l'interface \textit{\Index{loopback}}  grâce à la fonction \texttt{\Index{forward\_data}} à un programme qui les traite. Si cette fonction retourne la valeur \texttt{None}, le programme ne souhaite pas répondre à l'Objet, le serveur Web acquitte positivement (code \texttt{200}) la requête venant du LNS (ligne 130 et 131).
 
- \pythonnxt[firstline=27,lastline=50, firstnumber=27]{generic\_relay.py}\label{chap—forward-data}
+\label{chap—forward-data}
+ \pythonnxt[firstline=27,lastline=50, firstnumber=27]{generic\_relay.py}
 
 
 Si le mode \texttt{verbose} est activé, le message à envoyer au programme de traitement des données est affiché en hexadécimal grâce à la fonction \pfunction{binascii}{hexlify} (lignes 33 et 34). Puis le message est effectivement émis (ligne 35)\footnote{l'adresse du destinataire et le port sont configurés lors de l'analyse des paramètres.}
@@ -402,9 +403,10 @@ Pour attendre une réponse qui n'est pas systématique, on ne peut pas utiliser 
     \item soit des données qui sont arrivées dans une ou plusieurs socket. la variable \texttt{readable} contient le tableau de ces sockets. La variable \texttt{s} contient la première socket du tableau, les données sont lues et envoyées en retour.
 \end{itemize}
 
+
          \vspace{1em}
 
-Le programme \pprog{generic\_relay.py}, lancé avec l'option \texttt{-v} montre de manière synthétique le trafic. 
+Le programme \pprog{generic\_relay.py}{plido-tp3}, lancé avec l'option \texttt{-v} montre de manière synthétique le trafic. 
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
 >python3 generic_relay.py -v
@@ -420,9 +422,9 @@ Le contenu du message montant est affiché en hexadécimal et correspond au fame
 
 \subsubsection{Traitement des données}
 
-La fonction \texttt{\Index{forward\_data}} du programme \pprog{generic\_relay.py} envoie les données à l'adresse de \textit{\Index{loopback}} \texttt{127.0.0.1} et sur le port \texttt{33033}\footnote{Ces deux valeurs peuvent être respectivement changées  en utilisant les arguments \texttt{-{}-forward\_address} et  \texttt{-{}-forward\_port}.}.
+La fonction \texttt{\Index{forward\_data}} du programme \pprog{generic\_relay.py}{plido-tp3} envoie les données à l'adresse de \textit{\Index{loopback}} \texttt{127.0.0.1} et sur le port \texttt{33033}\footnote{Ces deux valeurs peuvent être respectivement changées  en utilisant les arguments \texttt{-{}-forward\_address} et  \texttt{-{}-forward\_port}.}.
 
-Le programmme \pprog{display\_receive\_and\_send.py} traite les données de l'Objet.
+Le programmme \pprog{display\_receive\_and\_send.py}{plido-tp3} traite les données de l'Objet.
 
 \pythonlst{display\_receive\_and\_send.py}
 
@@ -437,7 +439,7 @@ En lançant le programme dans une nouvelle fenêtre, on reçoit correctement le 
 b'Hello LoRa'
 \end{termc}
 
-En revanche, le programme \pprog{generic\_relay.py} produit une erreur.
+En revanche, le programme \pprog{generic\_relay.py}{plido-tp3} produit une erreur.
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
 --UP-> b'48656c6c6f204c6f5261'
@@ -447,10 +449,248 @@ Traceback (most recent call last):
 ...
 \end{termc}
 
-Le message en retour a été reçu par la fonction \texttt{\Index{forward\_data}}, mais la voie descendante n'a pas encore été configurée. L'erreur est liée à l'absence du fichier \pprog{ttn\_config.py}, ligne 104, ce qui force Flask a retourner le status \texttt{500} et afficher les fonctions qui ont conduit à l'erreur.
+Le message en retour a été reçu par la fonction \texttt{\Index{forward\_data}}, mais la voie descendante n'a pas encore été configurée. L'erreur est liée à l'absence du fichier \pprog{ttn\_config.py}{plido-tp3}, ligne 104, ce qui force Flask a retourner le status \texttt{500} et afficher les fonctions qui ont conduit à l'erreur.
 
 \subsubsection{Voie retour}
 
 Il n'y a aucun problème de sécurité quand le LNS envoie au serveur d'application des données reçues de capteurs, car l'endroit où il les transmet a été configuré par leur propriétaire. Par contre, dans l'autre sens, le LNS doit s'assurer que les données à transmettre à l'Objet, proviennent bien d'un serveur d'application autorisé.
 
-Comme pour Beebotte, une clé secrète va être utilisée. A cette clé, le LNS peut associer des droits pour plus ou mois limiter les accès.
+Comme pour Beebotte, une clé secrète va être utilisée. A cette clé, le LNS peut associer des droits pour plus ou mois limiter les accès. Dans le menu de gauche, cliquez sur \textit{API key} puis sur \textit{+ Add API Key}. Dans l'écran suivant, donnez un nom à votre clé et choisissez \textit{Grant Individual Right} pour limiter l'usage de la clé. Sélectionnez \textit{Write downlink application traffic} et validez. 
+
+         \vspace{1em}
+
+Recopiez la clé et confirmer que vous l'avez bien fait en validant \textit{I have copied the key}. Editez le fichier \pprog{ttn\_config.py}{plido-tp3} en y insérant la clé obtenue.
+
+\pythonlst{ttn\_config.py}
+
+\begin{figure}[tbp]
+\centerline{\includegraphics[width=.7\columnwidth]{Pictures/ttn-key.png} }
+\caption{Création d'une clé}
+\label{fig-ttn-key}
+\end{figure}
+
+Relancez le programmme \pprog{generic\_relay.py}{plido-tp3}, le LoPy  affiche la réponse.
+
+         \vspace{1em}
+
+Le listing suivant reprend la construction de la requête POST vers le LNS pour transporter le message descendant~:
+
+ \pythonnxt[firstline=103,lastline=125, firstnumber=103]{generic\_relay.py}
+
+\begin{itemize}
+\item ligne 104, la clé autorisant l'envoi de message descendant est copié dans la variable \texttt{TTN\_Downlink\_Key}.
+\item lignes 106 à 110, le format JSON attendu par le LNS pour envoyer un message descendant est construit, plusieurs messages peuvent être envoyés à la fois, d'où l'utilisation d'un tableau. Chacun des éléments contient un \texttt{\Index{fPort}} qui est recopié du message montant et des données qui proviennent de la socket (variable \texttt{downlink} codé en base64.
+
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@]
+{'downlinks': [{'frm_payload': 'UGxlYXNlZCB0byBtZWV0IHlvdSE=', 'f_port': 10}]}
+\end{termc}
+\item lignes 111 à 116, l'URI pour accéder au service est construite. Elle contient deux éléments variables qui identifient l'application et l'Objet. Ceux-ci sont également extrait du message montant.
+\begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@]
+https://eu1.cloud.thethings.network/api/v3/as/applications/plido-appl/devices/eui-70b3d54994c61237/down/push
+\end{termc}
+\item lignes 118 à 121, les options qui seront ajoutées à l'en-tête HTTP sont indiquées. Elle contiennent la clé d'authentification.
+\item finalement, ligne 123 à 125, ces différents élements sont passés à la fonction \pfunction{requests}{post} du module \texttt{requests}.
+\end{itemize}
+
+
+
+\section{Ajout d'une passerelle radio}
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/2VZRweC4fbo}
+\end{wrapfigure}
+
+
+
+
+Vous voulez installer une passerelle radio LoRaWAN chez vous pour bénéficier d'un réseau longue portée. Nous avons choisi d'utiliser un \Index{Pygate} qui nous permettra de rester dans l'univers Pycom que nous connaissons bien maintenant et surtout qui est une des solutions les moins chères. 
+
+\subsection{Installation du Pygate}
+
+
+Pour cela vous devez posséder un carte spécifique qui agit comme une carte d'extension. On y connecte un processeur. Ce dernier n'est pas forcément un LoPy car nous n'utiliserons pas sa partie radio LoRa. En effet, le Pygate dispose d'un autre composant radio Semtech qui permet l"écoute simultanée de huit canaux LoRa. Un LoPy lui ne peut écouter que sur un seul canal à la fois. En effet lors de l'émission d'une donnée, l'objet choisi aléatoirement un canal radio pour que le message soit reçu. Il faut que la passerelle radio écoute sur tous les canaux possibles.
+
+         \vspace{1em}
+
+\begin{wrapfigure}{r}{6cm}
+\centerline{\includegraphics[width=.4\columnwidth]{Pictures/pygate.png}}
+\end{wrapfigure}
+
+On insère le Pycom sur la Pygate et on connecte l'antenne sur le connecteur du Pygate. Dans un second temps on doit adapter le Pycom à ses nouvelles fonctions, en téléchargeant le bon microprogramme. On le fait en lançant le programme Pycom Firmware Update et en choisissant Pygate. 
+
+         \vspace{1em}
+
+
+Dans un troisième temps, on ouvre le répertoire Pygate avec Atom. On y trouve le fichier \lprog{wifi\_conf.py}{Pygate} qui va permettre à la Gateway d'avoir accès à votre réseau wifi, il peut contenir les mêmes identifiants que lorsque vous aviez connecter votre LoPY à votre réseau wifi. Le programme \lprog{main.py}{Pygate} est préconfigurée pour utiliser le LNS européen de The Things Network. 
+
+         \vspace{1em}
+
+Le fichier \lprog{config.json}{Pygate} contient la description des fréquences utilisables dans cette zone. En y jetant un coup d'œil, on peut voir huit fréquences qui sont écoutées par la passerelle radio. Vous trouverez sur le site de The Things Network les autres configurations possibles. 
+
+         \vspace{1em}
+
+
+On téléverse le programme dans la mémoire du Pycom de la passerelle radio et comme il s'appelle \lprog{main.py}, il va se lancer tout seul au redémarrage. Il se connecte au wifi, puis va afficher l'identifiant la passerelle. Recopiez le car nous allons avoir besoin plus tard. Après on a plein de texte indiquant que la passerelle est en train de configurer le réseau LoRaWAN. Quand la led passe au vert, la passerelle est active. 
+
+\subsection{Configuration de The Things Network}
+
+
+Maintenant nous devons informer The Things Networks de l'existence de notre passerelle radio. Si ce n'est pas le cas vous devrez créer un compte sur The Things Network. Aller sur console choisissez \textit{Europe 1} si vous êtes en Europe ou la zone géographique correspondante. Ajoutez une passerelle en donnant : 
+\begin{itemize}
+    \item un identifiant textuel qui est un non lisible sans espaces~;
+    \item l'identifiant de la passerelle qui correspond à la valeur hexadécimale affiché au démarrage~;
+    \item un texte pour mieux décrire la passerelle~;
+    \item finalement le plan fréquences\footnote{si les objets sont facilement accessibles on peut choisir le Spreading Factor 9 pour la voie descendante sinon si vous n'arrivez pas à joindre vos objets, vous pouvez vous replier sur le Spreading Factor 12}. 
+\end{itemize}
+
+On valide la passerelle et elle est ajoutée au LNS. Vous allez pouvoir visualiser les trames qu'elle reçoit.
+
+\section{Vue générale des échanges}
+
+La figure~\vref{fig-ttn-exchanges} en illustre le fonctionnement global. La première émission du LoPy est captée par un ou plusieurs passerelles radio, qui relaient le message via un format JSON spécifique appelé \textit{\Index{Packet Forwarder}}, cela peut être de directement en UDP ou en utilisant MQTT. Le LNS après identification de l'Objet, envoie une requête POST contenant les données émise vers une destination configurée par une URI. Cette requête arrive au routeur du domicile, qui l'envoie à un équipement dans le domicile en fonction de la configuration du NAT. 
+Le programme \pprog{generic\_relay.py}{plido-tp3} traite la requête, en extrait le contenu et l'envoie via une socket au programme.
+Si ce dernier ne répond pas, le temporisateur se déclenche et la requête est acquitée.
+
+Sinon, si le  programme \pprog{generic\_relay.py}{plido-tp3} reçoit des données en réponse avant le déclenchement du temporisateur, il initie une nouvelle requête POST vers le LNS. Dans notre cote, quand le LNS l'acquitte, la requête initiale est à son tour acquittée. 
+
+Le message descendant est gardé en mémoire dans le LNS jusqu'à ce que la fenêtre de réception du Lopy s'ouvre. 
+
+
+\begin{figure}[tbp]
+
+\begin{tikzpicture}
+
+\node[inner sep=0pt] (lopy) at (0,0) {\includegraphics[width=.1\textwidth]{Pictures/LoPy.jpg}};
+\node[inner sep=0pt] (RGW) at (3,0) {\includegraphics[width=.1\textwidth]{Pictures/antenna.png}};
+
+\draw (5, 0) node (NGW) [cloud, draw] {LNS};
+
+\node[inner sep=0pt] (NAT) at (8,0) {\includegraphics[width=.1\textwidth]{Pictures/router.png}};
+
+\draw (NAT) node [below=15pt] {\small{NAT}};
+
+\draw (12, 0) node (computer) [rectangle, dotted,draw, minimum width=5cm, minimum height=2cm] {};
+
+\draw (10.7, 0) node (relay) [ellipse, dashed, draw, minimum width=2cm, minimum height=1cm] {};
+\draw (13.3, 0) node (prog) [ellipse, dashed, draw, minimum width=2cm, minimum height=1cm] {};
+
+\draw (relay) node {\tiny{\texttt{generic\_relay.py}}};
+\draw (prog) node {\tiny{\textit{Programme}}};
+
+
+\draw (12, 0) node [rotate=90] (interface) {\tiny{loopback}};
+
+\draw (computer.north) node [above] {\tiny{Ordinateur}};
+
+\path (lopy) -- +(0, -1.5) coordinate(sline);
+
+\foreach \l in {lopy, RGW, NGW, NAT, relay, prog} {
+    \draw [dotted, thin, ->] (\l |- sline) -- +(0, -10); 
+}
+
+\path(sline) -- +(0, -0.5) coordinate (a);
+
+\draw (a) node [left, rectangle, draw] {\tiny{msg}};
+
+
+\draw [decoration={expanding waves,angle=2,segment length=1mm},decorate] (a) -- ([yshift=-0.2cm]a -| RGW) coordinate(b);
+
+\draw [->,decorate,decoration=snake] (b) -- node [above, sloped]{\tiny{packet forwarder}}([yshift=-0.2cm]b -| NGW) coordinate(c); 
+
+\draw [double, double distance=5pt,  green] (c) -- node [above, sloped]{\tiny{POST}} ([yshift=-0.3cm]c -| NAT) coordinate (d); 
+\draw [double, double distance=5pt,  orange, ->] (d) --  node [above, sloped]{\tiny{POST}}  ([yshift=-0.3cm]d -| relay) coordinate (e); 
+\draw [double, double distance=3pt,  blue] (e) --  node [above, sloped]{\tiny{UDP/IP}}  ([yshift=-0.3cm]e -| prog) coordinate (f); 
+
+
+\draw (f) node [right, rectangle, draw] {\tiny{msg}};
+
+\draw [thick]  (e) --node [right, near end] {\tiny{Temporisateur}} +(0, -1.5) coordinate (m) ; 
+
+\draw [very thick, orange] (m) -- node [above, sloped]{\tiny{200 OK}}   ([yshift=-0.3cm]m -| NAT) coordinate (n);
+\draw [very thick, green, ->] (n) --   node [above, sloped]{\tiny{200 OK}} ([yshift=-0.3cm]n -| NGW) coordinate (o);
+
+
+
+% =======
+\path(sline) -- +(0, -5) coordinate (a);
+
+\draw (a) node [left, rectangle, draw] {\tiny{msg}};
+
+
+\draw [decoration={expanding waves,angle=2,segment length=1mm},decorate] (a) -- ([yshift=-0.2cm]a -| RGW) coordinate(b);
+
+\draw [->,decorate,decoration=snake] (b) -- ([yshift=-0.2cm]b -| NGW) coordinate(c); 
+
+\draw [double, double distance=5pt,  green] (c) -- node [above, sloped]{\tiny{POST}} ([yshift=-0.3cm]c -| NAT) coordinate (d); 
+\draw [double, double distance=5pt,  orange, ->] (d) --  node [above, sloped]{\tiny{POST}}  ([yshift=-0.3cm]d -| relay) coordinate (e); 
+\draw [double, double distance=3pt,  blue] (e) --  node [above, sloped]{\tiny{UDP/IP}}  ([yshift=-0.3cm]e -| prog) coordinate (f); 
+
+\draw (f) node [above right, rectangle, draw] {\tiny{msg}};
+\draw (f) node [below right, rectangle, draw] {\tiny{resp}};
+
+\draw [double, double distance=3pt,  blue] (f) --  ([yshift=-0.3cm]f -| relay) coordinate (m); 
+
+
+
+\draw [double, double distance=5pt, orange,] (m) -- node [above, sloped]{\tiny{POST}}   ([yshift=-0.3cm]m -| NAT) coordinate (n);
+\draw [double, double distance=5pt, green, ->] (n) --   node [above, sloped]{\tiny{POST}} ([yshift=-0.3cm]n -| NGW) coordinate (o);
+
+\draw [thick, -*]  (e) -- (m) coordinate (m) ; 
+
+\draw [very thick, green] (o) --   ([yshift=-0.3cm]o -| NAT) coordinate (s);
+\draw [very thick, orange, ->] (s) --   node [above, sloped]{\tiny{200 OK}} ([yshift=-0.3cm]s -| relay) coordinate (t);
+
+
+\path (t) -- +(0, -0.2) coordinate(w);
+\draw [very thick, orange] (w) -- node [above, sloped]{\tiny{200 OK}}   ([yshift=-0.3cm]w -| NAT) coordinate (u);
+\draw [very thick, green, ->] (u) --   node [above, sloped]{\tiny{200 OK}} ([yshift=-0.3cm]u -| NGW) coordinate (v);
+
+
+\draw [dashed, orange] (e) to[bend left] (w);
+
+\path (o) -- +(0, -2) coordinate(p);
+
+\draw [->,decorate,decoration=snake] (p) -- ([yshift=-0.2cm]p -| RGW) coordinate(q); 
+
+\draw [decoration={expanding waves,angle=2,segment length=1mm},decorate] (q) -- ([yshift=-0.2cm]q -| lopy) coordinate(r);
+
+\draw (r) node [left, rectangle, draw] {\tiny{resp}};
+
+\end{tikzpicture}
+
+\caption{Diagramme temporel des échanges.}
+\label{fig-ttn-exchanges}
+\end{figure}
+
+\section{Thermomètre LoRaWAN}
+
+Le programme \lprog{lorawan\_temperature.py}{pycom} combine la manière de rejoindre le réseau LoRaWAN que l'on à vu précédemment et la partie envoie des séries temporelles différentielles des mesures de température. La seule difficulté réside dans la taille de cette série temporelle. En effet, suivant le \Index{Data Rate} le volume de données transportées diffère. Le tableau~\vref{tab-data-rate} donne la correspondance entre le \textit{Data Rate} et les autres paramètres physique. Il indique également la taille maximales des données transportées.
+
+         \vspace{1em}
+
+Ce changement de taille peut poser des problèmes de compatibilités, si l'on choisi une taille trop grande pour être transmise. En théorie, l'on connaît le \textit{Data Rate} choisi et on peut adapter la taille en conséquence, mais l'opérateur peut aussi modifier le \textit{Data Rate} de l'Objet en fonction des conditions de transmission, et il n'existe aucune instruction en micro-python pour récupérer le \textit{Data Rate} réellement utilisé. Pour simplifier la mise en œuvre, la taille maximale de 50 octets a été choisie. 
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c||c|c||c|}
+\hline
+ \rowcolor{purple!10} Data Rate & Spreading Factor & Largeur de bande & Taille Maximum (octets) \\ \hline \hline
+ DR0 & SF12 & 125 KHz & 51 \\ \hline
+ DR1 & SF11 & 125 KHz & 51 \\ \hline
+ DR2 & SF10 & 125 KHz & 51 \\ \hline
+ DR3 & SF9 & 125 KHz & 115 \\ \hline
+ DR4 & SF8 & 125 KHz & 242 \\ \hline
+ DR5 & SF7 & 125 KHz & 242 \\ \hline
+ DR6 & SF7 & 250 KHz & 242 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Data Rate en Europe}
+\label{tab-data-rate}
+\end{table}
+
+
+Il suffit de remplacer \pprog{display\_receive\_and\_send.py}{plido-tp3} par \pprog{display\_server.py}{plido-tp3} pour que la série temporelle soit traitée et le résultat envoyé à Beebotte.
+
+\Question{US902}
+{En vous aidant du lien suivant \url{https://www.thethingsnetwork.org/docs/lorawan/regional-parameters/} indiquant les paramètres régionaux. Est ce que le programme \lprog{lorawan\_temperature.py}{pycom} fonctionnerait sur un réseau LoRaWAN situé en Amérique du Nord~?}
+{Non, la taille maximale des données pour DR0 est de 11 octets.}

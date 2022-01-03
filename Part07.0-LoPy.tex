@@ -217,13 +217,13 @@ lo        Link encap:Local Loopback
           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
 \end{termc}
 
-Le programme \pprog{minimal\_server.py} présenté au chapitre~\vref{chap-mini-serv} n'a pas été modifié et attend des données sur le port 33033.
+Le programme \pprog{minimal\_server.py}{plido-tp3} présenté au chapitre~\vref{chap-mini-serv} n'a pas été modifié et attend des données sur le port 33033.
 
      \vspace{1em}
 
 \pycomlst{sending\_client.py}
 
-Le programme \pprog{minimal\_server.py} doit être modifié (ligne 4) pour prendre en compte l'adresse IP du serveur obtenue avec la commande \texttt{ifconfig}. Si à chaque exécution sur le LoPy de ce programme, le serveur reçoit la valeur, la communication est établie entre les deux équipements.
+Le programme \lprog{sending\_client.py}{pycom} doit être modifié (ligne 4) pour prendre en compte l'adresse IP du serveur obtenue avec la commande \texttt{ifconfig}. Si à chaque exécution sur le LoPy de ce programme, le serveur reçoit la valeur, la communication est établie entre les deux équipements.
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
 > @\textbf{python3 minimal\_server.py}@
@@ -489,7 +489,7 @@ Vous pouvez soit toucher le capteur, soit souffler dessus pour faire augmenter l
 
 \pycomlst[firstline=282, firstnumber=282]{BME280.py} %[firstline=282,lastline=19, firstnumber=282]
 
-Le programme \lprog{BME280.py} peut fonctionner comme un module mais la dernière partie donne un exemple d'exploiation des résultats~:
+Le programme \lprog{BME280.py}{pycom} peut fonctionner comme un module mais la dernière partie donne un exemple d'exploiation des résultats~:
 
 \begin{itemize}
 
@@ -517,7 +517,7 @@ Le programme que vous avez construit lors du TP précédent utilisait le module 
 
      \vspace{1em}
 
-Le programme \lprog{wifi\_temperature.py} montre cette adaptation.
+Le programme \lprog{wifi\_temperature.py}{pycom} montre cette adaptation.
 
 \pycomlst{wifi\_temperature.py}\label{prog-wifi-temp}
 
@@ -526,15 +526,15 @@ Mais son comportement reste le même, en particulier la fonction \pfunction{kpn\
 
      \vspace{1em}
 
-Côté ordinateur, vous devez relancer le programme \pprog{display\_server.py}, mais en modifiant le nom du capteur de "humidity" à "temperature". 
+Côté ordinateur, vous devez relancer le programme \pprog{display\_server.py}{plido-tp3}, mais en modifiant le nom du capteur de "humidity" à "temperature". 
 
      \vspace{1em}
 
 Sur votre compte Beebotte, au bout de 300 secondes, vous devez voir des données associées au capteur "temperature".
 
 \Question{changement de pas}
-{Que se passe-t-il si dans le programme \lprog{wifi\_temperature.py} vous modifiez le pas de mesure ligne 36, pour le mettre par exemple à 60 secondes.}
+{Que se passe-t-il si dans le programme \lprog{wifi\_temperature.py}{pycom} vous modifiez le pas de mesure ligne 36, pour le mettre par exemple à 60 secondes.}
 {
-Le programme \pprog{display\_server.py} doit être modifié également en ajoutant l'argument \texttt{period=60} à l'appel de \texttt{to\_bbt}.
+Le programme \pprog{display\_server.py}{plido-tp3} doit être modifié également en ajoutant l'argument \texttt{period=60} à l'appel de \texttt{to\_bbt}.
 }
 

@@ -13,7 +13,7 @@ Pour ce faire, nous pouvons utiliser un tableau qui va accumuler les valeurs et 
 
 \section{Envoi d'un tableau}
 
-Le programme \pprog{minimal\_humidity1.py} accumule les données dans un tableau \texttt{h\_humidity} quand celui-ci atteint 30 éléments (ligne 17), les données sont envoyées au serveur.
+Le programme \pprog{minimal\_humidity1.py}{plido-tp3} accumule les données dans un tableau \texttt{h\_humidity} quand celui-ci atteint 30 éléments (ligne 17), les données sont envoyées au serveur.
 
 \pythonlst{minimal\_humidity1.py}
 
@@ -37,7 +37,7 @@ La première valeur du tableau correspond à la valeur mesurée tandis que les s
 
 \pythonlst[firstline=17,lastline=26,  firstnumber=17]{minimal\_humidity2.py}%[firstline=282,lastline=19, firstnumber=282]
 
-Le programme \pprog{minimal\_humidity2.py} gère différemment le remplissage du tableau~:
+Le programme \pprog{minimal\_humidity2.py}{plido-tp3} gère différemment le remplissage du tableau~:
 
 \begin{itemize}
     \item ligne 14 et 15, si le tableau est vide, le tableau est créé avec la valeur mesurée,
@@ -73,7 +73,7 @@ La taille est réduite d"un tiers (environ 66 octets) pour transmettre la même 
 
 \section{Architecture}
 
-La figure~\vref{fig-client-serveur} représente l'architecture générale du système. Le programme \pprog{minimal\_humidity2.py} fournit les séries temporelles. Il reste à définir le programme serveur qui va les traiter et faire appel à un autre service pour les afficher sous forme de graphe. 
+La figure~\vref{fig-client-serveur} représente l'architecture générale du système. Le programme \pprog{minimal\_humidity2.py}{plido-tp3} fournit les séries temporelles. Il reste à définir le programme serveur qui va les traiter et faire appel à un autre service pour les afficher sous forme de graphe. 
 
        \vspace{1em}
 
@@ -109,7 +109,7 @@ Cette page (cf. figure~\vref{fig-bb-key}) donne une clé et un secret pour gére
 \end{figure}
 
 
-Notez ces valeurs et stockez les dans un fichier \pprog{config\_bbt.py} qui a cet aspect (vos valeurs sont forcément différentes) :
+Notez ces valeurs et stockez les dans un fichier \pprog{config\_bbt.py}{plido-tp3} qui a cet aspect (vos valeurs sont forcément différentes) :
 
 \pythonlst{config\_bbt.py}
 
@@ -124,7 +124,7 @@ Il faut donner un nom au channel (\textit{capteurs} dans l'exemple), cocher la c
 
 \subsection{Enregistrement des ressources}
 
-Le programme \pprog{display\_server.py} permet de correspondre avec Beebotte via son API REST. Il commence par l'importation des modules nécessaires~:
+Le programme \pprog{display\_server.py}{plido-tp3} permet de correspondre avec Beebotte via son API REST. Il commence par l'importation des modules nécessaires~:
 
 \pythonlst[firstline=1,lastline=8, firstnumber=1]{display\_server.py}
 
@@ -258,7 +258,7 @@ La chaîne de collecte de l'information que nous venons de construire allant du 
     \item que les données concernent le taux d'humidité.
 \end{itemize}
 
-Ces informations ont été précisées dans le programme \pprog{display\_server.py}, de même la transformation de la structure de tableau de la série temporelle en un dictionnaire avec des mots clés spécifique à Beebotte on été gravé dans le programme. 
+Ces informations ont été précisées dans le programme \pprog{display\_server.py}{plido-tp3}, de même la transformation de la structure de tableau de la série temporelle en un dictionnaire avec des mots clés spécifique à Beebotte on été gravé dans le programme. 
 
        \vspace{1em}
 
@@ -301,7 +301,7 @@ Le standard définit aussi des temps de base et des valeurs de base auxquelles l
 
 \pythonlst{minimal\_senml\_client.py}
 
-Le programme \pprog{minimal\_senml\_client.py} illustre le fonctionnement de SenML. Il repose sur deux objets~:
+Le programme \pprog{minimal\_senml\_client.py}{plido-tp3} illustre le fonctionnement de SenML. Il repose sur deux objets~:
 \begin{itemize}
 \item l'objet \pfunction{kpn\_senml}{SenmlPack} inclus les informations commune à l'objet, comme le nom de base (ici \texttt{device1} ligne 23) ou la base de temps, ligne 24.
 \item l'objet \pfunction{kpn\_senml}{SenmlRecord} contient une mesure où l'on peut préciser son nom, son unité et sa valeur (lignes 32, 38 et 43). Le temps est également précisé ligne 35. Ces enregistrements sont ajoutés à l'objet \texttt{pack}.
@@ -366,7 +366,7 @@ CBOR length:  188 bytes
  
  \pythonlst{minimal\_senml\_server.py}
  
- Le programme \pprog{minimal\_senml\_server.py} va convertir le format SenML codé en CBOR dans le format attendu par Beebotte. 
+ Le programme \pprog{minimal\_senml\_server.py}{plido-tp3} va convertir le format SenML codé en CBOR dans le format attendu par Beebotte. 
  La version CBOR utilise ds nombres plutôt que des tags.
  Le dictionnaire \texttt{naming\_map} defini lignes 10 à 12 permet la correspondance utilisé par la suite pour rendre le code plus lisible.
  

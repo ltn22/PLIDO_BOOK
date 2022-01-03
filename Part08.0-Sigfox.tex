@@ -15,7 +15,7 @@ Les LoPy peuvent utiliser le réseau et bénéficie d'un an de connectivité gra
 
 Dans un premier temps, vous devez enregistrez votre capteur sur le site de Sigfox. Il vous faut deux éléments : son identifiant et son mot de passe appelé PAC (Porting Authorization Code). Ce dernier doit rester secret car il permet à toute personne qui le possède d’enregistrer un objet ou d’en changer le propriétaire.
 
-Le programme \lprog{sigfox\_id.py} permet d’afficher ces deux valeurs et d’envoyer un message sur le réseau Sigfox. 
+Le programme \lprog{sigfox\_id.py}{pycom} permet d’afficher ces deux valeurs et d’envoyer un message sur le réseau Sigfox. 
 Avant de l’exécuter, vérifiez que vous avez branché une antenne sur le connecteur de droite, celui opposé au bouton Reset sur le Pycom, coté LED.
 
 \pycomlst{sigfox\_id.py} 
@@ -34,7 +34,7 @@ Maintenant que vous avez les précieux identifiants Sigfox, connectez-vous avec 
 
 \begin{itemize}
     \item indiquez votre pays ;
-\item remplissez le formulaire avec l'identifiant de l'objet et le \Index{PAC} que vous avez obtenus avec le programme \lprog{sigfox\_id.py} ;
+\item remplissez le formulaire avec l'identifiant de l'objet et le \Index{PAC} que vous avez obtenus avec le programme \lprog{sigfox\_id.py}{pycom} ;
 \item indiquez à des fins de statistique ce qui vous amène ici ;
 \item créez votre compte Sigfox ;
 \end{itemize}
@@ -121,7 +121,7 @@ Une page similaire à la figure~\vref{fig-sigfox-api} s'affiche. Donnez un nom a
 
 Vous voyez apparaître une nouvelle page avec deux champs en hexadécimal : \textit{login} et \textit{password}, que vous devez, comme pour l'API de Beebotte, noter quelqe part ou apprendre par cœur pour la suite.
 
-Le mieux étant de remplir un fichier de configuration avec ces valeurs comme le montre le programme \lprog{config\_sigfox.py}.
+Le mieux étant de remplir un fichier de configuration avec ces valeurs comme le montre le programme \lprog{config\_sigfox.py}{pycom}.
 
 \pycomlst{config\_sigfox.py}
 
@@ -141,7 +141,7 @@ Nous avons les clés d’accès à l’API, il suffit maintenant d’écrire un
 
 Pour des raisons de sécurité, nous vous invitons à prendre l'habitude de mettre les informations sensibles dans un fichier séparé.
 
-Le programme \pprog{device\_messages.py} permet de lister les messages reçus par Sigfox pour un objet particulier sur votre ordinateur.
+Le programme \pprog{device\_messages.py}{plido-tp3} permet de lister les messages reçus par Sigfox pour un objet particulier sur votre ordinateur.
 
 \pythonlst{device\_messages.py}
 
@@ -200,7 +200,7 @@ La fin de la trace affiche un résumé plus lisble de l'information reçue~:
 
 \subsection{Sur le LoPy}
 
-Le programme \lprog{sigfox\_temperature.py} est une adaptation de \lprog{wifi\_temperature.py}, listing~\vref{prog-wifi-temp} dédié au Wi-Fi pour des transmission sur le réseau Sigfox.
+Le programme \lprog{sigfox\_temperature.py}{pycom} est une adaptation de \lprog{wifi\_temperature.py}{pycom}, listing~\vref{prog-wifi-temp} dédié au Wi-Fi pour des transmission sur le réseau Sigfox.
 
 \pycomlst{sigfox\_temperature.py}
 
@@ -241,7 +241,7 @@ Le programme s'exécute sur le LoPy.
 [1954, -4, -1] 6
 \end{termc}
 
-Le  programme \pprog{device\_messages.py} récupère également ces valeurs depuis l'ordinateur.
+Le  programme \pprog{device\_messages.py}{plido-tp3} récupère également ces valeurs depuis l'ordinateur.
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@]
 1640281923000: 15 891907cf2b24272825020024  [b"\x89\x19\x07\xcf+$'(%\x02\x00$"] received 0
@@ -255,7 +255,7 @@ Attention suivant les variations de la température, le message CBOR grandit plu
 
 \subsection{requête GET depuis le serveur}\label{chap-sigfox-GET}
 
-Côté ordinateur, la stratégie la plus simple à mettre en œuvre consiste à étendre le programme \pprog{device\_message.py} vu précédemment et d'interroger périodiquement le \textit{backend} de Sigfox pour voir si de nouvelles données sont arrivées. Cela donne le programme \pprog{display\_sigfox.py} suivant~:
+Côté ordinateur, la stratégie la plus simple à mettre en œuvre consiste à étendre le programme \pprog{device\_message.py}{plido-tp3} vu précédemment et d'interroger périodiquement le \textit{backend} de Sigfox pour voir si de nouvelles données sont arrivées. Cela donne le programme \pprog{display\_sigfox.py}{plido-tp3} suivant~:
 
 \pythonlst[firstline=1,lastline=14, firstnumber=1]{display\_sigfox.py}
 
@@ -302,7 +302,7 @@ Le programme attend 60 seconde avant de faire une nouvelle requête.
 \Youtube{https://youtu.be/3y0U2E6x4kE}
 \end{wrapfigure}
 
-Nous avons dû modifier la logique du programme \pprog{display\_sigfox.py}. Au lieu d’attendre des données comme le faisait \texttt{display\_server.py} en Wi-Fi, il va chercher activement les données sur le \textit{backend}. Cela est imposé par les limitations de l’adressage IPv4 privé que vous avez certainement sur votre réseau local. En effet, il n’est pas possible d’être joint par l’extérieur, les connexions ne se font qu'à l’initiative de l’équipement qui a une adresse privée. Pour revenir au cas précédent où le \textit{backend} pourrait pousser des données, on peut soit faire tourner le programme sur une machine virtuelle dans le Cloud (ex : \ac{VPS} d’\acs{OVH}) ou configurer le \ac{NAT} de votre boîtier Internet pour autoriser des connexions entrantes sur un port particulier. C’est cette dernière option que nous allons détailler. Bien entendu, les caractéristiques des \ac{NAT} changent d’un opérateur à un autre ; nous ne pourrons pas détailler sa configuration.
+Nous avons dû modifier la logique du programme \pprog{display\_sigfox.py}{plido-tp3}. Au lieu d’attendre des données comme le faisait \texttt{display\_server.py} en Wi-Fi, il va chercher activement les données sur le \textit{backend}. Cela est imposé par les limitations de l’adressage IPv4 privé que vous avez certainement sur votre réseau local. En effet, il n’est pas possible d’être joint par l’extérieur, les connexions ne se font qu'à l’initiative de l’équipement qui a une adresse privée. Pour revenir au cas précédent où le \textit{backend} pourrait pousser des données, on peut soit faire tourner le programme sur une machine virtuelle dans le Cloud (ex : \ac{VPS} d’\acs{OVH}) ou configurer le \ac{NAT} de votre boîtier Internet pour autoriser des connexions entrantes sur un port particulier. C’est cette dernière option que nous allons détailler. Bien entendu, les caractéristiques des \ac{NAT} changent d’un opérateur à un autre ; nous ne pourrons pas détailler sa configuration.
 
 \subsubsection{Configuration du \textit{\Index{callback}}}
 
@@ -343,7 +343,7 @@ Il vous reste à configurer le NAT de votre routeur d’accès pour que les paqu
 \subsubsection{Traitement des requêtes POST}
 
 Les données contenues dans la requête POST venant du \textit{backend} de Sigfox seront transférer sur le lien \textit{\Index{loopback}} de l'ordinateur vers le port UDP 33033.
-Le programme \pprog{display\_server.py} attendant les données sur ce port pourra être utiliser pour transformer la série temporelle codée en CBOR en structure JSON attendue par Beebotte. De cette manière, nous banalisons le programme qui pourra traiter ces trois sources d’information~:
+Le programme \pprog{display\_server.py}{plido-tp3} attendant les données sur ce port pourra être utiliser pour transformer la série temporelle codée en CBOR en structure JSON attendue par Beebotte. De cette manière, nous banalisons le programme qui pourra traiter ces trois sources d’information~:
 \begin{itemize}
     \item objet émulé par un programme Python,
     \item LoPy avec Wi-Fi,
@@ -353,7 +353,7 @@ Le programme \pprog{display\_server.py} attendant les données sur ce port pourr
 
      \vspace{1em}
 
- Le programme \pprog{generic\_relay.py} le fait pour Sigfox et différents serveurs LoRaWAN. Nous ne dévoilerons ici que les lignes liées au traitement de Sigfox.
+ Le programme \pprog{generic\_relay.py}{plido-tp3} le fait pour Sigfox et différents serveurs LoRaWAN. Nous ne dévoilerons ici que les lignes liées au traitement de Sigfox.
  
  
  \pythonlst[firstline=54,lastline=68, firstnumber=54]{generic\_relay.py}
@@ -369,9 +369,9 @@ Le programme \pprog{display\_server.py} attendant les données sur ce port pourr
  
       \vspace{1em}
 
- A noter que la fonction \texttt{forward\_data} peut retourner une réponse qui sera envoyée au client HTTP. Pour Sigfox, cette possibilité n'est pas prise en compte car Sigfox n'autorise que 4 messages descendant par jour. Nous détaillerons son fonctionnement lorsque nous étudierons les réseaux LoRaWAN.
+ A noter que la fonction \texttt{forward\_data} peut retourner une réponse qui sera envoyée au client HTTP. Pour Sigfox, cette possibilité n'est pas prise en compte car Sigfox n'autorise que 4 messages descendant par jour. Nous détaillerons son fonctionnement lorsque nous étudierons les réseaux LoRaWAN\footnote{Pour plus de détails sur l'envoi de messages descendant voir page~\pageref{chap—forward-data}.}.
  
- \pythonnxt[firstline=195,lastline=217, firstnumber=195]{generic\_relay.py}
+ \pythonnxt[firstline=192,lastline=217, firstnumber=192]{generic\_relay.py}
  
  La partie principale du programme analyse les arguments utilisés lors de son appel. Si l'option \texttt{-v} est utilisé, le programme affichera les messages relayés. D'autres options sont définies pour modifier les numéro de port. Ces dernières sont utiles si ces programmes sont lancés sur un même machine dans le cloud.
  
@@ -409,7 +409,7 @@ no DW
 185.110.98.2 - - [24/Dec/2021 10:14:26] "POST /sigfox HTTP/1.1" 200 -
 \end{termc}
 
-Le programme \pprog{generic\_relay.py} reçoit la requête POST du réseau Sigfox sur le chemon d'URI \texttt{/Sigfox}. Elle contient l'élément CBOR envoyé par le LoPy. Ces données sont envoyée sur le port 33033. Aucune réponse n'est reçue, la requête POST est simplement acquitée.
+Le programme \pprog{generic\_relay.py}{plido-tp3} reçoit la requête POST du réseau Sigfox sur le chemon d'URI \texttt{/Sigfox}. Elle contient l'élément CBOR envoyé par le LoPy. Ces données sont envoyée sur le port 33033. Aucune réponse n'est reçue, la requête POST est simplement acquitée.
 
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@] 
@@ -425,28 +425,28 @@ Le programme \pprog{generic\_relay.py} reçoit la requête POST du réseau Sigfo
  {'data': 18.92, 'resource': 'temperature', 'ts': 1640337266000.0}]
 \end{termc}
 
-Le programme \pprog{display\_server.py} traite la donnée CBOR reçue sur le port 33033 et la convertie dans le format JSON attendu par Beebotte.
+Le programme \pprog{display\_server.py}{plido-tp3} traite la donnée CBOR reçue sur le port 33033 et la convertie dans le format JSON attendu par Beebotte.
 
 \section{Conclusion}
 
 On a construit un prototype de capteur qui fonctionne sur Sigfox. À vous de l’améliorer. En particulier, il faut augmenter l’intervalle entre deux mesures qui a été fixé à 10 secondes pour ne pas avoir à faire des tests trop longs. Comme la taille d’un message est de 12 octets, CBOR va prendre 1 octet pour coder le tableau et la valeur de référence est codée sur 3 octets. Si les deltas sont petits, ils tiendront sur un octet. Il reste de la place pour 8 deltas. Donc, la période d’émission est de 90 secondes si les intervalles entre deux mesures restent à 10 secondes.
 
-Comme Sigfox n'autorise que 140 messages par jours, la durée de mesure ne sera que de 210 minutes par jours, soit 3 heures et demie. Il est donc préférable de prendre des intervalles plus grands. Vous pouvez calibrer votre LoPy et votre programme de réception pour pouvoir suivre la température sur une journée. N'oubliez pas de changer également cette période dans le programme  \pprog{display\_server.py}.
+Comme Sigfox n'autorise que 140 messages par jours, la durée de mesure ne sera que de 210 minutes par jours, soit 3 heures et demie. Il est donc préférable de prendre des intervalles plus grands. Vous pouvez calibrer votre LoPy et votre programme de réception pour pouvoir suivre la température sur une journée. N'oubliez pas de changer également cette période dans le programme  \pprog{display\_server.py}{plido-tp3}.
 
       \vspace{1em}
 
 
-Le programme \pprog{display\_server.py} permet de récolter des informations de plusieurs sources :
+Le programme \pprog{display\_server.py}{plido-tp3} permet de récolter des informations de plusieurs sources :
 \begin{itemize}
     \item un programme en local qui émule les mesures,
     \item du réseau Wi-Fi,
-    \item par l'intermédiaire de \pprog{generic\_relay.py} provenant d'un réseau LPWAN.
+    \item par l'intermédiaire de \pprog{generic\_relay.py}{plido-tp3} provenant d'un réseau LPWAN.
 \end{itemize} 
 
       \vspace{1em}
 
 
-Nous avons notre convention de représentation de l'information basée sur CBOR pour définir une série temporelle. En revanche, nous avions été obligés de modifier le programme  \pprog{display\_server.py} quand nous étions passé d'une série temporelle représentant l'évolution de l'humidité à une autre traitant de la température et si la période change.
+Nous avons notre convention de représentation de l'information basée sur CBOR pour définir une série temporelle. En revanche, nous avions été obligés de modifier le programme  \pprog{display\_server.py}{plido-tp3} quand nous étions passé d'une série temporelle représentant l'évolution de l'humidité à une autre traitant de la température et si la période change.
 
       \vspace{1em}
 
@@ -454,7 +454,7 @@ Nous avons vu la différence entre les requêtes GET et POST qui induisent des c
 
       \vspace{1em}
       
-La notion de client et de serveur est floue, il ne peut pas être attribuée à un programme ou à un équipement, par exemple, le programme \pprog{display\_server.py} est serveur pour Sigfox et client pour Beebotte. Le site de Sigfox est serveur, si l'on utilise une méthode GET pour obtenir les données et client s'il fait un POST.
+La notion de client et de serveur est floue, il ne peut pas être attribuée à un programme ou à un équipement, par exemple, le programme \pprog{display\_server.py}{plido-tp3} est serveur pour Sigfox et client pour Beebotte. Le site de Sigfox est serveur, si l'on utilise une méthode GET pour obtenir les données et client s'il fait un POST.
       
       \vspace{1em}
 

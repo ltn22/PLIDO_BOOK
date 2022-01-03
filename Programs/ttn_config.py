@@ -1,0 +1,1 @@
+TTN_Downlink_Key = "ENTER YOUR KEY"

@@ -120,9 +120,6 @@ def get_from_ttn():
                 'Authorization' : 'Bearer ' + TTN_Downlink_Key
             }
 
-            print(downlink_url)
-            print (downlink_msg)
-            print (headers)
             x = requests.post(downlink_url, 
                                 data = json.dumps(downlink_msg), 
                                 headers=headers)

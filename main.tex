@@ -86,10 +86,11 @@ showstringspaces=false
 \newcommand\rfc[1]{\href{http://www.ietf.org/rfc/rfc#1.txt}{\textcolor{blue}{RFC #1}\index{RFC #1}}}
 \newcommand\pfunction[2]{\texttt{#2}\index{Module Python!#1!#2}}
 
-\newcommand\glos[1]{\gls{#1}\index{#1}}
-\newcommand\pprog[1]{\texttt{#1}\index{Programmes Python!#1}}
-\newcommand\lprog[1]{\texttt{#1}\index{Programmes micro-python!#1}}
+% boot.py
 
+\newcommand\glos[1]{\gls{#1}\index{#1}}
+\newcommand\pprog[2]{\href{https://github.com/ltn22/PLIDObis/blob/master/#2/#1}{\texttt{#1}}\index{Programmes Python!#1}}
+\newcommand\lprog[2]{\href{https://github.com/ltn22/PLIDObis/blob/master/#2/#1}{\texttt{#1}}\index{Programmes micro-python!#1}}
 
 % QUESTION
 
@@ -270,17 +271,18 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-%\input{Part1.0-Intro}
-%\input{Part2.0-ArchiIP}
-%\input{Part2.5-Wireshark}
-%\input{Part3.0-Modbus}
-%\input{Part4.0-ArchiIoT}
-%\input{Part5.0-Data}
-%\input{Part6.0-VSensors}
-%\input{Part6.5-beebotte}
-%\input{Part7.0-LoPy}
-%\input{Part8.0-Sigfox}
-\input{Part9.0-LoRaWAN}
+\input{Part01.0-Intro}
+\input{Part02.0-ArchiIP}
+\input{Part02.5-Wireshark}
+\input{Part03.0-Modbus}
+\input{Part04.0-ArchiIoT}
+\input{Part05.0-Data}
+\input{Part06.0-VSensors}
+\input{Part06.5-beebotte}
+\input{Part07.0-LoPy}
+\input{Part08.0-Sigfox}
+\input{Part09.0-LoRaWAN}
+\input{Part10.0-CoAP}
 
 
 

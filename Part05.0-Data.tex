@@ -234,7 +234,7 @@ JSON est facilement exploitable dans d’autres langages. Par exemple en Python,
      \vspace{1em}
      \pythonlst{example\_json.py}
 
-Le programme \pprog{example\_json.py} reprend la structure précédente. La variable \texttt{struct\_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
+Le programme \pprog{example\_json.py}{cbor-example} reprend la structure précédente. La variable \texttt{struct\_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {'Image': {'IDs': [17, 2371, 234, 38793], 'Height': 600, 'Animated': False, 'Title': 'Empty picture', 'Thumbnail': 
@@ -341,7 +341,7 @@ On peut noter qu'il n'y a pas de surcoût pour coder un entier de 0 à 23. Ainsi
 
 \pythonlst{cbor-integer-ex1.py}
 
-Le programme \texttt{cbor-integer-ex1.py}  affiche les puissances de $10$ entre $10^0$ et $10^{18}$~:
+Le programme \pprog{cbor-integer-ex1.py}{cbor-example}  affiche les puissances de $10$ entre $10^0$ et $10^{18}$~:
 
 \begin{itemize}
     \item Ligne 1, le programme importe le module \texttt{\Index{cbor2}} et le renomme pour plus de simplicité \texttt{cbor}.
@@ -399,7 +399,7 @@ Ainsi, pour coder -15, on va coder la valeur 14, ce qui donne en binaire 001-1 1
 
 \pythonlst{cbor-integer-ex2.py}
 
-Le programme \texttt{cbor-integer-ex2.py} reprend le même code que le programme précédent, mais la variable \texttt{v} est initialisée avec la valeur -1. Ce programme va traiter les puissances de 10 négatives.
+Le programme \pprog{cbor-integer-ex2.py}{cbor-example} reprend le même code que le programme précédent, mais la variable \texttt{v} est initialisée avec la valeur -1. Ce programme va traiter les puissances de 10 négatives.
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
   # @\textbf{python3.5 cbor-integer-ex2.py}@
@@ -442,7 +442,7 @@ Ce codage est aussi assez optimal. Il est rare d'envoyer plus de 23 caractères.
 
 \pythonlst{cbor-string.py}
 
-Le programme \texttt{cbor-string.py} montre la représentation de chaînes de caractères de longueur croissante ainsi qu'une séquence binaire~:
+Le programme \pprog{cbor-string.py}{cbor-example} montre la représentation de chaînes de caractères de longueur croissante ainsi qu'une séquence binaire~:
 
 \begin{itemize}
     \item ligne 3, la variable \texttt{i} prend des valeurs de 1 à 9.
@@ -482,7 +482,7 @@ Le type tableau va regrouper un ensemble d'éléments. Chacun de ces éléments 
 
 \pythonlst{cbor-array.py}
 
-Le programme \texttt{cbor-array.py} donne quelques exemples de codage de tableau :
+Le programme \pprog{cbor-array.py}{cbor-example} donne quelques exemples de codage de tableau :
 \begin{itemize}
     \item \texttt{[1,2,3,4]} défini ligne 3, devient \texttt{8401020304}. On peut deviner la structure du message CBOR : \texttt{0x84} indique un tableau de 4 éléments (attention le décodage n'est pas toujours aussi simple). Les 4 éléments sont des entiers inférieurs à 23 ;
     \item \texttt{[1,[2, 3], 4]} défini ligne 7 devient \texttt{8301\ul{820203}04}. Il s'agit d'un tableau de 3 éléments dont le deuxième est un tableau de deux éléments ;
@@ -497,7 +497,7 @@ Le type Liste de paires ou Map est indiqué par la valeur \texttt{101}. Il fonct
 
 \pythonlst{cbor-mapped.py}
 
-Le programme \texttt{cbor-mapped.py} donne un exemple d'encodage. A noter que la structure à encoder n'est pas directement compatible avec JSON\footnote{json.\pfunction{json}{dumps} aurait converti les clés numériques en chaînes de caractères \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}, certaines clés ne sont pas des chaînes de caractères.
+Le programme \pprog{cbor-mapped.py}{cbor-example} donne un exemple d'encodage. A noter que la structure à encoder n'est pas directement compatible avec JSON\footnote{json.\pfunction{json}{dumps} aurait converti les clés numériques en chaînes de caractères \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}, certaines clés ne sont pas des chaînes de caractères.
 
        \vspace{1em}
 
@@ -531,7 +531,7 @@ CBOR enrichit le typage des données ; ce qui permet de manipuler plus facilemen
 
 \pythonlst{cbor-tag.py}
 
-Par exemple, le programme \texttt{cbor-tag.py} retourne les résultats suivants:
+Par exemple, le programme \pprog{cbor-tag.py}{cbor-example} retourne les résultats suivants:
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\textbf{python3.5 cbor-tag.py}@
@@ -571,7 +571,7 @@ Quel sont les avantage de CBOR par rapport à JSON (2 réponses) ?
    
  }
 {
-CBOR ne compresse pas les chaînes de caractères. Il ajoute juste leur longueur. CBOR et JSON codent tous les deux des nombres flottants, ce n'est donc pas un avantage de CBOR. Par contre, le fait d'utiliser des valeurs binaires au lieu de l'ASCII pour représenter les nombres, de ne pas avoir de crochets ou accolades, permet d'avoir une représentation beaucoup plus compacte. Les petites valeurs numériques sont représentées sans surcoût. Réaliser un codeur ou un decodeur de CBOR est beaucoup plus simple qu'en JSON car la représentation des données est beaucoup plus stricte (pas d'espace, pas de retour à la ligne... ). Les deux représentations permettent d'utiliser des nombres flottant donc aucune n'a d'avantage sur ce point.
+CBOR ne compresse pas les chaînes de caractères. Il ajoute juste leur longueur. CBOR et JSON codent tous les deux des nombres flottants, ce n'est donc pas un avantage de CBOR. Par contre, le fait d'utiliser des valeurs binaires au lieu de l'ASCII pour représenter les nombres, de ne pas avoir de crochets ou accolades, permet d'avoir une représentation beaucoup plus compacte. Les petites valeurs numériques sont représentées sans surcoût. Réaliser un codeur ou un décodeur de CBOR est beaucoup plus simple qu'en JSON car la représentation des données est beaucoup plus stricte (pas d'espace, pas de retour à la ligne... ). Les deux représentations permettent d'utiliser des nombres flottant donc aucune n'a d'avantage sur ce point.
 }
 
 \Question{Flottant}{
