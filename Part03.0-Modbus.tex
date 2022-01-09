@@ -401,7 +401,7 @@ On retrouve les encapsulations des protocoles Ethernet, IP et TCP, suivi des don
 Les champs suivants sont identiques à ceux de la trame sur le bus RS-485~:
 \begin{itemize}
     \item l'adresse du secondaire sur un octet, ici 0x1c ou 28,
-    \item la nature de la requête : 0x04 pour lire un input register,
+    \item la nature de la requête : 0x04 pour lire un \textit{input register},
     \item le registre à lire sur deux octets, ici 0x0000 correspondant à la tension sur la phase A.
     \item le nombre de registre à lire, ici 2 pour obtenir les 32 bits de la valeur.
 \end{itemize}
@@ -421,7 +421,7 @@ Le primaire reçoit la réponse suivante~:
 
 On y retrouve, après les encapsulations protocolaires d'Ethernet, IP et TCP les données suivantes~:
 \begin{itemize}
-    \item le numéro de transaction qui correspond à celui employé dans la requête précédente. cela permet de faire le lien entre les deux messages qui aurait pu se defaire en cas de perte de paquets sur le réseau Internet,
+    \item le numéro de transaction qui correspond à celui employé dans la requête précédente. cela permet de faire le lien entre les deux messages qui aurait pu se défaire en cas de perte de paquets sur le réseau Internet,
     \item la version du protocole,
     \item la longueur de la réponse, ici 7 octets,
     \item l'adresse du secondaire ayant répondu, ici 28,

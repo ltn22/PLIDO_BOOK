@@ -50,6 +50,7 @@
 \definecolor{ocre}{RGB}{51,102,0} 
 \definecolor{lightgray}{RGB}{229,229,229} 
 \definecolor{palerod}{RGB}{238,232,170}
+\definecolor{verttelecom}{RGB}{171,180,0}
 
 \newcommand\pythonstyle{\lstset{
 language=Python,
@@ -115,7 +116,7 @@ showstringspaces=false
 #2
 \immediate\write\tempfile{\noexpand\textbf{Question \thetcbcounter {} page \thepage} {} }
 \immediate\write\tempfile{\unexpanded{#2}\noexpand\vspace{1em}\noexpand\newline}
-\immediate\write\tempfile{\noexpand\textit{\unexpanded{#3}}\noexpand\newline\noexpand\newline}
+\immediate\write\tempfile{\unexpanded{#3}\noexpand\newline\noexpand\newline}
 
 \end{theo}
 }
@@ -208,6 +209,11 @@ showstringspaces=false
 \newcommand\Youtube[1]{\begin{tcolorbox}[colback=red!5,colframe=red!75!black,title=Youtube, width=3cm]\href{#1}{\qrcode{#1}}\end{tcolorbox}}
 
 
+%%%%%%%
+
+\provideboolean{allchap}\setboolean{allchap}{false}
+
+\newcommand\Input[1]{\ifthenelse{\boolean{allchap}}{\input{#1}}{}}
 
 
 \begin{document}
@@ -271,18 +277,22 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-\input{Part01.0-Intro}
-\input{Part02.0-ArchiIP}
-\input{Part02.5-Wireshark}
-\input{Part03.0-Modbus}
-\input{Part04.0-ArchiIoT}
-\input{Part05.0-Data}
-\input{Part06.0-VSensors}
-\input{Part06.5-beebotte}
-\input{Part07.0-LoPy}
-\input{Part08.0-Sigfox}
-\input{Part09.0-LoRaWAN}
-\input{Part10.0-CoAP}
+\setboolean{allchap}{false} % true: take all, false take nothing only /input
+
+\Input{Part01.0-Intro}
+\Input{Part02.0-ArchiIP}
+\Input{Part02.5-Wireshark}
+\Input{Part03.0-Modbus}
+\Input{Part04.0-ArchiIoT}
+\Input{Part05.0-Data}
+\Input{Part06.0-VSensors}
+\Input{Part06.5-beebotte}
+\Input{Part07.0-LoPy}
+\Input{Part08.0-Sigfox}
+\Input{Part09.0-LoRaWAN}
+\Input{Part10.0-CoAP}
+\input{Part10.5-aiocoap}
+\Input{Part11.0-LwM2M}
 
 
 

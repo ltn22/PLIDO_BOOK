@@ -1,0 +1,806 @@
+\chapter{CoAP}
+
+Les principes \ac{REST} avec leur représentation de l'information par des ressources pointées par des identifiants globalement unique est une des clés du succès de l'Internet et de la composition de services distribués. Même si ce n'est pas l'unique solution, il est indispensable que les informations provenant d'objets contraints puissent s'intégrer dans cette toile d'araignée mondiale. \acs{CoAP}, pour \acl{CoAP}, permet cette intégration à un meilleur coût en termes d'empreinte mémoire ou protocolaire que ne le permettrait le protocole \ac{HTTP}.
+
+\section{Introduction}
+
+Dans les chapitres précédents, nous avons vu que \ac{CBOR} permettait d’envoyer des données structurées de manière efficace, que le récepteur pouvait faire la différence entre un entier ou une chaîne de caractères et également savoir combien d’éléments composaient un dictionnaire ou un tableau. En plus d’un gain de place par rapport à \ac{JSON}, la complexité pour sérialiser ou désérialiser était limitée, conduisant à des implémentations peu gourmandes en mémoire.
+
+         \vspace{1em}
+
+
+Mais CBOR n’est pas suffisant pour une bonne interopérabilité. Quand un récepteur reçoit les données, il faut qu'il sache qu’il s’agit d’un codage CBOR et pas d'une autre structure. De plus, il faut que le récepteur sache quoi faire de ces données. Dans les exercices, nous avons transmis des séries temporelles correspondant à des relevés de température. Mais si nous voulions également transmettre l’humidité et la pression, comment le récepteur ferait la différence ?
+
+         \vspace{1em}
+
+Nous avons une solution pour répondre à ces questions : l’utilisation de ressources.
+
+         \vspace{1em}
+
+Nous avons vu qu’avec le paradigme REST, les ressources étaient nommées. Donc, pour distinguer les différentes séries temporelles, il suffit d’utiliser un nom (ou un URI) différent. Les ressources contiennent également des méta-informations et il est donc possible de transporter le format de codage pour indiquer qu’il s’agit de \ac{CBOR}, de \ac{JSON}, de \ac{CSV}...
+
+         \vspace{1em}
+
+Malgré son universalité, ce modèle pose un problème pour les objets contraints :
+
+\begin{itemize}
+\item HTTP utilise TCP pour fiabiliser les communications entre le client et le serveur. Or, TCP est gourmand en ressources. Il faut de la mémoire pour stocker les paquets non acquittés ou hors séquence, un grand nombre d’heuristiques doivent être mises en œuvre pour améliorer ses performances ;
+la souplesse pour créer des en-têtes peut s'avérer être un désavantage pour un objet contraint. Ainsi, la requête \ac{HTTP} vers le serveur \texttt{www.arduino.cc} peut avoir cette forme~:
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\tiny, escapechar=@]
+GET / HTTP/1.1\r \n
+Host: www.arduino.cc\r\n
+User−Agent: Mozilla/5.0 (X11;Ubuntu;Linuxx8664;rv:25.0) Gecko /20100101Firefox/25.0\ r\n
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,∗/∗;q=0.8\r\n
+Accept−Language: en−US,en;q=0.5\r\n
+Accept−Encoding:gzip,deflate\r\n
+Connection: keep-alive\r\n
+\r \n
+\end{termc}
+\end{itemize}
+
+
+En dessous de la première ligne qui demande la ressource à la racine (généralement \texttt{index.html}), on trouve un certain nombre de lignes sous le format :
+
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\tiny, escapechar=@]
+Nom du champ : valeur du champ\r\n
+\end{termc}
+
+\noindent qui vont indiquer au serveur le nom du serveur que l’on veut atteindre, la description du navigateur et les formats que celui-ci peut accepter. 
+
+
+         \vspace{1em}
+         
+         
+
+Le but de CoAP est de définir un protocole beaucoup plus strict qui sera donc plus facile à mettre en œuvre mais qui pourra interopérer avec HTTP afin de préserver les principes définis par l’architecture REST et profiter du nommage des ressources pour que les ressources contraintes participent à la grande toile d'araignée mondiale.
+
+\section{Format d'une en-tête CoAP}
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/MqBAJ-qwbnU}
+\end{wrapfigure}
+
+L’en-tête des messages CoAP est de taille variable mais très structurée, comme le montre la figure~\vref{fig-CoAP-msg}.
+
+
+\begin{figure}
+\centering
+	\begin{tikzpicture}
+	
+	\draw (0.2, 5) node (ver) [above right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=0.6cm, minimum height=0.6cm, draw] {};
+	\draw (ver.text) node {Ver};
+	
+	\draw (ver.east) node (T) [ right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=0.6cm, minimum height=0.6cm, draw] {};
+	\draw (T.text) node {T};
+
+	\draw (T.east) node (TS) [ right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=1.2cm, minimum height=0.6cm, draw] {};
+	\draw (TS.text) node {TKL};
+
+	\draw (TS.east) node (code) [ right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=2.4cm, minimum height=0.6cm, draw] {};
+	\draw ([xshift=.1cm]code.north) node [below=-3pt] {code};
+	
+	\foreach \i in {1,...,7} {
+		\draw ([xshift=\i*0.3 cm] code.south west) -- + (0, 0.2) coordinate (c\i);
+	}
+	
+	\draw [thick] (c3) -- +(0, 0.2) -- +(0, -0.2); 
+	
+	\draw (code.south west) node [above right] {\fontsize{4}{4}{\selectfont class}}; 
+	\draw (code.south east) node [above left] {\fontsize{4}{4}{\selectfont detail}}; 
+
+	\draw (code.east) node (MID) [ right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=4.8cm, minimum height=0.6cm, draw] {};
+	\draw (MID.text) node {Message ID};
+
+	\draw (ver.south west) node (Token) [below right, rectangle, left color=verttelecom!20, right color=verttelecom!2, minimum width=9.65cm, minimum height=1cm, draw] {};
+	\draw (Token.text) node {Token (if any)};
+	
+	\draw (Token.south west) node (options) [below right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=9.65cm, minimum height=1cm, draw] {};	
+	\draw (options.text) node {Options (if any)};
+
+	\draw (options.south west) node (oneoneone) [below right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=2.4cm, minimum height=1cm, draw] {};
+	\draw (oneoneone.text) node {11111111};
+	
+	
+	
+	\draw (oneoneone.east) node (payload) [ right, rectangle, top color=verttelecom!40, bottom color=verttelecom!20, minimum width=7.2cm, minimum height=1cm, draw] {};
+	\draw (payload.text) node {Payload (if any)};
+	
+
+	
+	\end{tikzpicture}
+\caption{Format d'un message CoAP} 
+\label{fig-CoAP-msg} 
+\end{figure} 	
+
+
+Le premier mot de 32 bits est présent dans tous les messages CoAP :
+
+\begin{itemize}
+    \item le champ \texttt{Ver}, sur 2 bits, contient le numéro de version du protocole, qui vaut \texttt{01} dans la version actuelle~;
+    \item le champ \texttt{T} pour \textit{\Index{Type}}, également sur 2 bits, indique la nature du message (\texttt{00} : \Index{CON}firmable, \texttt{01} : \Index{NON} confirmable, \texttt{10} : Acquittement\index{ACK}, \texttt{11} : Reset\index{RST})~;
+    \item le champ \texttt{\Index{TKL}}, sur 4 bits, donne la longueur en octets du champ token démarrant au deuxième mot de 32 bits. Si la valeur est 0, ce champ est absent. Les valeurs de 1 à 8 indiquent la longueur. Les valeurs de 9 à 15 ne sont pas autorisées~;
+    \item le champ \texttt{\Index{Code}}, sur 1 octet, permet un codage assez subtil de la nature de la requête ou de la réponse (cf. chapitre suivant)~;
+    \item le champ Message ID, sur 2 octets, identifie les requêtes.
+\end{itemize}
+
+\subsection{Codage de \texttt{code}}
+
+Dans beaucoup de protocoles applicatifs comme FTP ou HTTP, le serveur renvoie un code sur 3 caractères indiquant si la requête s'est exécutée correctement ou non. Les codes commençant par le chiffre :
+\begin{itemize}
+\item 1 informent que la requête est en train d’être traitée normalement. Ce type de notification n’est pas pris en compte avec CoAP ;
+\item 2 indiquent que la requête a été acceptée et traitée correctement ;
+\item 3 permettent d’indiquer une indirection ;
+\item 4 font référence à une erreur du coté client, due à une mauvaise syntaxe ou une requête qui ne peut être traitée. Ainsi la célèbre erreur 404 indique que le client a demandé une page qui n’existe pas sur le serveur ;
+\item 5 désignent une erreur du coté du serveur.
+\end{itemize}
+
+         \vspace{1em}
+
+Le site web de l'\ac{IANA}\footnote{\url{http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml#http-status-codes-1}} donne les erreurs que l’on retrouve dans le protocole HTTP. Comme indiqué précédemment, le chiffre de gauche varie entre 1 et 5 tandis que les deux chiffres de droite, précisant la raison de la notification, varient généralement entre 0 et 31.
+
+         \vspace{1em}
+
+Pour permettre une représentation plus compacte, CoAP va coder cette chaîne de caractères dans un octet. Les trois bits de gauche désignent la nature du code et les 5 à droite donneront la raison. 
+
+         \vspace{1em}
+
+Ainsi le code d’erreur HTTP \texttt{415} (\textit{Unsupported Media Type}) se note en CoAP \texttt{4.15}, s’écrit en binaire \texttt{100.01111} et en décimal 143. Cette notation concerne les réponses aux requêtes mais elle laisse de la place pour coder également les requêtes. En effet, le code avec les trois premiers bits à 0 n’est pas utilisé pour coder les notifications. 
+
+         \vspace{1em}
+
+
+Plusieurs requêtes compatibles avec l’architecture REST peuvent être codées : 
+\begin{itemize}
+    \item \Index{GET}, codé \texttt{0x01}, retrouve le contenu d’une ressource présente sur le serveur et désignée par un URI~;
+    \item \Index{POST}, codé \texttt{0x02}, stocke une valeur sur une ressource existante présente sur le serveur~;
+    \item \Index{PUT}, codé \texttt{0x03}, crée une ressource sur le serveur et lui affecte une valeur ;
+    \item \Index{DELETE}, codé \texttt{0x04}, supprime une ressource sur le serveur.
+
+\end{itemize}
+
+Notez que la valeur 0x00 peut être utilisée dans certains cas.
+
+\subsection{Utilisation du champ \texttt{Message ID}}
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/BbMt49T9EV4}
+\end{wrapfigure}
+
+
+Le champ \texttt{\Index{Message ID}} sur 2 octets sert à identifier les messages CoAP afin de détecter les duplicatas. Cette valeur est recopiée dans les acquittements pour permettre de savoir quel message est acquitté. Ils ne doivent pas être réutilisés pendant une période fixée.
+
+
+
+         \vspace{1em}
+
+
+ Le protocole CoAP repose sur la couche UDP pour des raisons de simplicité de mise en œuvre. Il peut être parfois nécessaire de fiabiliser le transfert des données. Pour se faire, CoAP dispose d'une sous-couche implantant un protocole très simple. Chaque message contient un champ \texttt{message ID} et trois types de trames sont disponibles~:
+
+\begin{itemize}
+\item les messages de type \texttt{CON} pour \textit{confirmable} indiquent qu'ils doivent être acquitté par le récepteur.
+\item les message de type \texttt{ACK} contiennent cet acquittement, le champ \texttt{message ID} du message à acquitter est recopié dans ce message. Ce message peut également contenir des données.
+\item les message de type \texttt{NON} pour \textit{non confirmable} sont de purs datagrammes, ils ne seront pas acquittés par le récepteur, leur perte ne sera pas détectée  par le protocole CoAP.  Par contre, le champ \texttt{message ID} permet de détecter des messages dupliqués.
+\end{itemize}
+
+         \vspace{1em}
+
+La notion d'émetteur/récepteur est dissociée des rôles de client ou de serveur définit par REST. Un client REST peut être émettre des trames \Index{CON}, \Index{NON} ou \Index{ACK}, de même pour un serveur.
+
+         \vspace{1em}
+
+Un message de type \texttt{RST} s'ajoute aux trois types précédents, il peut être émis par exemple quand un des n\oe{}uds a perdu sont contexte suite à un redémarrage et ne sait plus traiter les réponses qu'il reçoit.
+
+
+
+\begin{figure}
+\centering
+	\begin{tikzpicture}[scale=2, transform shape] 
+	
+%	 \clip (0.0, 0) rectangle (11,7);
+%	\draw[help lines] (0,0) grid (10,7); 
+	
+	\draw [drop shadow, color=verttelecom, -fast cap, line width=3pt] (1, 6) -- (1, 1);
+	\draw [drop shadow, color=verttelecom, -fast cap, line width=3pt] (4, 6) -- (4, 1);
+	
+		\draw [ultra thick,  color=purple, drop shadow, ->] (1, 5.5) -- node [above, sloped] {\tiny{CON MID=0x1234}} (4, 5); 
+		\draw [color=verttelecom, thick] (1, 5.5) -- +(-0.5, 0); 
+
+%		\draw [color=red, -open diamond] (0.75, 5.5) -- node [below, sloped] {\tiny{Timer}} +(0, -1.5); 
+		\draw [ultra thick,  color=purple, drop shadow, ->] (4, 5) -- node [below, sloped] {\tiny{ACK MID=0x1234}} (1, 4.5); 
+		\draw [color=red, -diamond] (0.75, 5.5) -- node [below, sloped] {\tiny{Timer}} +(0, -1); 
+		\draw [color=verttelecom, thick] (1, 4.5) -- +(-0.5, 0); 
+		\draw [ultra thick,  color=purple, drop shadow, ->] (1, 4) -- node [above, sloped] {\tiny{CON MID=0x1235}} (4, 3.5); 
+		\draw [color=verttelecom, thick] (1, 4) -- +(-0.5, 0); 
+		\draw [ultra thick,  color=purple, drop shadow, -*] (4, 3.5) -- node [below, sloped] {\tiny{ACK MID=0x1235}} (1, 3); 
+	
+		\draw [color=verttelecom, thick] (1, 4) -- +(-0.5, 0); 
+		\draw [color=red, -open diamond] (0.75, 4) -- node [below, sloped] {\tiny{Timer}} +(0, -1.5); 
+		\draw [color=verttelecom, thick] (1, 2.5) -- +(-0.5, 0); 
+
+		\draw [ultra thick,  color=purple, drop shadow, ->] (1, 2.5) -- node [above, sloped] {\tiny{CON MID=0x1235}} (4, 2); 
+		\draw [color=verttelecom, thick] (1, 4) -- +(-0.5, 0); 
+		\draw [ultra thick,  color=purple, drop shadow, ->] (4, 2) -- node [below, sloped] {\tiny{ACK MID=0x1235}} (1, 1.5); 
+	
+		\draw [color=verttelecom, thick] (1, 2.5) -- +(-0.5, 0); 
+		\draw [color=red, -diamond] (0.75, 2.5) -- node [below, sloped] {\tiny{Timer}} +(0, -1); 
+		\draw [color=verttelecom, thick] (1, 1.5) -- +(-0.5, 0); 
+	
+	\end{tikzpicture}
+\caption{Échanges fiabilisés avec CoAP} 
+\label{fig-CoAP-CON} 
+\end{figure} 	
+
+         \vspace{1em}
+
+La figure~\vref{fig-CoAP-CON} montre des échanges fiabilisés avec le protocole CoAP. Les messages de type \texttt{CON} impliquent un acquittement en retour. L'émetteur arme un temporisateur et à son expiration ré-émet le message. Si il reçoit un message d'acquittement contenant la même valeur dans le champ \texttt{Message ID}, le message est acquitté. Ce cas est illustré avec le \texttt{Message ID} valant \texttt{0x1234}.
+
+Si par contre, à l'expiration du temporisateurs, l'acquittement n'est pas arrivé, le message initial, gardé en mémoire est retransmis. Le \rfc{7252} suggère un temporisateur initial de 2 secondes dont la valeur double à chaque retransmission, et 4 transmissions d'un même message sont possibles. Ces valeurs peuvent être changées pour s'adapter au contexte. Les durées de temporisation incluent un aléa, pour éviter une synchronisation entre plusieurs émetteurs pouvant favoriser des collisions de trame.
+
+         \vspace{1em}
+
+La valeur du champ \texttt{Message ID} n'a de sens que pour un échange, si par exemple un récepteur reçoit les valeurs \texttt{0x1234} et \texttt{0x1236}, il ne doit pas en déduire que le message \texttt{0x1235} s'est perdu. Plusieurs transmission peuvent également se dérouler en parallèle~; un émetteur n'a pas besoin d'attendre un acquittement pour envoyer la trame suivante. 
+
+         \vspace{1em}
+
+
+Les messages non confirmés (type \texttt{\Index{NON}}) utilisent également un champ \texttt{message ID} différent à chaque nouveau message. Il permet de détecter des duplications qui pourraient survenir dans les couches protocolaire inférieures lors du transport du message.
+
+         \vspace{1em}
+
+Pour rejeter les doublons \footnote{dus aux duplications des couches inférieures, aux pertes des messages d'acquittement forçant une réémission (cas des messages ID \texttt{0x1235} de la figurer~\vref{fig-CoAP-CON}) ou à des temporisateurs mal dimensionnés déclenchant une réémission avant la réception de l'acquittement.}, le récepteur doit garder une copie des Message ID émis par une source. Un simple calcul permet de définir la période de rétention des valeurs.
+
+         \vspace{1em}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ \rowcolor{purple!10} Paramètre & Valeur par défaut  \\ \hline \hline
+ ACK\_TIMEOUT & 2s \\ \hline
+ ACK\_RANDOM\_FACTOR & 1.5 \\ \hline
+ MAX\_RETRANSMIT & 4 \\ \hline
+ MAX\_LATENCY & 100s \\ \hline
+ PROCESSING\_DELAY & 2s \\ \hline
+ 
+\end{tabular}
+\end{center}
+\caption{Valeurs par défaut proposées par le \rfc{7252}}
+\label{tab-data-rate}
+\end{table}
+
+Un peu d’algèbre élémentaire permet de calculer cette durée. La figure~\vref{fig-duree-max} montre le calcul du pire cas. Il s'obtient quand toutes les messages CON se perdent et sont retransmis et que seul le dernier est acquitté. Comme la durée de déclenchement du temporisateur est doublée à chaque tentative, le temps passé dans cette étape est $$(1 + 2 + 4 + ...) \times ACK\_TIMEOUT$$ ou $$ 2^{MAX\_RETRANSMIT}-1 \times ACK\_TIMEOUT$$
+
+
+Pour éviter les synchronisations entre les noeuds, la valeur du temporisateur est multiplé par un facteur $ACK\_RANDOM\_FACTOR$ compris entre $1$ et $1.5$. Comme on se place dans le cas le plus défavorable, on prend la valeur maximale.
+
+On en déduit la valeur d'attente maximale avant une transmission correcte $MAX\_TRANSMIT\_SPAN$ qui est de 45 secondes.
+
+         \vspace{1em}
+
+
+Une fois le message transmis, il doit arriver à destination. Le \rfc{7252} prend une valeurs très importante de 100s pour la latence entre l'objet et le serveur\footnote{Le schéma figure~\vref{fig-duree-max} n'est pas à l'échelle.} et 2s pour le temps de traitement. Le temps d'aller retour ou \ac{RTT} maximal est de 202s.
+
+         \vspace{1em}
+
+Pour les messages \Index{CON}firmés, le temps maximal $EXCHANGE\_LIFETIME$ est donc de 245s. Pour les message \Index{NON} confirmé, on peut supposer qu'un message sera transmis plusieurs fois pour s'assurer qu'il a été correctement reçu par le destinataire. On retrouve le même calcul sans la partie acquittement, d'où une durée de 145s.
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+ \rowcolor{purple!10} Paramètre & Valeurs déduites  \\ \hline \hline
+ MAX\_TRANSMIT\_SPAN & 45s \\ \hline
+ MAX\_RTT & 202s \\ \hline \hline
+ EXCHANGE\_LIFETIME & 247s \\ \hline
+ NON\_LIFETIME & 145s \\ \hline
+
+\end{tabular}
+\end{center}
+\caption{Valeurs déduites à partir des paramètres par défaut proposées par le \rfc{7252}}
+\label{tab-data-rate}
+\end{table}
+
+
+\begin{figure}
+\centering
+	\begin{tikzpicture}[scale=1.5, transform shape] 
+	
+%	 \clip (0.0, 0) rectangle (11,7);
+%	\draw[help lines] (0,0) grid (10,7); 
+	
+	\draw [drop shadow, color=verttelecom, -fast cap, line width=3pt] (1, 6) -- (1, 0) coordinate (lline);
+	\draw [drop shadow, color=verttelecom, -fast cap, line width=3pt] (4, 6) -- (4, 0) coordinate (rline);
+	
+	\path (lline) -- +(-1.5, 0) coordinate (cline);
+	\path (lline) -- +(-4, 0) coordinate (cline2);
+	\path (lline) -- +(3.5, 0) coordinate (cline3);
+
+	\draw [ultra thick,  color=purple, drop shadow, -*] (1, 5.5) coordinate(a)  -- node [above, sloped] {\tiny{CON MID=0x1234}} +(3, -0.1); 
+	
+
+	\draw [color=verttelecom, thick] (a) -- coordinate[near end] (b) +(-0.5, 0) coordinate(start); 
+
+	\draw [color=red, -open diamond] (b) -- node [left] {\tiny{Timer}} +(0, -0.3) coordinate(c); 
+	
+	\draw [color=verttelecom, thick] (c -| lline) -- coordinate[near end] (b) +(-0.5, 0); 
+	
+
+	\draw [ultra thick,  color=purple, drop shadow, -*] (c -| lline) coordinate(a) -- +(3, -0.1); 
+	\draw [color=verttelecom, thick] (a) -- coordinate[near end] (b) +(-0.5, 0); 
+
+	\draw [color=red, -open diamond] (b) -- node [left] {\tiny{Timer}} +(0, -0.6) coordinate(c); 
+	
+	\draw [color=verttelecom, thick] (c -| lline) -- coordinate[near end] (b) +(-0.5, 0); 
+	
+		\draw [ultra thick,  color=purple, drop shadow, -*] (c -| lline) coordinate(a) -- +(3, -0.1); 
+	\draw [color=verttelecom, thick] (a) -- coordinate[near end] (b) +(-0.5, 0); 
+
+	\draw [color=red, -open diamond] (b) -- node [left] {\tiny{Timer}} +(0, -1.2) coordinate(c); 
+	
+	\draw [color=verttelecom, thick] (c -| lline) -- coordinate[near end] (b) +(-0.5, 0); 
+
+
+
+
+	\draw [ultra thick,  color=purple, drop shadow, -*] (c -| lline) coordinate(a) -- +(3, -0.1) coordinate (y); 
+	\draw [color=verttelecom, thick] (a) -- coordinate[near end] (b) +(-0.5, 0); 
+
+	\draw [color=red, -open diamond] (b) -- node [left] {\tiny{Timer}} +(0, -2.4) coordinate(c); 
+	
+	\draw [color=verttelecom, thick] (c -| lline) -- coordinate[near end] (b) +(-0.5, 0); 
+	
+	
+	\draw [ultra thick,  color=purple, drop shadow, ->] (c -| lline) coordinate(a) -- +(3, -0.1) coordinate (d); 
+	
+	\draw [color=verttelecom, thick] (a) -- coordinate[near end] (b) +(-0.5, 0) coordinate(end); 
+	
+	\draw [ultra thick,  color=purple, drop shadow, ->] ([yshift=-0.2cm]d) coordinate(z) -- node [below, sloped] {\tiny{ACK MID=0x1234}} +(-3, -0.1) coordinate (e); 	
+	
+
+	
+	\draw [color=verttelecom, thick] (e) -- coordinate[near end] (x) +(-0.5, 0); 
+
+	\draw [color=red, -diamond] (b) --  (x) ; 
+	
+	
+    \draw [dotted] (start) -- coordinate [near end] (k) (start -| cline);
+    \draw [dotted] (end) -- coordinate [near end] (l) (end -| cline);
+    
+    \draw [dashed, <->] (k) -- coordinate (r) (l);
+    
+    \draw (r) node [left, text width=2.7cm, text centered] {\fontsize{5pt}{6pt}\selectfont{$MAX\_TRANSMIT\_SPAN = $\\$ ACK\_TIMEOUT \times (2^{MAX\_RETRANSMIT} - 1) \times $\\$ ACK\_RANDOM\_FACTOR$\\}};
+    
+    
+     \draw [dotted] (d) -- (d -| cline);
+     
+     \draw [dashed, <->] (l) -- coordinate (s) (l |- d);
+ 
+    \draw (s) node [left, text width=2.7cm, text centered] {\fontsize{5pt}{6pt}\selectfont{$MAX\_LATENCY$}};
+    
+     \draw [dotted] (z) -- (z -| cline);
+     
+     \draw [dashed, <->] (l |- z) -- coordinate (t) (l |- d);
+ 
+    \draw (t) node [left, text width=2.7cm, text centered] {\fontsize{5pt}{6pt}\selectfont{$PROCESSING\_DELAY$}};
+    
+    
+    \draw [dotted] (e) -- (e -| cline);
+    
+    \draw [dashed, <->] (l |- z) -- coordinate (u) (l |- e);
+
+    \draw (u) node [left, text width=2.7cm, text centered] {\fontsize{5pt}{6pt}\selectfont{$MAX\_LATENCY$}};
+    
+    
+    \draw  [decoration=brace, decorate]   (e -| cline2) -- coordinate (w)  (start -| cline2);
+    
+    \draw (w) node [above, rotate=90] {\fontsize{5pt}{6pt}\selectfont{$EXCHANGE\_LIFETIME$}};
+
+
+    \draw  [decoration=brace, decorate]   (start -| cline3) -- coordinate (w)  (d  -| cline3);
+    \draw (w) node [below, rotate=90] {\fontsize{5pt}{6pt}\selectfont{$NON\_LIFETIME$}};
+
+    
+
+	\end{tikzpicture}
+\caption{Échanges fiabilisés avec CoAP} 
+\label{fig-duree-max} 
+\end{figure} 	
+
+         \vspace{1em}
+
+Le standard prévoit que, par défaut, la durée d’activité d’un Message ID est d’environ 5 minutes (247 s) pour les messages confirmés, et 2,5 minutes (145 s) pour les messages non confirmés.
+Avoir cette notion en tête peut vous éviter des heures de débogage. Supposons qu'un client commence toujours par numéroter ses messages à 1. Le récepteur va donc garder les valeurs des messages ID pendant 5 minutes. Si vous redémarrez l'objet, il va émettre de nouveaux messages, mais avec les mêmes valeurs de Messages ID qui seront acquittés, mais pas traités ignorés par le récepteur.
+
+
+
+\subsection{Les \Index{Token}s}
+
+\begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/whg3BsUkxkE}
+\end{wrapfigure}
+
+CoAP utilise le protocole UDP pour communiquer. Contrairement à TCP, il n’y a pas de notion d’établissement de connexion. Il est donc difficile de faire le lien entre les établissements et les réponses, surtout si elles ne sont pas immédiates. La figure suivante illustre ce phénomène. Une requête GET est envoyée par un client à un serveur.
+
+\begin{figure}
+\centering
+	\begin{tikzpicture}[scale=1.5, transform shape] 
+	
+	\draw [drop shadow, color=verttelecom, -fast cap, line width=3pt] (1, 6) coordinate (a) -- (1, 1);
+	\draw [drop shadow, color=verttelecom, -fast cap, line width=3pt] (4, 6) coordinate (b) -- (4, 1);
+	
+	\draw (a) node [above, verttelecom] {\tiny{Client}};
+	\draw (b) node [above, verttelecom] {\tiny{Serveur}};
+	
+		\draw [ultra thick,  color=purple, drop shadow, ->] (1, 5.5) -- node [above, near end, sloped, text width=4cm] {\tiny{CON MID=0x1234\\Token=12\\GET /res\\}} (4, 5); 
+		\draw [color=verttelecom, thick] (1, 5.5) -- +(-0.5, 0); 
+		\draw [ultra thick,  color=purple, drop shadow, ->] (4, 5) -- node [below, sloped] {\tiny{ACK MID=0x1234}} (1, 4.5); 
+		\draw [color=red, -diamond] (0.75, 5.5) -- node [below, sloped] {\tiny{Timer}} +(0, -1); 
+		\draw [color=verttelecom, thick] (1, 4.5) -- +(-0.5, 0); 
+		\draw [dotted, color=purple, -triangle 60] (4,5) to [bend left=90] (4, 2.5); 
+		\draw [ultra thick,  color=purple, drop shadow, ->] (4, 2.5) -- node [above, near start, sloped, text width=4cm] {\tiny{CON MID=0xF00D\\Token=12\\2.05 Content\\}} (1, 2); 
+		\draw [color=verttelecom, thick] (4, 2.5) -- +(0.5, 0); 
+		\draw [ultra thick,  color=purple, drop shadow, ->] (1, 2) -- node [below, sloped] {\tiny{ACK MID=0xF00D}} (4, 1.5); 
+		\draw [color=red, -diamond] (4.25, 2.5) -- node [above, sloped] {\tiny{Timer}} +(0, -1); 
+		\draw [color=verttelecom, thick] (4, 1.5) -- +(0.5, 0); 
+	
+	\end{tikzpicture}
+\caption{Utilisation du Token} 
+\label{fig-CoAP-Token} 
+\end{figure} 	
+
+         \vspace{1em}
+
+La réponse ne peut pas être immédiate (par exemple il faut lire une valeur sur un capteur qui demande d’être activé). Le message d'acquittement ne peut pas être différé sinon, le client ne voyant pas sa requête acquittée, la retransmettrait. Le serveur acquitte avec un message Ack vide (cf. figure~\vref{fig-CoAP-Token}). Quand le serveur peut envoyer la ressource, il le fait à son tour dans un message de type CON qui sera à son tour acquitté. Vous pouvez remarquer que les valeurs du champ Message ID sont complètement décorrélées. Pour faire le lien entre la requête et la réponse, un token fourni par le client est recopié par le serveur. C'est pour cela que l'on peut considérer une valeur de Token comme une "connexion" entre le client et le serveur.
+
+         \vspace{1em}
+
+Le Token est une séquence binaire facultative dont la taille est comprise entre 0 (pas de token) et 8 octets. La longueur est indiquée au début de l’en-tête dans le champ Token Length (\texttt{\Index{TKL}}) et la valeur suit immédiatement l'en-tête obligatoire avant les options.
+
+         \vspace{1em}
+
+On voit bien sur cet exemple, figure~\vref{fig-CoAP-Token} la décorélation entre la machine protocolaire de bas niveau basée sur les \texttt{Message ID} et la machine protocolaire REST. Le client envoie un message CON contenant sa requête et reçoit la réponse dans un message ACK. Dans cet exemple, il y a aussi deux niveau d'acquittement au niveau des messages et avec les notifications REST.
+
+
+\subsection{Les options CoAP}
+
+Le champ \texttt{Option} va contenir des \Index{option}s qui vont soit servir à améliorer le protocole de transfert des données entre le client et le serveur, soit servir à coder les en-têtes des requêtes et des réponses en garantissant une certaine compatibilité avec les en-têtes HTTP.
+
+         \vspace{1em}
+\begin{figure}
+\centering
+	\begin{tikzpicture}[scale=1.5, transform shape]
+	
+	\draw (0,0) node (DeltaO) [right, minimum width=2cm, minimum height=0.7cm, draw, drop shadow, top color=white, bottom color=blue!10] {};
+	\draw (DeltaO.east) node (Length) [right, minimum width=2cm, minimum height=0.7cm, draw, drop shadow, top color=white, bottom color=orange!10] {};
+
+	\draw ([yshift=-0.1cm] DeltaO.south west) node (ExtraT1) [below right, minimum width=4cm, minimum height=0.7cm, draw, drop shadow, top color=white, bottom color=blue!10, dotted] {};
+	\draw (ExtraT1.south west) node (ExtraT2) [below right, minimum width=4cm, minimum height=0.7cm, draw, drop shadow, top color=white, bottom color=blue!10, dotted] {};
+
+	\draw ([yshift=-0.1cm] ExtraT2.south west) node (ExtraL1) [below right, minimum width=4cm, minimum height=0.7cm, draw, drop shadow, top color=white, bottom color=orange!10, dotted] {};
+	\draw (ExtraL1.south west) node (ExtraL2) [below right, minimum width=4cm, minimum height=0.7cm, draw, drop shadow, top color=white, bottom color=orange!10, dotted] {};
+
+	\draw ([yshift=-0.1cm] ExtraL2.south west) node (OptionData) [below right, minimum width=4cm, minimum height=4cm, draw, drop shadow, top color=white, bottom color=green!10] {};
+	
+	\draw (DeltaO) node [text width=1.8cm] {\tiny{Delta Option\\}};
+	
+	\draw (Length) node [text width=1.8cm] {\tiny{Longueur Option\\}};
+	\draw (Length.east) node [right] {\tiny{1 Octet}};
+	
+	\draw (ExtraT1) node [text width=3.8cm] {\tiny{Delta Option (extended)\\}};
+	\draw (ExtraT1.east) node [right] {\tiny{1 Octet si Delta Option égal 13 ou 14}};
+	\draw (ExtraT2) node [text width=3.8cm] {\tiny{Delta Option (extended)\\}};
+	\draw (ExtraT2.east) node [right] {\tiny{1 Octet si Delta Option égal 14}};
+	
+	\draw (ExtraL1) node [text width=3.8cm] {\tiny{Longueur Option (extended)\\}};
+	\draw (ExtraL1.east) node [right] {\tiny{1 Octet si Longueur Option égal 13 ou 14}};
+	\draw (ExtraL2) node [text width=3.8cm] {\tiny{Longueur Option (extended)\\}};
+	\draw (ExtraL2.east) node [right] {\tiny{1 Octet si Longueur Option égal 14}};
+	
+	\draw (OptionData) node  [text width=3.8cm] {\tiny{Données\\(si Longueur Option \textgreater 0)\\}};
+	
+	\foreach \i in {0,...,7}{
+		\draw ([xshift=1+\i*.55cm,] DeltaO.north west) node [above] {\tiny{\i}};
+	}
+	
+	\end{tikzpicture}
+\caption{Format des options} 
+\label{fig-CoAP-opt} 
+\end{figure} 	
+La structure utilisée (cf. figure~\vref{fig-CoAP-opt}) est dite \ac{TLV} ou Type Longueur Valeur. Chaque champ contient au moins ces deux informations~:
+\begin{itemize}
+    \item Type indiquant la nature de l’option ;
+    \item Longueur indiquant la taille des données en octets. Si ce dernier n’est pas nul, les données vont se trouver après. 
+\end{itemize}
+
+CoAP complique un peu la chose en optant pour un codage différentiel de la valeur de l’option. Ainsi, si l’on doit envoyer une option de type 5 puis deux de type 6, le codage contiendra $\Delta$T = 5, $\Delta$T = 1, $\Delta$T = 0.
+
+         \vspace{1em}
+
+Mais comme le champ $\Delta$T ne fait que 4 bits, on ne peut pas aller bien loin pour coder ces valeurs. Un mécanisme d'échappement est mis en place pour les différences supérieures à 13. Dans ce cas, la valeur 13 est mise dans le champ ∆T et l'octet suivant code la différence moins 13.
+
+Par exemple, si l'on doit coder deux options de valeurs 5 et 20, la différence est de 15. La première option est codée normalement avec le $\Delta$T à 5. Pour la seconde option, le $\Delta$T est mis à 13 et l'octet suivant prendra la valeur 2.
+
+Notez que la valeur 14 mise dans le champ $\Delta$T indique que la différence nécessite deux octets pour être codée. Les principales options utilisés dans CoAP se retrouvent listés dans le tableau~\vref{tab-CoAP-options}. Celles apparaissant sur fond bleu, seront traitées plus en détail dans cet ouvrage.
+
+         \vspace{1em}
+
+Pour la longueur on retrouve le même principe : les longueurs inférieures à 13 sont codées directement ; si elles sont supérieures ou égale à 13, la valeur moins 13 est codée dans un octet supplémentaire. Une valeur de 14 indique que deux octets sont utilisés pour coder la longueur moins 269.
+
+La figure~\vref{fig-CoAP-opt} illustre le codage d’une option dans l’en-tête d’un message CoAP.
+
+         \vspace{1em}
+
+Il se peut qu’il y ait des données après les options. Dans ce cas, un séparateur avec la valeur \texttt{0xFF} est inséré. Il ne peut pas être confondu avec le codage d’une option puisque les champs $\Delta$T et Longueur n'évoluent qu'entre 0 et 14.
+
+S’il n’y a pas de données à transmettre (par exemple dans le cas d’une requête GET), le message CoAP se termine après les options.
+
+\subsection{Options CoAP}
+
+Le premier bit servant a coder le type décrit, quand il est positionné à 1, si ce type doit être connu du récepteur (critique). Dans ce cas, si un destinataire reçoit une option de ce type est qu'il ne la connaît pas, il doit produire un message d'erreur. Dans la cas contraire cette option est ignorée du récepteur qui poursuit le traitement des options suivantes. Ainsi les options paires sont facultatives et les impaires critiques.   
+
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{|l|l|l|l|p{1cm}|p{6cm}|}
+\hline
+ \rowcolor{purple!10} \textbf{Valeur} & \textbf{Nom}& \textbf{Type} &\textbf{Nature} & \textbf{répété} & \textbf{Commentaire} \\\hline\hline
+0 	&Reservé          & & & & \tiny{}	\\\hline
+1 	&\Index{If-Match}         & opaque & critique & oui & \small{Utilisé pour indiquer a serveur de n'effectuer la requête que sous certaines conditions.}	\\\hline
+3 	&\Index{Uri-Host}         & string & critique  & & \small{Contient le nom du serveur d'une URI (nom, adresse IPv4 ou IPv6). Généralement, il n'est pas nécessaire de le préciser puisque les messages CoAP sont envoyés à cette adresse.  }	\\\hline
+4 	&\Index{ETag}             & opaque    & facultative & oui & \small{Utilisé pour gérer la mise en cache des ressources}	\\\hline
+5 	&\Index{If-None-Match}    & vide  & critique & & \small{Utilisé pour indiquer à un serveur de n'effectuer la requête que sous certaines conditions.}	\\\hline
+ \rowcolor{blue!10} 6 	&\Index{Observe}          & entier& facultative & & \small{Permet à un serveur d'envoyer une requête aux changement d'état d'une ressource. Dans la réponse la valeur doit toujours augmenter. }	\\\hline
+7 	&\Index{Uri-Port}         & entier & critique & & \small{Contient le numéro du port UDP sur lequel CoAP est lancé. Généralement ce champ n'est pas nécessaire vu que le serveur CoAP attend déjà des messages sur ce port.}	\\\hline
+8 	&\Index{Location-Path}    & string & facultative &oui &\small{Utilisé en réponse à une requête POST pour indiquer un segment du chemin de la ressource.}	\\\hline
+ \rowcolor{blue!10} 11 	&\Index{Uri-Path}         & string & critique & oui& \small{Contient un des segments de l'URI}	\\\hline
+ \rowcolor{blue!10} 12 	&\Index{Content-Format}   & entier & facultative & & \small{Définit le format dans lequel sont codées des données}	\\\hline
+14 	&\Index{Max-Age}          & entier & facultative & & \small{Durée pendant laquelle la ressource peut être mise en cache.}	\\\hline
+ \rowcolor{blue!10} 15 	&\Index{Uri-Query}        & string & critique & oui& \small{Contient les segments d'interrogation que l'on retrouve dans les URI.}	\\\hline
+ \rowcolor{blue!10} 17 	&\Index{Accept}           & entier & critique & & \small{Indique les formats que le client peut accepter.}	\\\hline
+20 	&\Index{Location-Query}   & string & facultative & oui& \small{Utilisé en réponse à une requête POST pour indiquer le chemin de la ressource.}	\\\hline
+35 	&\Index{Proxy-Uri}        & string & critique & & \small{Contient une URI qui doit être prise en compte par le proxy.}	\\\hline
+39 	&\Index{Proxy-Scheme}     & string & critique & & \small{Indique le protocole.}	\\\hline
+60 	&\Index{Size1}            & entier & facultative & & \small{Indique la taille de la ressource.}	\\\hline
+ \rowcolor{blue!10} 258 	&\Index{No-Response}            & entier & facultative & & \small{	Limite les notifications REST}	\\\hline
+\end{tabular}
+	
+\caption{Types du protocole CoAP} 
+\label{tab-CoAP-options} 
+\end{table} 
+
+\subsection{Représentation des URI}
+
+On comprend mieux la signification de certaines options données dans le tableau précédent quand la syntaxe d’un URI est connue. (voir \rfc{2396}) . On a déjà vu que la syntaxe générale est :
+
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
+<scheme>:<scheme-specific-part>
+\end{termc}
+
+\noindent où \textit{scheme} va définir le schéma de notation. De manière générale, le schéma va indiquer comment est structuré la suite de l'URI. Quand l'URI est aussi un localisateur (donc un URL), le schéma fait référence au protocole qui pourra être utilisé pour retrouver la ressource comme http ou https voire coap. Après le schéma, on trouve deux zones, l'autorité qui va indiquer qui est responsable de nommer les ressources. Dans le cas d'un URL, il peut s’écrire de la manière suivante :
+
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
+<scheme>://@\textit{userinfo@}@host@\textit{:port}@/path?query
+\end{termc}
+
+\noindent où les champs en italique \textit{userinfo@} et \textit{:port} sont facultatifs. Ils contiennent respectivement le nom de l’utilisateur et le numéro de port sur lequel tourne le service.
+
+         \vspace{1em}
+
+\texttt{path} va être composé d’une série de segments séparés par des caractères\texttt{/} qui identifient la ressource sur le serveur. L’URI peut se terminer par des questions, c’est-à-dire une chaîne de caractères qui sera interprétée par le serveur précédemment désigné. Une question, c'est-à-dire des paramètres fournis pour construire la ressource, peut contenir plusieurs parties séparées par le caractère \texttt{&}.
+
+         \vspace{1em}
+
+Ceci peut être vérifié par le programme de désassemblage. L’URI~:
+
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
+coap://192.168.1.52/capteur1/temperature?max value&date=20131206
+\end{termc}
+
+\noindent utilise le schéma de nommage de coap. Le serveur est \texttt{192.168.1.52}, le chemin (\textit{path}) est composé de deux segments, suivi par deux questions. Le serveur reçoit la requête suivante : 
+
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, , escapechar=#]
+Received packet of size 50
+40 01 BE BF|B8 63 61 70 74  - 65 75 72 31|0B 74 65 @....capt eur1.te
+6D 70 65 72 61 74 75 72 65  -|49 6D 61 78 5F 76 61 mperature Imax_va
+6C 75 65|0D 00 64 61 74 65  - 3D 32 30 31 33 31 32 lue..date =201312
+30 36                                              06
+ver:1 Type = 0 (CON) Token Length = 0 code 1 (GET) Msg id = BEBF
+Option = 11 (+11) length = 8
+Uri-Path capteur1
+Option = 11 (+0) length = 11
+Uri-Path temperature
+Option = 15 (+4) length = 9
+Uri-Query max_value
+Option = 15 (+0) length = 13
+Uri-Query date=20131206
+\end{termc}
+
+
+Le listing précédent montre ce que reçoit le serveur. L'URI n'est pas complète, car la partie qui a servie a le localiser n'est pas indispensable. Seules les parties "chemin" et "question" sont indiquées. Le schéma coap: n’est pas précisé ; de même que Uri-Host et Uri-Port car le serveur connaît son adresse IP et le numéro de port sur lequel s’exécute le serveur CoAP.
+
+Ils pourraient être utiles en cas de virtualisation du serveur, c’est-à-dire si plusieurs instances de CoAP tournaient, soit à des noms différents, soit sur des numéros de port différents. Si cette possibilité existe, pour l’instant, la faible capacité des ressources ne pousse pas vers une virtualisation.
+
+         \vspace{1em}
+
+Si on reprend la partie optionnelle, la première option qui commence par l'octet \texttt{0xB8}. \texttt{0xb} (=11) indique qu'il s'agit d'une option \Index{Uri-path} (comme c'est la première option, le delta se confond avec la valeur de l'option) et de longueur 8 octets qui correspondent à la valeur \texttt{capteur1}. La seconde option débute par \texttt{0x0B}. Le delta est nul. On reste sur une option Uri-path de longueur de 11 octets. La troisième option s'ouvre avec l'octet \texttt{0x49}. L'incrément étant de 4, le numéro de l'option passe à 15 soit \Index{Uri-query} avec une valeur sur 9 octets. L'option suivante démarre par \texttt{0x0D}. On reste sur une option Uri-query mais la longueur \texttt{0xD} informe que l'octet suivant contient la longueur. La valeur vaut étrangement \texttt{0x00} car elle est diminuée de 13 pour respecter le codage défini par CoAP. la longueur est donc de 13 octets.
+
+\subsubsection*{Questions sur les URI}
+
+Soit le message CoAP suivant :
+
+\begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, , escapechar=#]
+40020001b474656d700573656e7331436d6178ff32332e30
+\end{termc}
+
+\Question{Code ?}
+{
+Que représente ce message ?
+\begin{itemize}[label=$\circ$]
+   \item \Wrong{Une requête GET}
+   \item \Correct{Une requête POST}
+   \item \Wrong{Une requête PUT}
+   \item \Wrong{Une requête DELETE}
+   \item \Wrong{Une notification positive}
+ \end{itemize}
+}
+{ Le champ code (deuxième octets de l'en-tête CoAP) vaut 0x02, ou 0.02 donc il s'agit d'une requête et d'un POST.
+}
+
+\Question{Token or not Token?}
+{
+Quelle est la valeur du champ token ?
+\begin{itemize}[label=$\circ$]
+   \item \Correct{Vide}
+   \item \Wrong{\texttt{0xb4}}
+   \item \Wrong{\texttt{0xb474}}
+   \item \Wrong{\texttt{0xb47465}}
+   \item \Wrong{\texttt{0xb474656d}}
+ \end{itemize}
+}
+{
+Le premier octet \texttt{0x40} s'écrit en binaire \texttt{0b01\_00\_0000}, soit la version (1), le type (CON) et la taille du champ Token (0), il n'y a donc pas de Token après l'en-tête obligatoire, il y aura directement les options ou le séparateur \texttt{0xFF} pour indiquer des données.}
+
+\Question{chemin d'URI}
+{
+Quel élément de l'URI contient ce message ?
+\begin{itemize}[label=$\circ$]
+   \item \Wrong{Aucun}
+   \item \Wrong{\texttt{/temp}}
+   \item \Wrong{\texttt{/temp/sens1} et \texttt{/max}}
+   \item \Wrong{\texttt{/temp/sens1/max}}
+     \item \Correct{\texttt{/temp/sens1?max}}
+
+    \end{itemize}
+   }
+   {
+   La séquence des Tyle/Longueur est \texttt{0xb4} Uri-path avec 4 octets de données (temp), \texttt{0x05} toujours Uri-path avec 5 octets de données (sens1) et \texttt{0x43} donc un type 11+4=15 soit Uri-Query avec 3  octets de données (max). \texttt{0xff} indique la fin des options
+   }
+ 
+ \subsection{Représentation des données}
+
+Pour que le client puisse interpréter les données, il faut qu’il puisse comprendre comment elles sont représentées. 
+Cela peut dépendre de la police de caractères. Ainsi, une lettre accentuée ne sera pas représentée de la même manière suivant le type de code. Il en va de même pour la représentation. Le plus simple consiste à envoyer en ASCII la valeur demandée, par exemple la chaîne de caractères \texttt{18} indique 18 degrés. 
+Il faut donc indiquer le type de codage/sérialisation utilisé pour décrire le contenu de la ressource. Là où HTTP utiliserait un nom, c'est-à-dire une chaîne de caractères, CoAP va utiliser une valeur numérique.
+
+Le tableau précédent donne un extrait des valeurs utilisées pour représenter les formats\footnote{La liste complète peut être trouvée sur le site de l'IANA \url{https://www.iana.org/assignments/core-parameters/core-parameters.xhtml\#content-formats}.}.
+
+         \vspace{1em}
+
+Deux options CoAP utilisent ces codes :
+\begin{itemize}
+    \item \Index{Content-format} (12) indiquant comment la ressource est codée ;
+    \item \Index{Accept} (17) indiquant dans une requête le format dans lequel la réponse doit être codée.
+\end{itemize}
+         \vspace{1em}
+
+Il existe beaucoup de valeurs pour le content-format, elles permettent de spécifier de manière très économique le type de ressource et par conséquent le traitement à effectuer.
+
+Chaque protocole utilisant CoAP aura tendance à définir de nouveaux codes. Le tableau~\vref{tab-CoAP-MIME} illustre ce phénomène pour \Index{SenML}. La valeur va servir à la fois pour indiquer la structure de données et le format de codage.
+      
+\begin{table}[!ht] 
+\centering 
+{
+\begin{tabular}{|l|p{6cm}|}
+\hline
+ \rowcolor{purple!10} \textbf{Valeur} & \textbf{Type} \\\hline\hline
+0 & text/plain; charset=utf-8  \\\hline		
+40 & application/link-format  \\\hline	
+41 & application/xml 		 \\\hline	
+42 &application/octet-stream  \\\hline		
+47 &application/exi 		 \\\hline
+50 & application/json\index{JSON} 		 \\\hline
+60 & application/cbor\index{CBOR} 		 \\\hline	
+110 & application/senml+json\index{SenML}\\ \hline	
+112 & application/senml+cbor \\ \hline
+11542 & application/vnd.oma.lwm2m+tlv\index{TLV}\index{LwM2M}\index{OMA}  \\ \hline
+11543 & application/vnd.oma.lwm2m+json  \\ \hline
+\end{tabular}
+}	
+\caption{Type des donnŽes} 
+\label{tab-CoAP-MIME} 
+\end{table} 
+
+\Question{ASCII}
+{Vous avez la ressource suivante :
+
+\texttt{temperature = 20C}
+
+Quelle valeur l'option CoAP Content-type utiliser pour une réponse en CoAP ?
+
+\begin{itemize}[label=$\circ$]
+   \item \Wrong{text/plain}
+   \item \Correct{0}
+   \item \Wrong{50}
+\end{itemize}
+}
+{L'entier 0 qui correspond à un codage utilisant les caractères ASCII}
+
+\Question{SenML}{
+Vous voulez recevoir une ressource dans le format SenML; CBOR. Quelle valeur doit transporter l'option Accept dans la requête ?}
+{\texttt{112}, comme le montre le tableau~\vref{tab-CoAP-MIME}}
+
+\Question{Erreur}
+{Quel code d'erreur retourne le serveur s'il ne peut pas envoyer une réponse dans ce format ? Aidez vous du \rfc{7252}.
+\begin{itemize}[label=$\circ$]
+   \item \Wrong{4.04 (Not Found)}
+   \item \Wrong{4.02 (Bad Option)}
+   \item \Correct{4.06 (Not Acceptable)}
+   \item \Wrong{5.01 (Not Implemented))}
+\end{itemize}
+}
+{
+Cf. Chapitre 5.10.4. du RFC. 4.06 n'est pas facile à trouver. Il faut aller sur le site de l'IANA, aller sur le RFC de CoAP qui pointe sur celui de HTTP pour la définition de ce code qui est rarement utilisé en HTTP. 4.04 n'est pas possible car la ressource existe mais pas au bon format. 4.02 n'est également pas possible, l'option Accept est critique donc doit être connue du serveur. Finalement, il s'agit d'une erreur du client et pas du serveur ; donc l'erreur 5.01 n'est pas possible non plus.
+}
+    
+\section {Observe}
+
+Avec l’architecture REST, le serveur répond toujours aux requêtes d’un client. Si l'on veut suivre l'évolution d'une ressource, le client doit demander périodiquement la valeur ; le serveur ne gardant pas d'état sur les requêtes passées. Cela n'est pas toujours compatible avec les contraintes énergétiques des capteurs. Supposons que l'on ait une alarme d'incendie qui doit informer quand le taux de fumée atteint un certain seuil. Il existe deux possibilités :
+\begin{itemize}
+\item l'alarme est un client REST et envoie un POST vers un serveur quand l'alerte est déclenchée. Pour que cela fonctionne, il faut que l'alarme ait été préalablement configurée avec l'adresse du serveur vers où envoyer ses requêtes POST ;
+\item l'alarme est un serveur REST qui possède une ressource donnant le taux de fumée. Elle n'a pas besoin d'être configurée. Les clients l'interrogent et elle répond à leur adresse. En revanche, si l'on veut déterminer quand un seuil est atteint, il faut continuellement interroger la ressource à une fréquence élevée si l'on ne veut pas rater une information.
+\end{itemize}
+
+         \vspace{1em}
+
+L'option \Index{Observe}, définie dans le \rfc{7641}, permet à un serveur d'envoyer périodiquement la valeur d'une ressource vers le client qui en a fait la demande. La période d'émission (ou les règles d'émission comme envoyer quand un seuil est atteint) est définie par le comportement du serveur. 
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+	
+	\foreach \i/\n in {0/client, 5/serveur}{
+		\draw [-triangle 60] (\i, 10) coordinate(vline\i) node [above] {\tiny{\n}} -- +(0, -10); 
+	}
+	
+	\coordinate (a) at ([yshift=-0.5cm]vline0); 
+	\draw [->](a) -- node [above, sloped, text width=4cm] {\tiny{GET /level\\Token=0x314\\Observe 0\\}} +(5, -0.5) coordinate (b); 
+	
+	\draw [->] ([yshift=-0.5cm] b) --node [below=0.4cm, , text width=4cm] {\tiny{2.05 \\Token=0x314\\Observe=12\\40}} +(-5, -0.5) coordinate(c); 
+	
+	\draw [->] ([yshift=-2.2cm] b) --node [below=0.4cm, , text width=4cm] {\tiny{2.05 \\Token=0x314\\Observe=25\\38}} +(-5, -0.5) coordinate(d); 
+	\draw [-*] ([yshift=-3.5cm] b) --node [above, very near start, , text width=2cm] {\tiny{2.05 \\Token=0x314\\Observe=30\\50}} +(-5, -2.8) coordinate(e); 
+	\draw [->] ([yshift=-4.9cm] b) --node [below=0.4cm, very near start,, text width=4cm] {\tiny{2.05 \\Token=0x314\\Observe=40\\25}} +(-5, -0.5) coordinate(f); 
+
+	
+	\end{tikzpicture}
+\caption{Envoi périodique grâce à l'option \texttt{Observe}} 
+\label{fig-CoAP-observe} 
+\end{figure} 
+
+         \vspace{1em}
+
+La figure~\vref{fig-CoAP-observe} illustre ce comportement. Le client envoie une requête GET en positionnant l'option Observe avec la valeur 0, mais dans valeur. Si le client accepte cette option, il va répondre en la positionnant dans ses réponses. Elle doit dans ce cas comporter une valeur qui ne pourra que croître de réponse en réponse.  Cela est utile pour pour permettre au client de détecter un déséquencement des réponses. Ainsi dans l'exemple, l'Observe estampillé 30 arrive après celui estampillé 40 et sera rejeté par le client.
+
+         \vspace{1em}
+
+On notera également que le champ \Index{Token} doit être présent pour faire le lien entre la requête et les réponses.
+
+         \vspace{1em}
+
+Il faut pouvoir aussi arrêter un Observe. Il existe plusieurs cas de figure~:
+\begin{itemize}
+    \item le client veut stopper un Observe en cours. Il refait la même requête mais en mettant la valeur 1 dans l'option Observe.
+    \item le client redémarre, il va perdre peut perdre son contexte concernant l'Observe, mais continuer a recevoir périodiquement des requêtes provenant du serveur. Le client ne reconnaissant pas le Token, émet un message \Index{ReSeT}. Le serveur annule l'émission périodique vers le client.
+    \item le client est inaccessible, il ne va pas pouvoir annuler la transmission. En règle générale, les réponses avec l'option Observe sont transportées dans des messages \Index{NON} confirmables. Le serveur peut de temps en temps envoyer la réponse dans un message \Index{CON}firmable. S'il ne reçoit pas d'acquittement du client, il en déduit qu'il a disparu et arrête d'envoyer des réponses périodiques.
+\end{itemize}
+
