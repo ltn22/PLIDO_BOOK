@@ -1,0 +1,62 @@
+
+\chapter*{Introduction}
+L'internet des objets ne va pas seulement ajouter une nouvelle catégorie d'équipements au réseau, il va également modifier la mise en \oe{}uvre des protocoles.
+IL constitue une évolution majeure des réseaux mondiaux et doit répondre à deux défis fondamentaux : être économe en énergie et surtout être interopérable ; c'est-à-dire permettre aux objets de s’intégrer facilement dans les systèmes d’information existants. Il faut donc être à la fois différent mais identique. 
+
+Il modifie également la manière d'enseigner. Jusqu'à présent cet enseignement était très stratifié, on montrait en cours magistral comment fonctionne les protocoles, comment ils s'organisent. La mise en \oe{}uvre pratique portait plutôt sur la configuration des équipements d'interconnexion comme les routeurs. La vision traditionnelle consiste a bien séparer les fonctionnalités. Les protocoles sont empilés les uns sur les autres avec les fonctionnalités comme le codage de l'information, sur lesquelles reposent l'aiguillage de l'information et au sommet les  applications. Chaque protocole dans cet empilement  indépendant les uns des autres et des frontières très strictes. 
+
+
+
+Cette vision est à revoir pour l'Internet des objets, les faibles capacités en mémoire, la nature des liens de communication font qu'il est difficile de se spécialiser dans un seul domaine. Ainsi, j'espérais avoir oublié pour toujours les aspects traitement du signal ou électronique en quittant l'université. Or pour concevoir un objet une approche pluridisciplinaire est essentielle, il faut donc à la fois appréhender des concepts électroniques aussi bien en terme de place que de consommation électrique, de traitement du signal car les signaux sont généralement très faibles, sans oublier les problèmes traditionnels en réseaux comme le routage, l'auto-configuration ou la sécurité. Il faut également avoir un \oe{}il sur les  applicatifs~:  comment les données sont représentŽes et codées lors de leur transmission et comment elles peuvent interagir avec des services existants. 
+
+L'objet en lui même n'est qu'une petite partie du problème, il va envoyer un flux d'information plus ou moins important vers des serveurs qui seront chargés de les analyser, de les stocker, de trouver des tendances. Les petits ruisseaux faisant les grandes rivières, il faut que ces serveurs ou les réseaux qui y conduisent soient correctement dimensionnés. Mais également que le coût pour la gestion d'un objet soit très faible sinon en les cumulant sur des millions d'objets il peuvent être un frein au déploiement.
+
+
+~
+
+Ce livre est le fruit des expériences que nous avons eu avec les ateliers de fabrication, et d'une constatation que le réseau est souvent le parent pauvre à la fois des applications créées mais également du support que l'on trouve sur ces plates-formes; les communications sont vues dans une optique de l'application, sans prendre en compte une vision d'interopérabilitŽ plus globale conduisant au concept d'Internet des Objets. Ceci peut se comprendre car les piles protocolaires de l'Internet sont relativement importantes et dans un environnement restreint, il est plus facile de s'en dŽbarrasser. Néanmoins, ces piles protocolaires ont un avantage, elles favorisent la communication entre les constituants du réseau. Ainsi, il est possible de piloter un objet a partir de son ordinateur portable, les donnŽes peuvent être envoyées sur des serveurs pour être traitées,... 
+
+La richesse des possibilités de communication va permettre de créer des services innovants. Il faut aussi que les piles protocolaires s'adaptent. C'est ce que font de nombreux organismes dont l'IETF qui standardise les protocoles utilisés dans l'Internet.
+
+~
+~
+
+
+
+Cet ouvrage est une adaptation du MOOC Programmer L'Internet des Objets sur Coursera. Il va couvrir les technologies, architectures et protocoles nécessaires pour la réalisation de bout en bout de la collecte d’informations sur des réseaux dédiés à l’IoT à la structuration de la donnée et à son traitement.
+
+Vous allez notamment :
+\begin{itemize}
+\item découvrir une nouvelle catégorie de réseaux appelée LPWAN dont Sigfox et LoRaWAN sont les représentant les plus connus ;
+\item voir l’évolution de la pile protocolaire de l’internet qui passe de IPv4/TCP/HTTP à IPv6/UDP/ CoAP tout en préservant le concept REST basé sur des ressources identifiées sans ambiguïté par des URI ;
+\item expliquer comment CBOR peut être utilisé pour structurer des données complexes en complément de JSON ;
+\item enfin JSON-LD et la base de données MongoDB nous permettront de manipuler aisément l’information collectée. Ainsi, nous introduirons les techniques essentielles pour valider statistiquement les données collectées.
+
+\end{itemize}
+À travers ce cours, vous apprendrez à programmer un objet économe en énergie et interopérable avec d'autres objets.
+
+\clearpage
+
+\section *{Materiel}
+
+ \begin{wrapfigure}{r}{3cm}
+\Youtube{https://youtu.be/9edD2jEF3vM}
+\end{wrapfigure}
+
+Il n'est pas nécessaire d'avoir du matériel pour faire la plupart des exercices et expérimenter les concepts. A peu près tout peut se faire avec des scripts Python, mais ce n'est pas aussi amusant que les expérimentations en vrai. En particulier pour découvrir la magie des réseaux radios longue portée. C'est pour cela que nous allons utiliser le matériel suivant~:
+
+\begin{itemize}
+\item  un  \fulluri{LoPy4}{https://pycom.io/product/lopy4/} -\textit{Pycom - Quadruple Bearer MicroPython enabled Dev Board} ; Attention : prendre l'option With headers
+
+\item une  \fulluri{Expansion Board 3.0}{https://pycom.io/product/expansion-board-3-0/} - Pycom - \textit{Compatible with Pycom Multi-Network IoT} ;
+
+\item une \fulluri{antenne LoRa}{https://pycom.io/product/lora-868mhz-915mhz-sigfox-antenna-kit/} (868MHz/915MHz) & Sigfox Antenna Kit - Pycom avec son petit fil permettant de la connecter au LoPy.
+
+\item un \fulluri{boitier}{https://pycom.io/product/pycase-clear/}, mais ce n'est pas indispensable, si vous n'êtes pas soigneux \textit{Pycase Clear - Fits Pycom IoT Dev Boards, Expansion Board & Antenna kit} ;
+
+\item un \fulluri{BME280 3v3}{https://boutique.semageek.com/fr/704-capteur-de-pression-temperature-humidite-bme280-3009052078446.html}  Capteur de pression temperature humidite BME280 - Boutique Semageek ou \fulluri{BME280 3.3}{https://fr.aliexpress.com/item/1005002387867504.html?spm=a2g0o.productlist.0.0.580f7c3elwXr70&algo_pvid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6&algo_expid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6-1&btsid=0b0a182b16193744192742943e5955&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_} BME280 BMP280 Avec L'aiguille Simple 1 * 6Pin 3.3V Module Numérique Température Capteur De Pression Barométrique Module Pour Arduino | AliExpress ;
+
+\item un câble USB (USB 2.0A to micro B 2.0 1.5 m) ;
+
+\item des câbles \fulluri{dupont mâle-femelle}{https://www.amazon.fr/cable-dupont/s?k=cable+dupont} : Amazon.fr : cable dupont
+\end{itemize}

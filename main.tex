@@ -208,7 +208,7 @@ showstringspaces=false
 
 \newcommand\Youtube[1]{\begin{tcolorbox}[colback=red!5,colframe=red!75!black,title=Youtube, width=3cm]\href{#1}{\qrcode{#1}}\end{tcolorbox}}
 
-
+\newcommand\fulluri[2]{\href{#2}{#1}\footnote{\url{#2}}}
 %%%%%%%
 
 \provideboolean{allchap}\setboolean{allchap}{false}
@@ -263,6 +263,8 @@ showstringspaces=false
 
 \renewcommand\contentsname{Table des Matières}
 \renewcommand{\bibname}{Bibliographie}
+
+\cleardoublepage
 \tableofcontents% Print the table of contents itself
 
 %\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right
@@ -272,6 +274,8 @@ showstringspaces=false
 %----------------------------------------------------------------------------------------
 %	CHAPTERS
 %----------------------------------------------------------------------------------------
+\cleardoublepage
+
 \chapter*{Acronymes}
 \begin{multicols}{2}
 \input{acronyms}
@@ -279,6 +283,7 @@ showstringspaces=false
 
 \setboolean{allchap}{false} % true: take all, false take nothing only /input
 
+\input{Part00-liminaire}
 \Input{Part01.0-Intro}
 \Input{Part02.0-ArchiIP}
 \Input{Part02.5-Wireshark}
@@ -291,7 +296,7 @@ showstringspaces=false
 \Input{Part08.0-Sigfox}
 \Input{Part09.0-LoRaWAN}
 \Input{Part10.0-CoAP}
-\input{Part10.5-aiocoap}
+\Input{Part10.5-aiocoap}
 \Input{Part11.0-LwM2M}
 
 
@@ -305,12 +310,15 @@ showstringspaces=false
 
 \immediate\closeout\tempfile
 \setboolean{Response}{false}
+
+\cleardoublepage
 \chapter{Réponses aux questions}
 \input{questions}
 
+\cleardoublepage
 \printindex
 
-
+\cleardoublepage
 \printbibliography
 
 \end{document}
