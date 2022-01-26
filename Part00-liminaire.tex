@@ -1,62 +1,126 @@
 
 \chapter*{Introduction}
-L'internet des objets ne va pas seulement ajouter une nouvelle catégorie d'équipements au réseau, il va également modifier la mise en \oe{}uvre des protocoles.
-IL constitue une évolution majeure des réseaux mondiaux et doit répondre à deux défis fondamentaux : être économe en énergie et surtout être interopérable ; c'est-à-dire permettre aux objets de s’intégrer facilement dans les systèmes d’information existants. Il faut donc être à la fois différent mais identique. 
-
-Il modifie également la manière d'enseigner. Jusqu'à présent cet enseignement était très stratifié, on montrait en cours magistral comment fonctionne les protocoles, comment ils s'organisent. La mise en \oe{}uvre pratique portait plutôt sur la configuration des équipements d'interconnexion comme les routeurs. La vision traditionnelle consiste a bien séparer les fonctionnalités. Les protocoles sont empilés les uns sur les autres avec les fonctionnalités comme le codage de l'information, sur lesquelles reposent l'aiguillage de l'information et au sommet les  applications. Chaque protocole dans cet empilement  indépendant les uns des autres et des frontières très strictes. 
 
 
+\lgf{L'internet des Objets ne va pas seulement ajouter une nouvelle catégorie d'équipements au réseau, il va également modifier la mise en \oe{}uvre des protocoles.
+IL constitue une évolution majeure des réseaux mondiaux et doit répondre à deux défis fondamentaux : être économe en énergie et surtout être interopérable ; c'est-à-dire permettre aux Objets de s’intégrer facilement dans les systèmes d’information existants. Il faut donc être à la fois différent mais identique. }
+\lge{The Internet of Things will not only add a new category of equipment to the network, it will also change the way protocols are implemented.
+It constitutes a major evolution of the world networks and must answer two fundamental challenges: to be energy efficient and above all to be interoperable; that is to say to allow Things to be easily integrated into existing information systems. It must therefore be both different and identical.}
 
-Cette vision est à revoir pour l'Internet des objets, les faibles capacités en mémoire, la nature des liens de communication font qu'il est difficile de se spécialiser dans un seul domaine. Ainsi, j'espérais avoir oublié pour toujours les aspects traitement du signal ou électronique en quittant l'université. Or pour concevoir un objet une approche pluridisciplinaire est essentielle, il faut donc à la fois appréhender des concepts électroniques aussi bien en terme de place que de consommation électrique, de traitement du signal car les signaux sont généralement très faibles, sans oublier les problèmes traditionnels en réseaux comme le routage, l'auto-configuration ou la sécurité. Il faut également avoir un \oe{}il sur les  applicatifs~:  comment les données sont représentŽes et codées lors de leur transmission et comment elles peuvent interagir avec des services existants. 
+\lgf{Il modifie également la manière d'enseigner. Jusqu'à présent cet enseignement était très stratifié, on montrait en cours magistral comment fonctionne les protocoles, comment ils s'organisent. La mise en \oe{}uvre pratique portait plutôt sur la configuration des équipements d'interconnexion comme les routeurs. La vision traditionnelle consiste a bien séparer les fonctionnalités. Les protocoles sont empilés les uns sur les autres avec les fonctionnalités comme le codage de l'information, sur lesquelles reposent l'aiguillage de l'information et au sommet les  applications. Chaque protocole dans cet empilement  indépendant les uns des autres et des frontières très strictes.} 
+\lge{It also changes the way we teach. Until now, this teaching was very stratified, with lectures showing how the protocols work and how they are organized. The practical implementation was more concerned with the configuration of interconnection equipment such as routers. The traditional vision consists in separating the functionalities. The protocols are stacked one on top of the other with the functionalities such as the coding of information, on which the routing of information is based, and at the top the applications. Each protocol in this stack is independent of the others and has very strict boundaries.}
 
-L'objet en lui même n'est qu'une petite partie du problème, il va envoyer un flux d'information plus ou moins important vers des serveurs qui seront chargés de les analyser, de les stocker, de trouver des tendances. Les petits ruisseaux faisant les grandes rivières, il faut que ces serveurs ou les réseaux qui y conduisent soient correctement dimensionnés. Mais également que le coût pour la gestion d'un objet soit très faible sinon en les cumulant sur des millions d'objets il peuvent être un frein au déploiement.
+~
+
+\lgf{Cette vision est à revoir pour l'Internet des objets, les faibles capacités en mémoire, la nature des liens de communication font qu'il est difficile de se spécialiser dans un seul domaine. Ainsi, j'espérais avoir oublié pour toujours les aspects traitement du signal ou électronique en quittant l'université. Or pour concevoir un objet une approche pluridisciplinaire est essentielle, il faut donc à la fois appréhender des concepts électroniques aussi bien en terme de place que de consommation électrique, de traitement du signal car les signaux sont généralement très faibles, sans oublier les problèmes traditionnels en réseaux comme le routage, l'auto-configuration ou la sécurité. Il faut également avoir un \oe{}il sur les  applicatifs~:  comment les données sont représentées et codées lors de leur transmission et comment elles peuvent interagir avec des services existants. }
+\lge{This vision has to be revised for the Internet of Things, the low memory capacities, the nature of the communication links make it difficult to specialize in only one field. Thus, I hoped to have forgotten forever the signal processing or electronic aspects when I left the university. However, in order to design an object, a multidisciplinary approach is essential, so you have to understand electronic concepts in terms of space as well as power consumption, signal processing because the signals are generally very weak, without forgetting traditional network problems such as routing, auto-configuration or security. It is also necessary to have an eye on the applications: how the data are represented and coded during their transmission and how they can interact with existing services. }
+
+\lgf{L'Objet en lui même n'est qu'une petite partie du problème, il va envoyer un flux d'information plus ou moins important vers des serveurs qui seront chargés de les analyser, de les stocker, de trouver des tendances. Les petits ruisseaux faisant les grandes rivières, il faut que ces serveurs ou les réseaux qui y conduisent soient correctement dimensionnés. Mais également que le coût pour la gestion d'un objet soit très faible sinon en les cumulant sur des millions d'objets il peuvent être un frein au déploiement.}
+\lge{The Thing itself is only a small part of the problem, it will send a more or less important flow of information to servers that will be responsible for analyzing, storing and finding trends. Since small streams make big rivers, these servers or the networks that lead to them must be correctly sized. But also that the cost of managing an object is very low, otherwise the cumulative cost of millions of objects can be a barrier to deployment..}
 
 
 ~
 
-Ce livre est le fruit des expériences que nous avons eu avec les ateliers de fabrication, et d'une constatation que le réseau est souvent le parent pauvre à la fois des applications créées mais également du support que l'on trouve sur ces plates-formes; les communications sont vues dans une optique de l'application, sans prendre en compte une vision d'interopérabilitŽ plus globale conduisant au concept d'Internet des Objets. Ceci peut se comprendre car les piles protocolaires de l'Internet sont relativement importantes et dans un environnement restreint, il est plus facile de s'en dŽbarrasser. Néanmoins, ces piles protocolaires ont un avantage, elles favorisent la communication entre les constituants du réseau. Ainsi, il est possible de piloter un objet a partir de son ordinateur portable, les donnŽes peuvent être envoyées sur des serveurs pour être traitées,... 
+\lgf{Ce livre est le fruit des expériences que nous avons eu avec les ateliers de fabrication, et d'une constatation que le réseau est souvent le parent pauvre à la fois des applications créées mais également du support que l'on trouve sur ces plates-formes; les communications sont vues dans une optique de l'application, sans prendre en compte une vision d'interopérabilité plus globale conduisant au concept d'Internet des Objets. Ceci peut se comprendre car les piles protocolaires de l'Internet sont relativement importantes et dans un environnement restreint, il est plus facile de s'en débarrasser. Néanmoins, ces piles protocolaires ont un avantage, elles favorisent la communication entre les constituants du réseau. Ainsi, il est possible de piloter un objet a partir de son ordinateur portable, les données peuvent être envoyées sur des serveurs pour être traitées,... }
+\lge{This book is the result of the experiences we had with the FabLabs, and of an observation that the network is often the poor relation both of the applications created and of the support found on these platforms; communications are seen from an application perspective, without taking into account a more global vision of interoperability leading to the concept of the Internet of Things. This is understandable because the protocol stacks of the Internet are relatively large and in a restricted environment, it is easier to get rid of them. Nevertheless, these protocol stacks have an advantage, they promote communication between the network components. Thus, it is possible to control an object from its laptop, data can be sent to servers to be processed,... }
 
-La richesse des possibilités de communication va permettre de créer des services innovants. Il faut aussi que les piles protocolaires s'adaptent. C'est ce que font de nombreux organismes dont l'IETF qui standardise les protocoles utilisés dans l'Internet.
-
+\lgf{La richesse des possibilités de communication va permettre de créer des services innovants. Il faut aussi que les piles protocolaires s'adaptent. C'est ce que font de nombreux organismes dont l'IETF qui standardise les protocoles utilisés dans l'Internet.}
+\lge{The variety of communication possibilities will allow the creation of innovative services. The protocol stacks must also adapt. This is what many organizations are doing, including the IETF, which standardizes the protocols used in the Internet.}
 ~
 ~
 
 
 
-Cet ouvrage est une adaptation du MOOC Programmer L'Internet des Objets sur Coursera. Il va couvrir les technologies, architectures et protocoles nécessaires pour la réalisation de bout en bout de la collecte d’informations sur des réseaux dédiés à l’IoT à la structuration de la donnée et à son traitement.
+\lgf{Cet ouvrage est une adaptation du MOOC Programmer L'Internet des Objets sur Coursera. Il va couvrir les technologies, architectures et protocoles nécessaires pour la réalisation de bout en bout de la collecte d’informations sur des réseaux dédiés à l’IoT à la structuration de la donnée et à son traitement.}
+\lge{This book is an adaptation of the MOOC Programming the Internet of Things on Coursera. It will cover the technologies, architectures and protocols needed for the end-to-end realization of information collection on networks dedicated to the IoT to the structuring of the data and its processing.}
 
-Vous allez notamment :
+\lgf{Vous allez notamment~:}
+\lge{You're going to include:}
 \begin{itemize}
-\item découvrir une nouvelle catégorie de réseaux appelée LPWAN dont Sigfox et LoRaWAN sont les représentant les plus connus ;
-\item voir l’évolution de la pile protocolaire de l’internet qui passe de IPv4/TCP/HTTP à IPv6/UDP/ CoAP tout en préservant le concept REST basé sur des ressources identifiées sans ambiguïté par des URI ;
-\item expliquer comment CBOR peut être utilisé pour structurer des données complexes en complément de JSON ;
-\item enfin JSON-LD et la base de données MongoDB nous permettront de manipuler aisément l’information collectée. Ainsi, nous introduirons les techniques essentielles pour valider statistiquement les données collectées.
+\item 
+    \lgf{découvrir une nouvelle catégorie de réseaux appelée LPWAN dont Sigfox et LoRaWAN sont les représentant les plus connus~;}
+    \lge{discover a new category of networks called LPWAN of which Sigfox and LoRaWAN are the best known representatives~;}
+\item 
+    \lgf{voir l’évolution de la pile protocolaire de l’internet qui passe de IPv4/TCP/HTTP à IPv6/UDP/ CoAP tout en préservant le concept REST basé sur des ressources identifiées sans ambiguïté par des URI~;}
+    \lge{see the evolution of the internet protocol stack from IPv4/TCP/HTTP to IPv6/UDP/CoAP while preserving the REST concept based on resources unambiguously identified by URI;}
+\item 
+    \lgf{expliquer comment CBOR peut être utilisé pour structurer des données complexes en complément de JSON~;}
+    \lge{explain how CBOR can be used to structure complex data in addition to JSON;}
+\item 
+    \lgf{enfin JSON-LD et la base de données MongoDB nous permettront de manipuler aisément l’information collectée. Ainsi, nous introduirons les techniques essentielles pour valider statistiquement les données collectées.}
+    \lge{Finally JSON-LD and the MongoDB database will allow us to easily manipulate the collected information. Thus, we will introduce the essential techniques to statistically validate the collected data.}
 
 \end{itemize}
-À travers ce cours, vous apprendrez à programmer un objet économe en énergie et interopérable avec d'autres objets.
+\lgf{À travers ce cours, vous apprendrez à programmer un Objet économe en énergie et interopérable avec d'autres Objets.}
+\lge{Through this course, you will learn how to program an energy efficient Thing that is interoperable with other Things.}
 
 \clearpage
 
-\section *{Materiel}
+\section *{\lgf{Materiel}\lge{Hardware}}
 
- \begin{wrapfigure}{r}{3cm}
-\Youtube{https://youtu.be/9edD2jEF3vM}
+ \begin{wrapfigure}{r}{5.5cm}
+\centerline{\includegraphics[width=.4\columnwidth]{Pictures/pycom-bme.png}}
 \end{wrapfigure}
 
-Il n'est pas nécessaire d'avoir du matériel pour faire la plupart des exercices et expérimenter les concepts. A peu près tout peut se faire avec des scripts Python, mais ce n'est pas aussi amusant que les expérimentations en vrai. En particulier pour découvrir la magie des réseaux radios longue portée. C'est pour cela que nous allons utiliser le matériel suivant~:
+\lgf{Il n'est pas nécessaire d'avoir du matériel pour faire la plupart des exercices et expérimenter les concepts. A peu près tout peut se faire avec des scripts Python, mais ce n'est pas aussi amusant que les expérimentations en vrai. En particulier pour découvrir la magie des réseaux radios longue portée. C'est pour cela que nous allons utiliser le matériel suivant~:}
+\lge{You don't need hardware to do most of the exercises and experiment with the concepts. Just about everything can be done with Python scripts, but it's not as much fun as experimenting in real life. Especially when it comes to discovering the magic of long range radio networks. That's why we will use the following material:}
 
 \begin{itemize}
-\item  un  \fulluri{LoPy4}{https://pycom.io/product/lopy4/} -\textit{Pycom - Quadruple Bearer MicroPython enabled Dev Board} ; Attention : prendre l'option With headers
+\item  
+    \lgf{un  \fulluri{LoPy4}{https://pycom.io/product/lopy4/} -\textit{Pycom - Quadruple Bearer MicroPython enabled Dev Board} ; Attention : prendre l'option \textit{With headers}}
+    \lge{a  \fulluri{LoPy4}{https://pycom.io/product/lopy4/} -\textit{Pycom - Quadruple Bearer MicroPython enabled Dev Board} ; Caution: take the option \textit{With headers}}
 
-\item une  \fulluri{Expansion Board 3.0}{https://pycom.io/product/expansion-board-3-0/} - Pycom - \textit{Compatible with Pycom Multi-Network IoT} ;
+\item
+    \lgf{une  \fulluri{Expansion Board 3.0}{https://pycom.io/product/expansion-board-3-0/} - Pycom - \textit{Compatible with Pycom Multi-Network IoT}~;}
+    \lge{A  \fulluri{Expansion Board 3.0}{https://pycom.io/product/expansion-board-3-0/} - Pycom - \textit{Compatible with Pycom Multi-Network IoT};}
 
-\item une \fulluri{antenne LoRa}{https://pycom.io/product/lora-868mhz-915mhz-sigfox-antenna-kit/} (868MHz/915MHz) & Sigfox Antenna Kit - Pycom avec son petit fil permettant de la connecter au LoPy.
+\item 
+    \lgf{une \fulluri{antenne LoRa}{https://pycom.io/product/lora-868mhz-915mhz-sigfox-antenna-kit/} (868MHz/915MHz) \& Sigfox Antenna Kit - Pycom avec son petit fil permettant de la connecter au LoPy~;}
+    \lge{une \fulluri{LoRa Antenna}{https://pycom.io/product/lora-868mhz-915mhz-sigfox-antenna-kit/} (868MHz/915MHz) \& Sigfox Antenna Kit - Pycom with its small wire allowing to connect it to LoPy;}
 
-\item un \fulluri{boitier}{https://pycom.io/product/pycase-clear/}, mais ce n'est pas indispensable, si vous n'êtes pas soigneux \textit{Pycase Clear - Fits Pycom IoT Dev Boards, Expansion Board & Antenna kit} ;
 
-\item un \fulluri{BME280 3v3}{https://boutique.semageek.com/fr/704-capteur-de-pression-temperature-humidite-bme280-3009052078446.html}  Capteur de pression temperature humidite BME280 - Boutique Semageek ou \fulluri{BME280 3.3}{https://fr.aliexpress.com/item/1005002387867504.html?spm=a2g0o.productlist.0.0.580f7c3elwXr70&algo_pvid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6&algo_expid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6-1&btsid=0b0a182b16193744192742943e5955&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_} BME280 BMP280 Avec L'aiguille Simple 1 * 6Pin 3.3V Module Numérique Température Capteur De Pression Barométrique Module Pour Arduino | AliExpress ;
+\item 
+    \lgf{un \fulluri{boitier}{https://pycom.io/product/pycase-clear/}, mais ce n'est pas indispensable, si vous n'êtes pas soigneux \textit{Pycase Clear - Fits Pycom IoT Dev Boards, Expansion Board \& Antenna kit} ;}
+    \lge{a \fulluri{box}{https://pycom.io/product/pycase-clear/},but it is not necessary, if you are not careful with your device \textit{Pycase Clear - Fits Pycom IoT Dev Boards, Expansion Board \& Antenna kit};}
 
-\item un câble USB (USB 2.0A to micro B 2.0 1.5 m) ;
+\item 
+    \lgf{un capteur \fulluri{BME280 3v3}{https://boutique.semageek.com/fr/704-capteur-de-pression-temperature-humidite-bme280-3009052078446.html}  Capteur de pression temperature humidite BME280 - Boutique Semageek ou \fulluri{BME280 3.3}{https://fr.aliexpress.com/item/1005002387867504.html?spm=a2g0o.productlist.0.0.580f7c3elwXr70&algo_pvid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6&algo_expid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6-1&btsid=0b0a182b16193744192742943e5955&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_};}
+    \lge{A sensor \fulluri{BME280 3v3}{https://boutique.semageek.com/fr/704-capteur-de-pression-temperature-humidite-bme280-3009052078446.html}  Capteur de pression temperature humidite BME280 - Boutique Semageek or \fulluri{BME280 3.3}{https://fr.aliexpress.com/item/1005002387867504.html?spm=a2g0o.productlist.0.0.580f7c3elwXr70&algo_pvid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6&algo_expid=bbd88dd7-92c5-4904-a4e7-6045b186dbd6-1&btsid=0b0a182b16193744192742943e5955&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_};}
 
-\item des câbles \fulluri{dupont mâle-femelle}{https://www.amazon.fr/cable-dupont/s?k=cable+dupont} : Amazon.fr : cable dupont
+\item 
+    \lgf{un câble USB (USB 2.0A to micro B 2.0 1.5 m)~;}
+    \lge{a USB cable (USB 2.0A to micro B 2.0 1.5 m);}
+
+\item 
+    \lgf{des câbles \fulluri{dupont mâle-femelle}{https://www.amazon.fr/cable-dupont/s?k=cable+dupont} }
+    \lge{\fulluri{dupont male-femelle}{https://www.amazon.fr/cable-dupont/s?k=cable+dupont} cable}
 \end{itemize}
+
+  \vspace{1em}
+
+
+\lgf{Le LoPy propose un an d'abonnement gratuit au réseau Sigfox, c'est suffisant pour expérimenter. Un abonnement annuel coûte une dizaine d'euros. Par contre, accéder à un réseau LoRaWAN est plus problématique. Les offres des opérateurs ne sont pas toujours adaptées et la couvertures des réseaux communautaires n'est pas complète. Mais vous pouvez étendre cette couverture en installant votre propre antenne LoRa pour moins d'une centaine d'euros. Nous utiliserons aussi la solution proposée par Pycom.}
+\lge{LoPy offers a free one-year subscription to the Sigfox network, which is enough to experiment. An annual subscription costs about ten euros. On the other hand, accessing a LoRaWAN network is more problematic. The offers of the operators are not always adapted and the coverage of the community networks is not complete. But you can extend this coverage by installing your own LoRa antenna for less than a hundred euros. We will also use the solution proposed by Pycom.}
+
+\lgf{Pour cela il faut~:}
+\lge{To do this you need:}
+
+\begin{itemize}
+    \item 
+        \lgf{une carte d'extension \fulluri{pygate}{https://pycom.io/product/pygate/}~;}
+        \lge{an extension board \fulluri{pygate}{https://pycom.io/product/pygate/};}
+    \item 
+        \lgf{un LoPy comme précédement ou un un \fulluri{wi-py}{https://pycom.io/product/wipy-3-0/} un peu moins cher~;}
+        \lge{a LoPy as before or a slightly cheaper \fulluri{wi-py}{https://pycom.io/product/wipy-3-0/};}
+    \item 
+        \lgf{un \fulluri{joli boitier}{https://pycom.io/product/pygate-case/} pour faire pro~;}
+        \lge{a \fulluri{pretty box}{https://pycom.io/product/pygate-case/} to look professional;}
+        
+    \item 
+        \lgf{son \fulluri{antenne avec son câble}{https://pycom.io/product/lora-868mhz-915mhz-sigfox-antenna-kit/}~;}
+        \lge{its \fulluri{antenna with its cable}{https://pycom.io/product/lora-868mhz-915mhz-sigfox-antenna-kit/}~;}
+    \item 
+        \lgf{et cette fois-ci un câble USB-C.}
+        \lge{and this time a USB-C cable.}
+\end{itemize}
+

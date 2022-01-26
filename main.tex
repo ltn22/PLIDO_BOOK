@@ -216,6 +216,14 @@ showstringspaces=false
 \newcommand\Input[1]{\ifthenelse{\boolean{allchap}}{\input{#1}}{}}
 
 
+%-----------
+
+\provideboolean{lfrench}\setboolean{lfrench}{false}
+\provideboolean{lenglish}\setboolean{lenglish}{true}
+
+\newcommand\lgf[1]{\ifthenelse{\boolean{lfrench}}{#1}{}}
+\newcommand\lge[1]{\ifthenelse{\boolean{lenglish}}{#1}{}}
+
 \begin{document}
 
 \let\cleardoublepage\clearpage
@@ -283,8 +291,11 @@ showstringspaces=false
 
 \setboolean{allchap}{false} % true: take all, false take nothing only /input
 
-\input{Part00-liminaire}
-\Input{Part01.0-Intro}
+\setboolean{lfrench}{false}
+\setboolean{lenglish}{true}
+
+\Input{Part00-liminaire}
+\input{Part01.0-Intro}
 \Input{Part02.0-ArchiIP}
 \Input{Part02.5-Wireshark}
 \Input{Part03.0-Modbus}

@@ -1,6 +1,9 @@
 \chapterimage{pano-tv1.png} % Chapter heading image
 \cleardoublepage
-\chapter{LES BASES DE L'INTERNET DES OBJETS (IOT)}
+
+\lgf{\chapter{LES BASES DE L'INTERNET DES OBJETS (IOT)}}
+\lge{\chapter{THE BASIS OF THE INTERNET OF THINGS (IOT)}}
+
 
 \section{Introduction}
 
@@ -8,78 +11,105 @@
  \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/9edD2jEF3vM}
 \end{wrapfigure}
- Dans cette première partie du cours, nous allons poser les bases de ce qu'est l'internet des objets (\ac{IoT} in english). Qu'est-ce qu'on entend par \ac{IoT} dans le cadre de livre~? Quelles sont les problématiques auxquelles doit répondre l'\ac{IoT} et son évolution aujourd'hui~? Quelles sont les technologies, les architectures, les protocoles sous-jacents qui seront utilisés dans cet ouvrage~? 
+
+ \lgf{Dans cette première partie du cours, nous allons poser les bases de ce qu'est l'internet des objets (\ac{IoT} in english). Qu'est-ce qu'on entend par \ac{IoT} dans le cadre de livre~? Quelles sont les problématiques auxquelles doit répondre l'\ac{IoT} et son évolution aujourd'hui~? Quelles sont les technologies, les architectures, les protocoles sous-jacents qui seront utilisés dans cet ouvrage~?}
+ \lge{In this first part of the course, we will lay the foundations of what the Internet of Things (IoT) is. What do we mean by "Internet of Things" in the context of the book? What are the issues that the Internet of Things must address and its evolution today? What are the underlying technologies, architectures and protocols that will be used in this book?}
  
- Pour cela, nous allons faire un parallèle entre la manière dont l'internet a intégré la télévision et ce que l'on vit actuellement avec l'internet des objets. 
+ \lgf{Pour cela, nous allons faire un parallèle entre la manière dont l'internet a intégré la télévision et ce que l'on vit actuellement avec l'internet des Objets.}
+ \lge{To do this, we will draw a parallel between the way the Internet has integrated television and what we are currently experiencing with the Internet of Things.}
  
- \subsection{Réseaux dédiés}
+ \lgf{\subsection{Réseaux dédiés}}
+ \lge{\subsection{Dedicated networks}}
    \vspace{1em}
 
 \begin{wrapfigure}{r}{6cm}
 \centerline{\includegraphics[width=.4\columnwidth]{Pictures/illu-propa.png}}
 \end{wrapfigure}
 
- Dans les années 50, la télévision est devenue très populaire et presque tous les foyers ont acheté un téléviseur pour regarder leurs programmes préférés. Des réseaux de transmission dédiés ont été déployés partout sur la planète. En fait chaque type de communication avait son propre réseau un pour la radio un pour le téléphone un pour le télex,...
+\lgf{Dans les années 50, la télévision est devenue très populaire et presque tous les foyers ont acheté un téléviseur pour regarder leurs programmes préférés. Des réseaux de transmission dédiés ont été déployés partout sur la planète. En fait chaque type de communication avait son propre réseau un pour la radio un pour le téléphone un pour le télex,...}
+\lge{In the 1950s, television became very popular and almost every household bought a television set to watch their favorite programs. Dedicated transmission networks were deployed all over the world. In fact each type of communication had its own network one for radio one for telephone one for telex,...}
  
+\lgf{Dans les années 80, l'internet a vu le jour, mais les vitesses de transmission était faible et le réseau était limitée aux chargements de fichiers. Dans les années 90, des images et l'hypermédia avec le \ac{WWW} sont apparus, en lien avec l'augmentation des débits. Toujours dans les années 90, l'augmentation en puissance des microprocesseurs a permis la numérisation du signal télé. Les téléviseurs ont commencé à inclure des microprocesseurs et les réseaux sont passés d'une transmission analogique au numérique ; mais ils sont restés dédié à cet usage unique diffuser la télévision. Avec l'entrée dans le nouveau millénaire, l'internet a gagné en débit avec l'\ac{ADSL} et des fibres optiques. Il était possible d'intégrer des images dans les pages web mais la qualité était médiocre. Au même moment des centaines de canaux de télévision diffusaient en haute résolution leur programme via satellite ou par \ac{TNT}. De nos jours les communications internet ont gagné en vitesse et en qualité et certains pays ont coupé la \ac{TNT} et choisi de ne transmettre leurs programmes que par internet. En fait l'utilisation d'internet n'est pas uniquement un changement de réseau de distribution c'est aussi un changement majeur dans les usages et les applications. Vous pouvez regarder la télévision sur votre téléphone portable ou même regarder votre série favorite quand vous le voulez, à la demande. }
+\lge{In the 80's, the internet was born, but the transmission speeds were low and the network was limited to file uploads. In the 90s, images and hypermedia with the \ac{WWW} appeared, in connection with the increase of the speeds. Also in the 90s, the increase in power of microprocessors allowed the digitization of the TV signal. Televisions started to include microprocessors and the networks went from analog to digital transmission; but they remained dedicated to this single use broadcasting television. With the entry in the new millennium, the Internet gained in speed with the \ac{ADSL} and optical fibers. It was possible to integrate images in web pages but the quality was poor. At the same time, hundreds of television channels were broadcasting their programs in high resolution via satellite or \ac{DTT}. Nowadays, Internet communications have gained in speed and quality and some countries have cut off DTT and chosen to transmit their programs only via Internet. In fact the use of the internet is not only a change in the distribution network but also a major change in the uses and applications. You can watch television on your cell phone or even watch your favorite series whenever you want, on demand.}
 
 
-Dans les années 80, l'internet a vu le jour, mais les vitesses de transmission était faible et le réseau était limitée aux chargements de fichiers. Dans les années 90, des images et l'hypermédia avec le \ac{WWW} sont apparus, en lien avec l'augmentation des débits. Toujours dans les années 90, l'augmentation en puissance des microprocesseurs a permis la numérisation du signal télé. Les téléviseurs ont commencé à inclure des microprocesseurs et les réseaux sont passés d'une transmission analogique au numérique ; mais ils sont restés dédié à cet usage unique diffuser la télévision. Avec l'entrée dans le nouveau millénaire, l'internet a gagné en débit avec l'\ac{ADSL} et des fibres optiques. Il était possible d'intégrer des images dans les pages web mais la qualité était médiocre. Au même moment des centaines de canaux de télévision diffusaient en haute résolution leur programme via satellite ou par \ac{TNT}. De nos jours les communications internet ont gagné en vitesse et en qualité et certains pays ont coupé la \ac{TNT} et choisi de ne transmettre leurs programmes que par internet. En fait l'utilisation d'internet n'est pas uniquement un changement de réseau de distribution c'est aussi un changement majeur dans les usages et les applications. Vous pouvez regarder la télévision sur votre téléphone portable ou même regarder votre série favorite quand vous le voulez, à la demande. 
 
   \vspace{2em}
 
-\subsection{3 phases technologiques}
+\lgf{\subsection{3 phases technologiques}}
+\lge{\subsection{3 technological phases}}
+
    \vspace{1em}
 
 \begin{wrapfigure}{r}{6cm}
 \centerline{\includegraphics[width=.4\columnwidth]{Pictures/illu-verticals.png}}
 \end{wrapfigure}
-De cet exemple, on peut définir trois phases dans le développement d'une technologie. Dans la première phase, un réseau spécifique est construit pour un usage bien défini. On appelle cela une approche \Index{verticale} ; une technologie est dédiée à un seul usage. Il est difficile d'échanger de l'information entre deux verticales. On fait aussi référence à des \Index{silos} car ils sont isolés. Dans une seconde phase, les verticales commencent à intégrer des technologies communes mais pas d'une manière coordonnée. Elles ne peuvent toujours pas communiquer facilement car elles n'ont pas fait les mêmes choix.
+\lgf{De cet exemple, on peut définir trois phases dans le développement d'une technologie. Dans la première phase, un réseau spécifique est construit pour un usage bien défini. On appelle cela une approche \Index{verticale} ; une technologie est dédiée à un seul usage. Il est difficile d'échanger de l'information entre deux verticales. On fait aussi référence à des \Index{silos} car ils sont isolés. Dans une seconde phase, les verticales commencent à intégrer des technologies communes mais pas d'une manière coordonnée. Elles ne peuvent toujours pas communiquer facilement car elles n'ont pas fait les mêmes choix.}
+\lge{From this example, we can define three phases in the development of a technology. In the first phase, a specific network is built for a well-defined use. This is called a \Index{vertical} approach; a technology is dedicated to a single use. It is difficult to exchange information between two verticals. We also refer to \Index{silos} because they are isolated. In a second phase, the verticals start to integrate common technologies but not in a coordinated way. They still cannot communicate easily because they have not made the same choices.}
 
 ~
 
 \begin{wrapfigure}{r}{6cm}
 \centerline{\includegraphics[width=.4\columnwidth]{Pictures/ill-horizontales.png}}
 \end{wrapfigure}
-Dans une dernière phase, des verticales se coordonnent pour converger vers les mêmes technologies en définissant des règles et des usages communs. Ceci dans le but de réduire les coûts ou d'augmenter leur impact dans ce cas. On parle d'horizontal\index{Horizontale} car elle couvre plusieurs secteurs. L'internet est devenu une de ces horizontales pour beaucoup de services. L'internet des objets suit ce même mouvement. Des solutions particulières ont émergé pour résoudre des besoins spécifiques en agriculture, dans l'automobile, dans la santé, dans l'énergie. Quand les réseaux internet ont permis des communications à faible coût, l'architecture de l'internet a été prise en compte mais sans compatibilité. Le changement qu'on vit actuellement est la définition de fonctionnalités communes à différents domaines. Le but étant de réduire les coûts mais également de croiser les informations pour une meilleure gestion du processus industriel et un meilleur usage des ressources
+\lgf{Dans une dernière phase, des verticales se coordonnent pour converger vers les mêmes technologies en définissant des règles et des usages communs. Ceci dans le but de réduire les coûts ou d'augmenter leur impact dans ce cas. On parle d'horizontal\index{Horizontale} car elle couvre plusieurs secteurs. L'internet est devenu une de ces horizontales pour beaucoup de services. L'internet des objets suit ce même mouvement. Des solutions particulières ont émergé pour résoudre des besoins spécifiques en agriculture, dans l'automobile, dans la santé, dans l'énergie. Quand les réseaux internet ont permis des communications à faible coût, l'architecture de l'internet a été prise en compte mais sans compatibilité. Le changement qu'on vit actuellement est la définition de fonctionnalités communes à différents domaines. Le but étant de réduire les coûts mais également de croiser les informations pour une meilleure gestion du processus industriel et un meilleur usage des ressources.}
+\lge{In a final phase, verticals coordinate to converge on the same technologies by defining common rules and uses. This is done in order to reduce costs or to increase their impact in this case. We talk about \Index{horizontal} because it covers several sectors. The Internet has become one of these horizontals for many services. The Internet of Things follows this same movement. Particular solutions have emerged to solve specific needs in agriculture, in the automotive industry, in health, in energy. When Internet networks allowed low cost communications, the architecture of the Internet was taken into account but without compatibility. The change we are currently experiencing is the definition of common functionalities for different domains. The goal is to reduce costs but also to cross information for a better management of the industrial process and a better use of resources.}
  
 
   \vspace{2em}
 
-\section{L'Internet des Objets}
+\lgf{\section{L'Internet des Objets}}
+\lge{\section{The Internet of Things}}
+
 
   \vspace{1em}
   
- Comment définir l’internet des objets~? Ou plutôt, quel internet des objets allons-nous étudier~? L’ambiguïté des deux termes "internet" et "objets" impose une définition plus précise ; ou du moins une classification pour mieux comprendre à quoi l’on fait référence.
+\lgf{Comment définir l’internet des objets~? Ou plutôt, quel internet des objets allons-nous étudier~? L’ambiguïté des deux termes "internet" et "objets" impose une définition plus précise ; ou du moins une classification pour mieux comprendre à quoi l’on fait référence.}
+\lge{How do we define the Internet of Things? Or rather, which Internet of Things are we going to study? The ambiguity of the two terms "Internet" and "Things" requires a more precise definition; or at least a classification to better understand what we are referring to.}
 
   \vspace{1em}
 
 
-L’internet est maintenant totalement intégré dans nos vies, pour le travail, l’enseignement, pour les distractions. On l’utilise à la maison ou au travail sur nos ordinateurs, et on l'emporte avec nous de plus en plus avec nos smartphones. 
+\lgf{L’internet est maintenant totalement intégré dans nos vies, pour le travail, l’enseignement, pour les distractions. On l’utilise à la maison ou au travail sur nos ordinateurs, et on l'emporte avec nous de plus en plus avec nos smartphones. }
+\lge{The internet is now totally integrated in our lives, for work, for education, for entertainment. We use it at home or at work on our computers, and we carry it with us more and more with our smartphones. }
 
-Chacun a sa définition de ce qu’est internet. Pour le grand public, il peut s’agir d’applications très populaires comme Facebook, Tik-Tok, Netflix, Zoom. Pour certains, un peu plus technophiles, l’internet peut être confondu avec le Web auquel on accède via Chrome ou Firefox. Les techniciens parleront de protocoles comme IP, TCP, HTTP, et d’adresses comme les adresses IP ou les URL.
+\lgf{Chacun a sa définition de ce qu’est internet. Pour le grand public, il peut s’agir d’applications très populaires comme Facebook, Tik-Tok, Netflix, Zoom. Pour certains, un peu plus technophiles, l’internet peut être confondu avec le Web auquel on accède via Chrome ou Firefox. Les techniciens parleront de protocoles comme IP, TCP, HTTP, et d’adresses comme les adresses IP ou les URL.}
+\lge{Everyone has their own definition of what the internet is. For the general public, it can be very popular applications like Facebook, Tik-Tok, Netflix, Zoom. For some, a little more technophile, the Internet can be confused with the Web which is accessed via Chrome or Firefox. Technicians will talk about protocols like IP, TCP, HTTP, and addresses like IP addresses or URLs.}
 
 ~~
 
-Comme ce livre est orienté technologie, notre approche relève plutôt de cette dernière catégorie. Nous verrons comment des protocoles développés il y a une vingtaine d’années pour des ordinateurs peuvent s’appliquer à d’autres dispositifs qu’il nous reste à définir.
+\lgf{Comme ce livre est orienté technologie, notre approche relève plutôt de cette dernière catégorie. Nous verrons comment des protocoles développés il y a une vingtaine d’années pour des ordinateurs peuvent s’appliquer à d’autres dispositifs qu’il nous reste à définir.}
+\lge{As this book is technology-oriented, our approach falls more into the latter category. We will see how protocols developed twenty years ago for computers can be applied to other devices that we have yet to define.}
 
-L'objectif de l'internet des objets est de poursuivre l'intégration du réseau Internet pour permettre à autre chose que des ordinateurs d'échanger des données. Le but principal est d'optimiser les processus pour qu'ils soient plus efficaces pour économiser des ressources ou d'augmenter la productivité. Il s'agit donc d'un internet enfoui, loin du frigo ou de la montre connectés, qui vont remonter des informations avec une infrastructure ou d'autres équipements. On peut imaginer des capteurs dans une usine pour contrôler la production, des voitures connectées qui vont dialoguer pour éviter les collisions, la mesure du taux de remplissage des bennes de recyclage dans une ville pour optimiser les circuits de collecte, la surveillance du degré d'humidité d'un champ pour réduire la consommation d'eau...
+
+\lgf{L'objectif de l'internet des Objets est de poursuivre l'intégration du réseau Internet pour permettre à autre chose que des ordinateurs d'échanger des données. Le but principal est d'optimiser les processus pour qu'ils soient plus efficaces pour économiser des ressources ou d'augmenter la productivité. Il s'agit donc d'un internet enfoui, loin du frigo ou de la montre connectés, qui vont remonter des informations avec une infrastructure ou d'autres équipements. On peut imaginer des capteurs dans une usine pour contrôler la production, des voitures connectées qui vont dialoguer pour éviter les collisions, la mesure du taux de remplissage des bennes de recyclage dans une ville pour optimiser les circuits de collecte, la surveillance du degré d'humidité d'un champ pour réduire la consommation d'eau...}
+\lge{The goal of the Internet of Things is to further integrate the Internet to allow something other than computers to exchange data. The main goal is to optimize processes so that they are more efficient to save resources or increase productivity. It is therefore a buried internet, far from the fridge or the connected watch, which will bring back information with an infrastructure or other equipment. We can imagine sensors in a factory to control production, connected cars that will talk to each other to avoid collisions, measuring the filling rate of recycling bins in a city to optimize collection circuits, monitoring the degree of humidity in a field to reduce water consumption...}
 
 
-L’internet des objets peut se résumer de la manière suivante : utiliser des protocoles développés pour des ordinateurs et maintenant des téléphones portables (plus puissants que les ordinateurs utilisés par l’internet à ses débuts) mais dans des environnements plus contraints. En effet, les lois de Moore, définissant les puissances de traitement des processeurs ainsi que la diminution continue des coûts de la mémoire, nous ont permis de doter les petits objets de ressources comparables à celles des ordinateurs d’il y a trente ans.
+\lgf{L’internet des Objets peut se résumer de la manière suivante : utiliser des protocoles développés pour des ordinateurs et maintenant des téléphones portables (plus puissants que les ordinateurs utilisés par l’internet à ses débuts) mais dans des environnements plus contraints. En effet, les lois de Moore, définissant les puissances de traitement des processeurs ainsi que la diminution continue des coûts de la mémoire, nous ont permis de doter les petits objets de ressources comparables à celles des ordinateurs d’il y a trente ans.}
+\lge{The Internet of Things can be summarized as follows: using protocols developed for computers and now cell phones (more powerful than the computers used by the Internet in its early days) but in more constrained environments. Indeed, Moore's laws, defining the processing power of processors as well as the continuous decrease of memory costs, have allowed us to provide small objects with resources comparable to those of computers of thirty years ago.}
 
-L’internet des objets, c’est résoudre l’équation suivante : continuer à faire la même chose car tous les systèmes d’information actuels utilisent les mêmes principes mais le faire différemment car ces principes sont trop coûteux en énergie, en temps de calcul et échange de données.
+\lgf{L’internet des Objets, c’est résoudre l’équation suivante : continuer à faire la même chose car tous les systèmes d’information actuels utilisent les mêmes principes mais le faire différemment car ces principes sont trop coûteux en énergie, en temps de calcul et échange de données.}
+\lge{The Internet of Things means solving the following equation: continue to do the same thing because all current information systems use the same principles but do it differently because these principles are too costly in terms of energy, computing time and data exchange.}
 
-L’\ac{IoT}, l’internet des objets ou des choses, est une architecture globale permettant à des objets (équipements de même type ou non), d’interagir de manière autonome via internet. Cette interaction :
+\lgf{L’\ac{IoT}, l’internet des objets ou des choses, est une architecture globale permettant à des objets (équipements de même type ou non), d’interagir de manière autonome via internet. Cette interaction~:}
+\lge{The \ac{IoT} is a global architecture allowing objects (equipment of the same type or not) to interact autonomously via the Internet. This interaction:}
 
 \begin{itemize}
-    \item est réalisée, par construction, au travers d’un réseau internet, ce qui implique généralement que les objets/choses soient pourvus d’une adresse IP ;
-    \item est relatif à des commandes (opérations de contrôles ou appels de fonctions) ou des échanges de données ou d’informations.
+    \item 
+        \lgf{est réalisée, par construction, au travers d’un réseau internet, ce qui implique généralement que les objets/choses soient pourvus d’une adresse IP~;}
+        \lge{is realized, by construction, through an Internet network, which generally implies that the objects/things are provided with an IP address;}
+        
+    \item 
+        \lgf{est relatif à des commandes (opérations de contrôles ou appels de fonctions) ou des échanges de données ou d’informations.}
+        \lge{is related to commands (control operations or function calls) or data or information exchanges.}
 \end{itemize}
 
   \vspace{1em}
 
 
-Ce nouveau paradigme \ac{STIC} qu’est l’IoT est une convergence de nombreux domaines d’applications tels que : les maisons ou bâtiments intelligents, les villes du futur, l’industrie du futur (industrie 4.0), l’énergie, les systèmes de transport, l’agriculture, la eSanté, etc., vers une suite protocolaire réduite, interopérable et sécurisée. Le mouvement est en marche et, vu le nombre d'acteurs concernés, va prendre plusieurs années. Mais les bases sont déjà bien établies et c'est ce que vous allez apprendre dans cet ouvrage.
+\lgf{Ce nouveau paradigme \ac{STIC} qu’est l’IoT est une convergence de nombreux domaines d’applications tels que : les maisons ou bâtiments intelligents, les villes du futur, l’industrie du futur (industrie 4.0), l’énergie, les systèmes de transport, l’agriculture, la eSanté, etc., vers une suite protocolaire réduite, interopérable et sécurisée. Le mouvement est en marche et, vu le nombre d'acteurs concernés, va prendre plusieurs années. Mais les bases sont déjà bien établies et c'est ce que vous allez apprendre dans cet ouvrage.}
+\lge{The new IoT paradigm is a convergence of many application domains such as: smart homes or buildings, cities of the future, industry of the future (industry 4.0), energy, transportation systems, agriculture, eHealth, etc., towards a reduced, interoperable and secure protocol suite. The movement is underway and, given the number of players involved, will take several years. But the foundations are already well established and that's what you'll learn in this book.}
 
  \vspace{2em}
  
@@ -87,56 +117,82 @@ Ce nouveau paradigme \ac{STIC} qu’est l’IoT est une convergence de nombreux 
 
   \vspace{1em}
 
-Un des problèmes que rencontre l’internet des objets, c’est que l’IoT ne démarre pas ex-nihilo. Maintenant que les technologies qui ont fait le succès de l'Internet sont matures, il ne s'agit pas juste de les appliquer à un nouveau domaine. Des objets étaient capables de communiquer bien avant qu’internet n’existe. Chaque secteur a déjà développé ses solutions, plus ou moins standards, plus ou moins propriétaires.
+\lgf{Un des problèmes que rencontre l’internet des objets, c’est que l’IoT ne démarre pas ex-nihilo. Maintenant que les technologies qui ont fait le succès de l'Internet sont matures, il ne s'agit pas juste de les appliquer à un nouveau domaine. Des objets étaient capables de communiquer bien avant qu’internet n’existe. Chaque secteur a déjà développé ses solutions, plus ou moins standards, plus ou moins propriétaires.}
+\lge{One of the problems with the Internet of Things is that the IoT doesn't start ex-nihilo. Now that the technologies that made the Internet successful are mature, it's not just a matter of applying them to a new domain. Objects were able to communicate long before the Internet existed. Each sector has already developed its solutions, more or less standard, more or less proprietary.}
 
-La figure~\vref{fig-bazar} reprend un certain nombre de travaux et de groupes qui spécifient les protocoles pour l’internet des objets. 
+
+\lfg{La figure~\vref{fig-bazar} reprend un certain nombre de travaux et de groupes qui spécifient les protocoles pour l’internet des objets. }
+\lge{The figure~\vref{fig-bazar} lists a number of works and groups that specify protocols for the Internet of Things. }
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/IOTBazar_Domaines.jpeg}}
-\caption{Quelques standards de l'IoT}
+\lgf{\caption{Quelques standards de l'IoT}}
+\lge{\caption{Some IoT standards}}
 \label{fig-bazar}
 \end{figure}
 
-Sans entrer dans les détails, on voit que certains logos se retrouvent à plusieurs emplacements, qu’il y a pour chaque secteur une profusion de solutions qui nuisent à l’interopérabilité et aux évolutions. L’internet des objets, dans son acception la plus large, consiste à simplifier cette architecture, comme l’internet l'a fait il y a quelques années dans le domaine des télécoms en simplifiant ce modèle et en permettant à ces différents acteurs de converger vers une architecture commune et un ensemble de solutions plus réduit.
+\lgf{Sans entrer dans les détails, on voit que certains logos se retrouvent à plusieurs emplacements, qu’il y a pour chaque secteur une profusion de solutions qui nuisent à l’interopérabilité et aux évolutions. L’internet des objets, dans son acception la plus large, consiste à simplifier cette architecture, comme l’internet l'a fait il y a quelques années dans le domaine des télécoms en simplifiant ce modèle et en permettant à ces différents acteurs de converger vers une architecture commune et un ensemble de solutions plus réduit.}
+\lge{Without going into detail, we can see that some logos are found in several places, that there is a profusion of solutions for each sector that hinders interoperability and evolution. The Internet of Things, in its broadest sense, is about simplifying this architecture, just as the Internet did a few years ago in the telecoms sector, by simplifying this model and enabling these different players to converge on a common architecture and a smaller set of solutions.}
 
-Cela ne veut pas nécessairement dire moins d’acteurs, mais une plus grande cohérence dans les choix technologiques.
+\lgf{Cela ne veut pas nécessairement dire moins d’acteurs, mais une plus grande cohérence dans les choix technologiques.}
+\lge{This does not necessarily mean fewer players, but greater consistency in technological choices.}
 
-La figure~\vref{fig-bazar-OS} analyse l’IoT par domaine d’application en se focalisant sur la composante réseau. L’IoT et les objets connectés sont des systèmes complexes pour lesquels les solutions open source, les alliances entre industriels, les organismes de standardisation sont toujours fragmentés ; cependant de manière moins importante, montrant que la structuration est en marche.
+\lgf{La figure~\vref{fig-bazar-OS} analyse l’IoT par domaine d’application en se focalisant sur la composante réseau. L’IoT et les objets connectés sont des systèmes complexes pour lesquels les solutions open source, les alliances entre industriels, les organismes de standardisation sont toujours fragmentés ; cependant de manière moins importante, montrant que la structuration est en marche.}
+\lge{The figure~\vref{fig-bazar-OS} analyzes the IoT by application domain, focusing on the network component. IoT and connected objects are complex systems for which open source solutions, alliances between manufacturers, and standardization bodies are still fragmented; however, to a lesser extent, showing that structuring is underway.}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/IOTBazar_OpenSources.jpeg}}
-\caption{Quelques applications Open Source pour l'IoT}
+\lgf{\caption{Quelques applications Open Source pour l'IoT}}
+\lge{\caption{Some open source applications for the IoT}}
+
 \label{fig-bazar-OS}
 \end{figure}
 
-Cette fragmentation de l’écosystème est paradoxale. Si l’on résume sommairement, les solutions proposées reviennent à interroger un équipement sur le terrain pour accéder à une valeur, la traiter et renvoyer une commande pour interagir avec l’environnement.
+\lgf{Cette fragmentation de l’écosystème est paradoxale. Si l’on résume sommairement, les solutions proposées reviennent à interroger un équipement sur le terrain pour accéder à une valeur, la traiter et renvoyer une commande pour interagir avec l’environnement.}
+\lge{This fragmentation of the ecosystem is paradoxical. If we summarize, the proposed solutions amount to interrogating a piece of equipment in the field to access a value, process it and send back a command to interact with the environment.}
 
-Pourquoi cette foison de solutions différentes~? Cela peut venir des besoins de fiabilité, de sécurité, de portée de la donnée, mais cela vient aussi de l’histoire. La communication avec des objets est tout aussi ancienne que la communication entre ordinateurs (qui sont eux-mêmes des objets). Mais à l’époque, chaque domaine a suivi sa propre voie en spécialisant les solutions pour répondre à ses besoins propres. Il en résulte des solutions optimisées pour un domaine particulier. Mais chaque fois qu’il faut modifier une technologie, le travail doit être adapté pour chaque domaine, introduisant des coûts et des délais supplémentaires.
+\lgf{Pourquoi cette foison de solutions différentes~? Cela peut venir des besoins de fiabilité, de sécurité, de portée de la donnée, mais cela vient aussi de l’histoire. La communication avec des Objets est tout aussi ancienne que la communication entre ordinateurs (qui sont eux-mêmes des Objets). Mais à l’époque, chaque domaine a suivi sa propre voie en spécialisant les solutions pour répondre à ses besoins propres. Il en résulte des solutions optimisées pour un domaine particulier. Mais chaque fois qu’il faut modifier une technologie, le travail doit être adapté pour chaque domaine, introduisant des coûts et des délais supplémentaires.}
+\lge{Why are there so many different solutions? It may come from the needs of reliability, security, data scope, but it also comes from history. Communication with Things is just as old as communication between computers (which are themselves Things). But at the time, each field went its own way, specializing solutions to meet its own needs. The result is solutions optimized for a particular domain. But every time a technology has to be modified, the work has to be adapted for each domain, introducing additional costs and delays.}
 
-De même, chaque domaine ayant sa propre représentation des données, il est relativement difficile de les combiner pour avoir une vision plus globale. On arrive donc à des systèmes fermés, chers, peu évolutifs, mais optimisés pour les tâches qu’ils ont à réaliser.
+\lgf{De même, chaque domaine ayant sa propre représentation des données, il est relativement difficile de les combiner pour avoir une vision plus globale. On arrive donc à des systèmes fermés, chers, peu évolutifs, mais optimisés pour les tâches qu’ils ont à réaliser.}
+\lge{Also, since each domain has its own data representation, it is relatively difficult to combine them to have a more global vision. We therefore end up with closed systems, expensive, not very scalable, but optimized for the tasks they have to perform.}
 
-Au fil du temps, les protocoles de l’internet ont pu être utilisés, mais il s’agit surtout de complémenter les technologies existantes sans qu’il soit possible d’interconnecter deux domaines.
+
+\lgf{Au fil du temps, les protocoles de l’internet ont pu être utilisés, mais il s’agit surtout de complémenter les technologies existantes sans qu’il soit possible d’interconnecter deux domaines.}
+\lge{Over time, the protocols of the Internet could be used, but it is mainly a matter of complementing existing technologies without it being possible to interconnect two domains.}
+
 
 
   \vspace{2em}
 
-\section{Evolution de l'IoT}
+\lgf{\section{Evolution de l'IoT}}
+\lge{\section{IoT evolution}}
+
 
   \vspace{1em}
 
-L’exemple de l’évolution du réseau de télévision est éloquent. À ses débuts, ce réseau est analogique et hautement spécialisé pour diffuser les programmes transportés sur des signaux analogiques sur des équipements spécialisés, les téléviseurs.
+\lgf{L’exemple de l’évolution du réseau de télévision est éloquent. À ses débuts, ce réseau est analogique et hautement spécialisé pour diffuser les programmes transportés sur des signaux analogiques sur des équipements spécialisés, les téléviseurs.}
+\lge{L’exemple de l’évolution du réseau de télévision est éloquent. À ses débuts, ce réseau est analogique et hautement spécialisé pour diffuser les programmes transportés sur des signaux analogiques sur des équipements spécialisés, les téléviseurs.}
 
-Avec les progrès des processeurs informatiques, il devient possible de transporter les données en utilisant un codage numérique. Mais des réseaux spécialisés restent nécessaires, l’Internet n’offrant pas la même qualité.
+\lgf{Avec les progrès des processeurs informatiques, il devient possible de transporter les données en utilisant un codage numérique. Mais des réseaux spécialisés restent nécessaires, l’Internet n’offrant pas la même qualité.}
+\lge{With the progress of computer processors, it becomes possible to transport data using digital coding. But specialized networks are still needed, as the Internet does not offer the same quality.}
 
 
 
-La dernière étape consiste à intégrer ces flux dans l’internet classique. Cela devient possible par la montée en débit des réseaux filaires et radio (Wi-Fi, 4G...). 
+\lgf{La dernière étape consiste à intégrer ces flux dans l’internet classique. Cela devient possible par la montée en débit des réseaux filaires et radio (Wi-Fi, 4G...). }
+\lge{The last step consists in integrating these flows into the traditional Internet. This becomes possible by increasing the speed of wired and radio networks (Wi-Fi, 4G...). }
 
-Cette mutualisation des accès via l’internet permet non seulement une réduction des coûts, mais aussi l'apparition de nouveaux usages comme la télévision sur les téléphones portables ou les séries à la demande.
 
-L’internet des objets suit la même voie. En plus des technologies spécifiques, les protocoles de l’internet sont intégrés, mais en les adaptant aux contextes du secteur.  Nous sommes actuellement en train de vivre la convergence vers un ensemble réduit de protocoles, une standardisation de la représentation de la donnée, et son traitement sur des plates-formes plus génériques. 
+\lgf{Cette mutualisation des accès via l’internet permet non seulement une réduction des coûts, mais aussi l'apparition de nouveaux usages comme la télévision sur les téléphones portables ou les séries à la demande.}
+\lge{This pooling of accesses via the Internet allows not only a reduction of costs, but also the appearance of new uses such as television on cell phones or series on demand.}
 
-Le déclencheur n’est pas la montée en débit comme pour la télévision, mais la possibilité d'avoir des équipements peu chers, aux capacités réduites par rapport à l'informatique traditionnelle et autonomes énergétiquement, tout en ayant une meilleure intégration dans les systèmes d'information actuels.  
+\lgf{L’internet des Objets suit la même voie. En plus des technologies spécifiques, les protocoles de l’internet sont intégrés, mais en les adaptant aux contextes du secteur.  Nous sommes actuellement en train de vivre la convergence vers un ensemble réduit de protocoles, une standardisation de la représentation de la donnée, et son traitement sur des plates-formes plus génériques. }
+\lge{The Internet of Things follows the same path. In addition to specific technologies, the protocols of the Internet are integrated, but adapted to the contexts of the sector.  We are currently experiencing the convergence towards a reduced set of protocols, a standardization of data representation, and its processing on more generic platforms.}
+
+\lgf{Le déclencheur n’est pas la montée en débit comme pour la télévision, mais la possibilité d'avoir des équipements peu chers, aux capacités réduites par rapport à l'informatique traditionnelle et autonomes énergétiquement, tout en ayant une meilleure intégration dans les systèmes d'information actuels.  }
+\lge{The trigger is not the increase in speed as for television, but the possibility of having inexpensive equipment, with reduced capacities compared to traditional computing and energy autonomous, while having a better integration in the current information systems.  }
+
 
   \vspace{2em}
 
