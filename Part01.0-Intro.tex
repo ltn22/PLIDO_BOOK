@@ -173,7 +173,7 @@
   \vspace{1em}
 
 \lgf{L’exemple de l’évolution du réseau de télévision est éloquent. À ses débuts, ce réseau est analogique et hautement spécialisé pour diffuser les programmes transportés sur des signaux analogiques sur des équipements spécialisés, les téléviseurs.}
-\lge{L’exemple de l’évolution du réseau de télévision est éloquent. À ses débuts, ce réseau est analogique et hautement spécialisé pour diffuser les programmes transportés sur des signaux analogiques sur des équipements spécialisés, les téléviseurs.}
+\lge{The example of the evolution of the television network speaks for itself. At the beginning, this network was analog and highly specialized to broadcast programs carried on analog signals on specialized equipment, the television sets.}
 
 \lgf{Avec les progrès des processeurs informatiques, il devient possible de transporter les données en utilisant un codage numérique. Mais des réseaux spécialisés restent nécessaires, l’Internet n’offrant pas la même qualité.}
 \lge{With the progress of computer processors, it becomes possible to transport data using digital coding. But specialized networks are still needed, as the Internet does not offer the same quality.}
@@ -197,133 +197,246 @@
   \vspace{2em}
 
 \lgf{\section{Des objets contraints}}
-\lge{\section{Des objets contraints}}
+\lge{\section{Constrained objects}}
 
 
   \vspace{1em}
 
-Avec les progrès de l’électronique, les processeurs deviennent de plus en plus puissants et les super-ordinateurs d’hier sont maintenant dans une montre ou un smart-phone. 
+\lgf{Avec les progrès de l’électronique, les processeurs deviennent de plus en plus puissants et les super-ordinateurs d’hier sont maintenant dans une montre ou un smart-phone. }
+\lge{With the progress of electronics, processors are becoming more and more powerful and the supercomputers of yesterday are now in a watch or a smart-phone. }
 
-Pour l’internet des objets, la logique est un peu différente. La loi de Moore va induire une réduction des coûts de fabrication plutôt qu'une augmentation des puissances de traitement. Le principal critère pour un internet des objets massif reste l’énergie ; connecter un appareil à une source d’énergie ou recharger une batterie a un coût. Augmenter la vitesse du processeur ou la taille de la mémoire induit une plus grande consommation d’énergie de l'objet. On peut donc s’attendre à une certaine stabilité des performances des objets car ceux-ci resteront limités en performances.
+\lgf{Pour l’internet des objets, la logique est un peu différente. La loi de Moore va induire une réduction des coûts de fabrication plutôt qu'une augmentation des puissances de traitement. Le principal critère pour un internet des objets massif reste l’énergie ; connecter un appareil à une source d’énergie ou recharger une batterie a un coût. Augmenter la vitesse du processeur ou la taille de la mémoire induit une plus grande consommation d’énergie de l'objet. On peut donc s’attendre à une certaine stabilité des performances des objets car ceux-ci resteront limités en performances.}
+\lge{For the Internet of Things, the logic is a little different. Moore's Law will lead to a reduction in manufacturing costs rather than an increase in processing power. The main criterion for a massive Internet of Things remains energy; connecting a device to a power source or recharging a battery has a cost. Increasing the speed of the processor or the size of the memory induces a higher energy consumption of the object. We can therefore expect a certain stability in the performance of the objects because they will remain limited in performance.}
 
-Les objets sont généralement limités en termes de puissance de traitement, de mémoire et d’énergie. Selon le standard de l’IETF \rfc{7228}, les dispositifs peuvent être répartis en trois classes qui se retrouvent aussi dans la segmentation des processeurs :
+
+\lgf{Les objets sont généralement limités en termes de puissance de traitement, de mémoire et d’énergie. Selon le standard de l’IETF \rfc{7228}, les dispositifs peuvent être répartis en trois classes qui se retrouvent aussi dans la segmentation des processeurs~:}
+\lge{Objects are generally limited in terms of processing power, memory and energy. According to the IETF standard \rfc{7228}, devices can be divided into three classes that are also found in the segmentation of processors~:}
 
 \begin{itemize}
-\item La classe 0, avec moins de 10 ko de mémoire volatile pour stocker les données temporaires et 100 ko de mémoire Flash pour stocker le code informatique de l'objet. C'est l’équivalent d’un Arduino UNO (2 ko de RAM et 32 ko de Flash). Il est presque impossible d’installer à la fois les protocoles utilisés pour communiquer sur Internet (même de manière restreinte) et les applications qui tournent dessus. 
-\item La classe 1 a environ 10 Ko de RAM et 100 Ko de Flash. Avec une adaptation, il est possible d’y installer une pile IP. Il s'agit par exemple d'équipement comme le Pycom Lopy4 que nous utiliserons par la suite (et qui se situe dans la limite haute) sur lequel le système d'exploitation est minimal. Ainsi, le Pycom utilise une version simplifiée du langage Python (micro-python) qui permet de l'adapter à la limitation du système.
-\item La classe 2 est moins restreinte avec au moins 50 ko de RAM et 250 ko de Flash (comme un Raspberry Pi). Le système d’exploitation Linux peut fonctionner sur ces appareils. Par conséquent, il y a peu de limitations sur la pile IP et les applications s’y exécutant.
-Les appareils de classe 1 ont trop de restrictions pour utiliser les protocoles définis pour des objets plus gros. L’\ac{IETF}, l'organisme qui standardise les protocoles de l'internet, a proposé une révision de sa pile de protocoles afin d’adapter sa pile protocolaire à un environnement contraint.
+\item 
+    \lgf{La classe 0, avec moins de 10 ko de mémoire volatile pour stocker les données temporaires et 100 ko de mémoire Flash pour stocker le code informatique de l'objet. C'est l’équivalent d’un \Index{Arduino} UNO (2 ko de RAM et 32 ko de Flash). Il est presque impossible d’installer à la fois les protocoles utilisés pour communiquer sur Internet (même de manière restreinte) et les applications qui tournent dessus.}
+    \lge{Class 0, with less than 10 kB of volatile memory to store temporary data and 100 kB of Flash memory to store the object's computer code. It is the equivalent of an \Index{Arduino} UNO (2 kB RAM and 32 kB Flash). It is almost impossible to install both the protocols used to communicate on the Internet (even in a restricted way) and the applications that run on it.}
+    
+\item 
+    \lgf{La classe 1 a environ 10 Ko de RAM et 100 Ko de Flash. Avec une adaptation, il est possible d’y installer une pile IP. Il s'agit par exemple d'équipement comme le Pycom Lopy4 que nous utiliserons par la suite (et qui se situe dans la limite haute) sur lequel le système d'exploitation est minimal. Ainsi, le Pycom utilise une version simplifiée du langage Python (micro-python) qui permet de l'adapter à la limitation du système.}
+    \lge{Class 1 has about 10 KB of RAM and 100 KB of Flash. With an adaptation, it is possible to install an IP stack. For example, equipment like the Pycom Lopy4 that we will use later (and which is in the upper limit) on which the operating system is minimal. Thus, the Pycom uses a simplified version of the Python language (micro-Python) which allows it to be adapted to the system's limitations.}
+    
+\item 
+    \lgf{La classe 2 est moins restreinte avec au moins 50 ko de RAM et 250 ko de Flash (comme un \Index{Raspberry Pi}). Le système d’exploitation \Index{Linux} peut fonctionner sur ces appareils. Par conséquent, il y a peu de limitations sur la pile IP et les applications s’y exécutant.
+    Les appareils de classe 1 ont trop de restrictions pour utiliser les protocoles définis pour des objets plus gros. L’\ac{IETF}, l'organisme qui standardise les protocoles de l'internet, a proposé une révision de sa pile de protocoles afin d’adapter sa pile protocolaire à un environnement contraint.}
+    \lge{Class 2 is less restricted with at least 50k RAM and 250k Flash (like a \Index{Raspberry Pi}). The \Index{Linux} operating system can run on these devices. Therefore, there are few limitations on the IP stack and the applications running on it.
+    Class 1 devices have too many restrictions to use the protocols defined for larger objects. The \ac{IETF}, the organization that standardizes Internet protocols, has proposed a revision of its protocol stack to adapt its protocol stack to a constrained environment.}
 \end{itemize}
 
 
-La figure~\vref{fig-encap} résume les moyens d'interconnexion suivant la classe de l'objet~:
-Un appareil de classe 0 ne peut pas utiliser directement l’internet pour échanger des informations, d’où la nécessité d’installer une passerelle pour capter le trafic et l’envoyer sur l’internet. Il ne possède pas directement d'adresse IP. Les passerelles LoRaWAN \ac{LNS} et \acs{3GPP} \ac{SCEF} agissent dans ce sens (nous reviendrons là-dessus). Les données produites sont encapsulées par ces passerelles dans des protocoles comme \ac{HTTP} ou \ac{MQTT}, que nous verrons également dans la suite du cours.
+\lgf{La figure~\vref{fig-encap} résume les moyens d'interconnexion suivant la classe de l'objet~:}
+\lge{Figure~\vref{fig-encap} summarizes the means of interconnection according to the class of the object:}
 
-Les appareils de classe 1 peuvent aussi utiliser une passerelle pour s’interconnecter à l’internet traditionnel, mais plutôt que d'encapsuler les données produites dans d'autres protocoles comme le fait la classe 0, les passerelles pour les appareils de classe 1 vont traduire un protocole contraint dans son équivalent dans le monde non contraint.
+\begin{itemize}
+    \item 
+        \lgf{Un appareil de classe 0 ne peut pas utiliser directement l’internet pour échanger des informations, d’où la nécessité d’installer une passerelle pour capter le trafic et l’envoyer sur l’internet. Il ne possède pas directement d'adresse IP. Les passerelles LoRaWAN \ac{LNS} et \acs{3GPP} \ac{SCEF} agissent dans ce sens (nous reviendrons là-dessus). Les données produites sont encapsulées par ces passerelles dans des protocoles comme \ac{HTTP} ou \ac{MQTT}, que nous verrons également dans la suite du cours.}
+        \lge{A class 0 device cannot directly use the internet to exchange information, hence the need to install a gateway to capture the traffic and send it to the internet. It does not have an IP address directly. The LoRaWAN gateways \ac{LNS} and \acs{3GPP} \ac{SCEF} act in this sense (we will come back to this). The data produced is encapsulated by these gateways in protocols such as \ac{HTTP} or \ac{MQTT}, which we will also see later in the course.}
+    \item 
+        \lgf{Les appareils de classe 1 peuvent aussi utiliser une passerelle pour s’interconnecter à l’internet traditionnel, mais plutôt que d'encapsuler les données produites dans d'autres protocoles comme le fait la classe 0, les passerelles pour les appareils de classe 1 vont traduire un protocole contraint dans son équivalent dans le monde non contraint.
+        Les dispositifs de classe 2 peuvent interagir directement avec d’autres nœuds sur l’internet, sans passer par une passerelle.}
+        \lge{Class 1 devices can also use a gateway to interconnect to the traditional internet, but rather than encapsulating the data produced in other protocols as Class 0 does, gateways for Class 1 devices will translate a constrained protocol into its equivalent in the unconstrained world.Class 2 devices can interact directly with other nodes on the Internet, without going through a gateway.}
 
-Les dispositifs de classe 2 peuvent interagir directement avec d’autres nœuds sur l’internet, sans passer par une passerelle.
+\end{itemize}
+
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Encpasul.png}}
-\caption{Possibilités d'interconnection}
+\lgf{\caption{Possibilités d'interconnection}}
+\lge{\caption{Interconnection possibilities}}
 \label{fig-encap}
 \end{figure}
 
   \vspace{2em}
 
-\section{L'interopérabilité}
+\lgf{\section{L'interopérabilité}}
+\lge{\section{Interoperability}}
+
 
   \vspace{1em}
 
-
-Un autre défi concerne le nombre de dispositifs. Certaines études prévoient 500 milliards de dispositifs à la fin de la décennie.
+\lgf{Un autre défi concerne le nombre de dispositifs. Certaines études prévoient 500 milliards de dispositifs à la fin de la décennie.}
+\lge{Another challenge is the number of devices. Some studies predict 500 billion devices by the end of the decade.}
 
   \vspace{1em}
  \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/2TQiTskfZtc}
 \end{wrapfigure}
-Avec cet énorme internet des objets, où presque chaque équipement comprendra des éléments de détection ou d’action, l’intégration dans un système d’information deviendra un véritable défi. Comme l’internet des objets actuel est conçu pour une verticale (c'est-à-dire pour des applications spécifiques), les dispositifs sont choisis et intégrés au moment de la conception du système. Les ingénieurs choisissent leurs capteurs, connaissent précisément leurs caractéristiques et écrivent leur code en fonction de ce qu'ils ont intégré. 
 
-L’internet des objets massif change la donne. Les dispositifs ou les choses ne peuvent pas être intégrés dès le départ dans un système d’information statique. L’intégration doit se faire au fil du temps et doit gérer les évolutions des dispositifs pendant longtemps (les fabricants de dispositifs peuvent changer, les produits évolueront avec de nouvelles fonctionnalités, etc.)
+\lgf{Avec cet énorme internet des objets, où presque chaque équipement comprendra des éléments de détection ou d’action, l’intégration dans un système d’information deviendra un véritable défi. Comme l’internet des objets actuel est conçu pour une verticale (c'est-à-dire pour des applications spécifiques), les dispositifs sont choisis et intégrés au moment de la conception du système. Les ingénieurs choisissent leurs capteurs, connaissent précisément leurs caractéristiques et écrivent leur code en fonction de ce qu'ils ont intégré. }
+\lge{With this massive Internet of Things, where almost every piece of equipment will include sensing or actionable elements, integration into an information system will become a real challenge. Because today's Internet of Things is designed for a vertical (i.e., for specific applications), devices are chosen and integrated at the time of system design. Engineers choose their sensors, know exactly what their characteristics are, and write their code based on what they have integrated. }
 
-Cette question d’interopérabilité a été formalisée dans le modèle \ac{LCIM}~\cite{tolk2003levels} (voir figure~\vref{fig-lcim}) peut être représenté par un compteur pour mesurer le degré d'interopérabilité.
+
+\lgf{L’internet des objets massif change la donne. Les dispositifs ou les choses ne peuvent pas être intégrés dès le départ dans un système d’information statique. L’intégration doit se faire au fil du temps et doit gérer les évolutions des dispositifs pendant longtemps (les fabricants de dispositifs peuvent changer, les produits évolueront avec de nouvelles fonctionnalités, etc.)}
+\lge{The massive Internet of Things is a game changer. Devices or things cannot be integrated into a static information system from the start. The integration has to happen over time and has to handle device evolutions for a long time (device manufacturers may change, products will evolve with new features, etc.).}
+
+\lgf{L'internet qu'on connaît est une très bonne illustration du besoin d'interopérabilite. Il a permis, grace à une uniformisation du réseau et une force baisse des coûts de transmission, de développer de nouveaux usages. Vous n'auriez jamais investi pour un réseau propre à la vidéoconférence et au télétravail. Mais en mutualisant les usages, c'est possible ! L'internet des objets doit suivre la même voie et également converger vers l'architecture de l'internet actuel. Le mot clé est donc l'interopérabilité.  }
+\lge{The Internet we know is a very good illustration of the need for interoperability. It has allowed, thanks to a standardization of the network and a strong decrease of the transmission costs, to develop new uses. You would never have invested in a network dedicated to videoconferencing and teleworking. But by pooling uses, it is possible! The Internet of Things must follow the same path and also converge with the architecture of the current Internet. The key word is interoperability.  }
+
+
+\lgf{Cette question d’interopérabilité a été formalisée dans le modèle \ac{LCIM}~\cite{tolk2003levels} (voir figure~\vref{fig-lcim}) peut être représenté par un compteur pour mesurer le degré d'interopérabilité.}
+\lge{This interoperability issue has been formalized in the model \ac{LCIM}~\cite{tolk2003levels} (see figure~\vref{fig-lcim}) can be represented by a counter to measure the degree of interoperability.}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/TPT2020.png}}
-\caption{Niveau d'interopérabilité}
+\lgf{\caption{Niveau d'interopérabilité}}
+\lge{\caption{Level of interoperability}}
 \label{fig-lcim}
 \end{figure}
 
 
-Il distingue six niveaux d’interopérabilité, parmi lesquels :
+\lgf{Il distingue six niveaux d’interopérabilité, parmi lesquels~:}
+\lge{It distinguishes six levels of interoperability, among which~:}
 
 \begin{itemize}
-     \item Au niveau zéro, on n'est pas connecté ; on ne parle à personne donc on n'a pas de problèmes d'interopérabilité. 
-    \item  Au niveau 1, on est capable de transmettre de l'information,  mais il faut que les deux côtés connaissent les règles. On a un système intégré ; les applications doivent  connaître précisément les spécifications des objets avec lesquels ils communiquent,  car elles définissent ses propres formats des échanges de données. On pourrait prendre l'exemple qu'une carte électrique où un processeur communique avec des capteurs via un circuit imprimé. Le code tournant sur le processeur peut être écrit à l'avance car il y a peu de chance qu'un utilisateur dessoude les composants pour les remplacer par d'autres. Cela correspond à l'encapsulation, si l'on considère les objets en réseau de la figure~\vref{fig-encap}, l'élément d'interconnexion doit être configuré pour en fonction de l'objet émetteur encapsuler les données vers la bonne application chez le bon récepteur. 
-    \item L’interopérabilité syntaxique (niveau 2) où deux nœuds peuvent échanger des données, sans être a préalable configurés pour cet échange. C'est le cas de l'Internet. En utilisant cette suite de protocoles, en ayant une adresse valide sur le réseau, toute application est capable d'échanger des données avec une autre. En revanche, les données que vous allez échanger sont propres à une application. Les vidéoconférences sont un très bon exemple d'interopérabilité de niveau 2. Vous ne pouvez pas utiliser Zoom si votre correspondant utilise Teams car les formats sont différents. L'\ac{IETF}  est le regroupement de différents acteurs (industriels, académiques,...) qui produisent les standards liés à ce réseau. Il se reconnaissent par l'acronyme \ac{RFC} suivi d'un nombre. 
-    \item L’interopérabilité sémantique (niveau 3) implique que le récepteur est capable d'interpréter les données reçues.Le web est un très bon exemple d'interopérabilité de niveau 3. Quel que soit votre navigateur, vous pouvez afficher les pages d'un site web et suivre les liens. Le sens de l'information est compris de la même manière des deux côtés. Pour le Web, le format \ac{HTML} permet à l'aide de balises (mots-clés) de structurer un texte en y ajoutant des informations de formatage ou des liens vers d'autres documents. Le W3C définit les standards.
-     \item Les niveaux supérieurs d'interopérabilité vont être lié à la précision du modèle qui va représenter le système.     
+     \item 
+        \lgf{Au niveau zéro, on n'est pas connecté ; on ne parle à personne donc on n'a pas de problèmes d'interopérabilité. }
+        \lge{At level zero, we are not connected; we don't talk to anyone, so we don't have interoperability problems. }
+    \item  
+        \lgf{Au niveau 1, on est capable de transmettre de l'information,  mais il faut que les deux côtés connaissent les règles. On a un système intégré ; les applications doivent  connaître précisément les spécifications des objets avec lesquels ils communiquent,  car elles définissent ses propres formats des échanges de données. On pourrait prendre l'exemple qu'une carte électrique où un processeur communique avec des capteurs via un circuit imprimé. Le code tournant sur le processeur peut être écrit à l'avance car il y a peu de chance qu'un utilisateur dessoude les composants pour les remplacer par d'autres. Cela correspond à l'encapsulation, si l'on considère les objets en réseau de la figure~\vref{fig-encap}, l'élément d'interconnexion doit être configuré pour en fonction de l'objet émetteur encapsuler les données vers la bonne application chez le bon récepteur. }
+        \lge{At level 1, we are able to transmit information, but both sides must know the rules. We have an integrated system; the applications must know precisely the specifications of the objects with which they communicate, because they define their own data exchange formats. We could take the example of an electrical board where a processor communicates with sensors via a printed circuit. The code running on the processor can be written in advance because there is little chance that a user will loosen the components to replace them with others. This corresponds to encapsulation, if we consider the networked objects in figure~\vref{fig-encap}, the interconnecting element must be configured to encapsulate the data to the right application at the right receiver depending on the sending object. }
+    \item 
+        \lgf{L’interopérabilité syntaxique (niveau 2) où deux nœuds peuvent échanger des données, sans être a préalable configurés pour cet échange. C'est le cas de l'Internet. En utilisant cette suite de protocoles, en ayant une adresse valide sur le réseau, toute application est capable d'échanger des données avec une autre. En revanche, les données que vous allez échanger sont propres à une application. Les vidéoconférences sont un très bon exemple d'interopérabilité de niveau 2. Vous ne pouvez pas utiliser Zoom si votre correspondant utilise Teams car les formats sont différents. L'\ac{IETF}  est le regroupement de différents acteurs (industriels, académiques,...) qui produisent les standards liés à ce réseau. Il se reconnaissent par l'acronyme \ac{RFC} suivi d'un nombre. }
+        \lge{Syntactic interoperability (level 2) where two nodes can exchange data without first being configured for this exchange. This is the case of the Internet. By using this suite of protocols, by having a valid address on the network, any application is able to exchange data with another. On the other hand, the data you will exchange is specific to an application. Video conferencing is a great example of Level 2 interoperability. You cannot use Zoom if your correspondent uses Teams because the formats are different. The \ac{IETF} is the grouping of different actors (industrial, academic,...) who produce the standards related to this network. It is recognized by the acronym \ac{RFC} followed by a number. }
+    \item 
+        \lgf{L’interopérabilité sémantique (niveau 3) implique que le récepteur est capable d'interpréter les données reçues. Le web est un très bon exemple d'interopérabilité de niveau 3. Quel que soit votre navigateur, vous pouvez afficher les pages d'un site web et suivre les liens. Le sens de l'information est compris de la même manière des deux côtés. Pour le Web, le format \ac{HTML} permet à l'aide de balises (mots-clés) de structurer un texte en y ajoutant des informations de formatage ou des liens vers d'autres documents. Le \ac{W3C} définit les standards.}
+        \lge{Semantic interoperability (level 3) implies that the receiver is able to interpret the received data. The web is a very good example of level 3 interoperability. Whatever your browser, you can display the pages of a web site and follow the links. The meaning of the information is understood in the same way on both sides. For the Web, the format \ac{HTML} makes it possible using tags (keywords) to structure a text by adding formatting information or links to other documents. The \ac{W3C} defines the standards.}
+        
+     \item 
+        \lgf{Les niveaux supérieurs d'interopérabilité vont être lié à la précision du modèle qui va représenter le système. }
+        \lge{The higher levels of interoperability will be linked to the accuracy of the model that will represent the system. }
 \end{itemize}
 
 
-L'internet qu'on connaît est une très bonne illustration du besoin d'interopérabilite. Il a permis, grace à une uniformisation du réseau et une force baisse des coûts de transmission, de développer de nouveaux usages. Vous n'auriez jamais investi pour un réseau propre à la vidéoconférence et au télétravail. Mais en mutualisant les usages, c'est possible ! L'internet des objets doit suivre la même voie et également converger vers l'architecture de l'internet actuel. Le mot clé est donc l'interopérabilité.  
+
    \vspace{2em}
 
-\section{Le besoin de standardisation}
+\lgf{\section{Le besoin de standardisation}}
+\lge{\section{Le besoin de standardisation}}
+
   \vspace{1em}
 
-Les objets n'ont pas attendu l'internet pour communiquer. Ils ont évolué chacun dans leur verticale, développant des solutions satisfaisantes mais limitées en termes d'évolution et d'interopérabilité. Cet état des lieux sur la dispersion des écosystèmes met en avant la nécessité :
+\lgf{Les objets n'ont pas attendu l'internet pour communiquer. Ils ont évolué chacun dans leur verticale, développant des solutions satisfaisantes mais limitées en termes d'évolution et d'interopérabilité. Cet état des lieux sur la dispersion des écosystèmes met en avant la nécessité~:}
+\lge{Objects did not wait for the Internet to communicate. They have each evolved in their own vertical, developing solutions that are satisfactory but limited in terms of evolution and interoperability. This report on the dispersion of ecosystems highlights the need to:}
+
 
 \begin{itemize}
-\item d’une coordination entre les alliances ;
-\item d’une harmonisation ou d’un alignement des standards ;
-\item de disposer au plus vite d’implémentations de référence et de modèles de référence.
+\item 
+    \lgf{d’une coordination entre les alliances~;}
+    \lge{coordination among the alliances;}
+\item 
+    \lgf{d’une harmonisation ou d’un alignement des standards~;}
+    \lge{harmonization or alignment of standards;}
+\item 
+    \lgf{de disposer au plus vite d’implémentations de référence et de modèles de référence.}
+    \lge{to have reference implementations and reference models as soon as possible.}
 \end{itemize}
 
-Dans le cas contraire, l’interopérabilité ne pourra pas être traitée comme il se doit, les nouveaux services innovants multi-domaines ne seront pas couverts, et le développement de l’IoT pourrait être freiné voire avorté.
+\lgf{Dans le cas contraire, l’interopérabilité ne pourra pas être traitée comme il se doit, les nouveaux services innovants multi-domaines ne seront pas couverts, et le développement de l’IoT pourrait être freiné voire avorté.}
+\lge{Otherwise, interoperability will not be properly addressed, new innovative multi-domain services will not be covered, and the development of IoT could be stalled or even aborted.}
 
-Les aspects liés à l’éducation et à la formation des acteurs de l’IoT, ainsi que ceux liés à l’acceptation, aux usages et évidemment au volet socio-économique de l’IoT, sont aussi des points essentiels dont il faut tenir compte.
 
-Les organismes de normalisation tels que l’\ac{IETF} ou le \ac{W3C} ont conçu des protocoles ou des modèles de données capables de traiter l’interopérabilité. D’une certaine manière, c’est la clé du succès de l’internet actuel. Il a permis de résoudre le problème de l’interopérabilité au niveau syntaxique et sémantique mais au prix de messages volumineux.
+\lgf{Les aspects liés à l’éducation et à la formation des acteurs de l’IoT, ainsi que ceux liés à l’acceptation, aux usages et évidemment au volet socio-économique de l’IoT, sont aussi des points essentiels dont il faut tenir compte.}
+\lge{Aspects related to education and training of IoT actors, as well as those related to acceptance, uses and obviously the socio-economic aspect of IoT, are also essential points that must be considered.}
 
-Le défi pour l’internet des objets est de s’intégrer dans ce système distribué géant. Comme l’internet des objets est un nouveau venu, l’évolution devra se faire de son côté pour prendre en compte les règles existantes, mais en les adaptant. Les prochains chapitres traiteront de ces changements.
+\lgf{Les organismes de normalisation tels que l’\ac{IETF} ou le \ac{W3C} ont conçu des protocoles ou des modèles de données capables de traiter l’interopérabilité. D’une certaine manière, c’est la clé du succès de l’internet actuel. Il a permis de résoudre le problème de l’interopérabilité au niveau syntaxique et sémantique mais au prix de messages volumineux.}
+\lge{Standards bodies such as the \ac{IETF} or the \ac{W3C} have designed protocols or data models capable of handling interoperability. In a way, this is the key to the success of the current Internet. It has solved the problem of interoperability at the syntactic and semantic level but at the cost of large messages.}
+
+
+\lgf{Le défi pour l’internet des objets est de s’intégrer dans ce système distribué géant. Comme l’internet des objets est un nouveau venu, l’évolution devra se faire de son côté pour prendre en compte les règles existantes, mais en les adaptant. Les prochains chapitres traiteront de ces changements.}
+\lge{The challenge for the Internet of Things is to integrate into this giant distributed system. As the Internet of Things is a newcomer, the evolution will have to be done on its side to take into account the existing rules, but adapting them. The next chapters will deal with these changes.}
+
 
 \section{Questions}
 
-\Question{Nouveau Domaine}{Les objets communicants sont un tout nouveau domaine, lié aux progrès en miniaturisation des composants électroniques:
+\Question{\lgf{Nouveau Domaine}\lge{New Area}}
+{\lgf{Les objets communicants sont un tout nouveau domaine, lié aux progrès en miniaturisation des composants électroniques~:}
+\lge{Communicating objects are a brand new field, linked to the progress in miniaturization of electronic components~:}
+
 \begin{itemize}[label=$\circ$]
-\item \Wrong{Vrai}
-\item \Correct{Faux}
+\item \Wrong{\Vrai}
+\item \Correct{\Faux}
 \end{itemize}
- }{Les objets communicants ont toujours existé, même avant le déploiement des protocoles de l'Internet. Ce qui est nouveau c'est leur intégration dans les architectures Internet actuelle pour mieux traiter l'information qu'ils produisent.
+ }{
+ \lgf{Les objets communicants ont toujours existé, même avant le déploiement des protocoles de l'Internet. Ce qui est nouveau c'est leur intégration dans les architectures Internet actuelle pour mieux traiter l'information qu'ils produisent.}
+ \lge{Communicating objects have always existed, even before the deployment of Internet protocols. What is new is their integration into current Internet architectures to better process the information they produce.}
  }
  
- \Question{Protocoles}{Laquelle de ces affirmations est vraie ?
+ \Question{\lgf{Protocoles}\lge{Protocoles}}
+ {
+ \lgf{Laquelle de ces affirmations est vraie ?}
+ \lge{Which of these statements is true?}
 \begin{itemize}[label=$\circ$]
-\item \Wrong{Il y a très peu de protocoles pour faire communiquer les Objets. Comme l'Internet est une technologie qui s'est très répondue, son succès va permettre aux objets de communiquer.}
-\item \Correct{ Il y a beaucoup de solutions pour permettre à des objets de communiquer, l'Internet des Objets doit permettre de les fédérer.}
+\item \Wrong{
+    \lgf{Il y a très peu de protocoles pour faire communiquer les Objets. Comme l'Internet est une technologie qui s'est très répondue, son succès va permettre aux objets de communiquer.}
+    \lge{There are very few protocols to make objects communicate. As the Internet is a technology that has been very successful, its success will allow objects to communicate.}
+    }
+\item \Correct{ 
+    \lgf{Il y a beaucoup de solutions pour permettre à des objets de communiquer, l'Internet des Objets doit permettre de les fédérer.}
+    \lge{There are many solutions to enable objects to communicate, the Internet of Things must enable them to be federated.}
+    }
 \end{itemize}
- }{Chaque métier a créé ses propres protocoles.}
+ }
+ {
+ \lgf{Chaque métier a créé ses propres protocoles.}
+ \lge{Each business has created its own protocols.}
+ }
  
  
-\Question{Source de données}{Quelle est la principale source de création des données dans l'IoT ?
+\Question{\lgf{Source de données}\lge{Source of data}}
+{
+\lgf{Quelle est la principale source de création des données dans l'IoT~?}
+\lge{What is the primary source of data creation in the IoT?}
 \begin{itemize}[label=$\circ$]
-\item \Correct{les capteurs}
-\item \Wrong{les nano-ordinateurs (type Raspberry Pi)}
+\item \Correct{\lgf{les capteurs}\lge{sensors}}
+\item \Wrong{\lgf{les nano-ordinateurs (type Raspberry Pi)}\lge{nanocomputers (Raspberry Pi type)}}
 \item \Wrong{Internet}
-\item \Wrong{les serveurs Web}
+\item \Wrong{\lgf{les serveurs Web}\lge{Web servers}}
 
 \end{itemize}
- }{Les mesures effectuées par les capteurs constituent la principale source de création des données de l'IoT.}
+ }
+ {
+ \lgf{Les mesures effectuées par les capteurs constituent la principale source de création des données de l'IoT.}
+ \lge{Measurements made by sensors are the primary source of IoT data creation.}
+ }
 
-\Question{Défis}{Quels sont les principaux défis technologiques pour l'Internet des Objets (3 réponses) ?
+\Question{\lgf{Défis}\lge{Challenges}}
+{
+\lgf{Quels sont les principaux défis technologiques pour l'Internet des Objets (3 réponses) ?}
+\lge{What are the main technological challenges for the Internet of Things (3 answers)?}
+
 \begin{itemize}[label=$\square$]
-\item \Correct{Avoir une consommation d'énergie faible.}
-\item \Correct{Avoir une architecture protocolaire simplifiée.}
-\item \Wrong{Pouvoir fonctionner sur des systèmes d'exploitation ouverts comme Linux.}
-\item \Correct{Permettre de sécuriser les données qui peuvent être sensibles }
-\item \Wrong{Transmettre en permanence leur état et des valeurs mesurées.}
+\item \Correct{
+    \lgf{Avoir une consommation d'énergie faible.}
+    \lge{Have a low energy consumption.}
+    }
+\item \Correct{
+    \lgf{Avoir une architecture protocolaire simplifiée.}
+    \lge{Have a simplified protocol architecture.}
+    }
+\item \Wrong{
+    \lgf{Pouvoir fonctionner sur des systèmes d'exploitation ouverts comme Linux.}
+    \lge{Be able to run on open operating systems like Linux.}
+    }
+\item \Correct{
+    \lgf{Permettre de sécuriser les données qui peuvent être sensibles.}
+    \lge{Allow to secure data that may be sensitive.}
+    }
+\item \Wrong{
+    \lgf{Transmettre en permanence leur état et des valeurs mesurées.}
+    \lge{Continuously transmit their status and measured values.}
+    }
 
 \end{itemize}
- }{les objets sont généralement contraints en énergie et en capacité. Pour limiter la consommation d'énergie, il ne faut pas émettre ou recevoir tout le temps, donc la transmission en permanence des données ne va pas dans ce sens. De même, un système d'exploitation comme Linux apparait surdimensionné.}
+ }
+ {
+ \lgf{les objets sont généralement contraints en énergie et en capacité. Pour limiter la consommation d'énergie, il ne faut pas émettre ou recevoir tout le temps, donc la transmission en permanence des données ne va pas dans ce sens. De même, un système d'exploitation comme Linux apparait surdimensionné.}
+ \lge{Objects are generally limited in energy and capacity. In order to limit energy consumption, it is not necessary to transmit or receive all the time, so the permanent transmission of data does not go in this direction. Similarly, an operating system such as Linux appears to be oversized.}
+ 
+ }
  

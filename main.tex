@@ -224,6 +224,9 @@ showstringspaces=false
 \newcommand\lgf[1]{\ifthenelse{\boolean{lfrench}}{#1}{}}
 \newcommand\lge[1]{\ifthenelse{\boolean{lenglish}}{#1}{}}
 
+\newcommand\Vrai[0]{\ifthenelse{\boolean{lfrench}}{Vrai}{}\ifthenelse{\boolean{lenglish}}{True}{}}
+\newcommand\Faux[0]{\ifthenelse{\boolean{lfrench}}{Faux}{}\ifthenelse{\boolean{lenglish}}{False}{}}
+
 \begin{document}
 
 \let\cleardoublepage\clearpage
@@ -289,15 +292,15 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-\setboolean{allchap}{true} % true: take all, false take nothing only /input
+%\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
-\setboolean{lfrench}{false}
-\setboolean{lenglish}{true}
+\setboolean{lfrench}{false}\setboolean{lenglish}{true}  % ENGLISH
+%\setboolean{lfrench}{true}\setboolean{lenglish}{false} % FRENCH
 
 \Input{Part00-liminaire}
-\input{Part01.0-Intro}
+\Input{Part01.0-Intro}
 \Input{Part02.0-ArchiIP}
-\Input{Part02.5-Wireshark}
+\input{Part02.5-Wireshark}
 \Input{Part03.0-Modbus}
 \Input{Part04.0-ArchiIoT}
 \Input{Part05.0-Data}
