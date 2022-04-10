@@ -331,7 +331,7 @@
     \item    2~: \lgf{Succès}\lge{Success}
     \item    3~: Redirection
     \item    4~: \lgf{Erreur coté client}\lge{Error on the client side}
-    \item    5~: lgf{Erreur coté serveur}\lge{Error on the server side}
+    \item    5~: \lgf{Erreur coté serveur}\lge{Error on the server side}
 \end{description}}
 
 \lgf{\subsection{Analyse des requêtes HTTP}}
@@ -666,7 +666,7 @@
 \lge{Wireshark knows this list of well-known port numbers and can continue to parse the frame as HTTP.}
 
 \lgf{Sans entrer dans les détails, on peut aussi remarquer une série de valeurs binaires qui servent par exemple à ouvrir ou fermer une connexion TCP. Si l'on reprend la phase d'ouverture de la connexion (cf. figure~\vref{fig-ws-filtre}), l'ouverture de connexion se fait par~:}
-\lge{Without going into details, we can also notice a series of binary values which are used for example to open or close a TCP connection. If we go back to the opening phase of the connection (cf. figure~\vref{fig-ws-filter}), the connection is opened by~:}
+\lge{Without going into details, we can also notice a series of binary values which are used for example to open or close a TCP connection. If we go back to the opening phase of the connection (cf. figure~\vref{fig-ws-filtre}), the connection is opened by~:}
 
 \begin{itemize}
     \item 
@@ -683,30 +683,49 @@
 \lgf{Ces trois messages qui ne contiennent pas de données servent à synchroniser la valeur initiale du champ \texttt{sequence} à chaque bout de la connexion.}
 \lge{These three messages, which do not contain any data, are used to synchronize the initial value of the \texttt{sequence} field at each end of the connection.}
   
-\Question{Fermeture de connexion}{
-A l'aide de la figure~\vref{fig-ws-GET} ou de vos captures Wireshark, quels sont les messages impliqués dans la fermeture du connexion?}
-{La fermeture de déconnexion nécessite l'envoie de quatre message. L'une des extrémité, par forcement celle qui a ouvert la connexion, envoie un message avec le bit FIN positionné. Il est acquitté par l'autre entité qui a son tour envoie un message avec le bit FIN positionné qui sera acquitté pour définitivement fermer la connexion.
+\Question{\lgf{Fermeture de connexion}\lge{Closing the connection}}
+{
+\lgf{A l'aide de la figure~\vref{fig-ws-GET} ou de vos captures Wireshark, quels sont les messages impliqués dans la fermeture du connexion~?}
+\lge{Using the figure~\vref{fig-ws-GET} or your Wireshark captures, what are the messages involved in closing the connection?}
+}
+{
+\lgf{La fermeture de déconnexion nécessite l'envoie de quatre message. L'une des extrémité, par forcement celle qui a ouvert la connexion, envoie un message avec le bit FIN positionné. Il est acquitté par l'autre entité qui a son tour envoie un message avec le bit FIN positionné qui sera acquitté pour définitivement fermer la connexion.}
+\lge{The  connection closing requires the sending of four messages. One of the ends, necessarily the one that opened the connection, sends a message with the END bit set. It is acknowledged by the other entity which in turn sends a message with the FIN bit set which will be acknowledged to finally close the connection.}
 }   
 
 \section{Do it yourself}\label{chap-flask}
 
-Un serveur Web peut s'écrire en Python grâce au module \Index{Flask}. Le programme \texttt{simple\_server.py} permet de créer un serveur Web sur son ordinateur.
+\lgf{Un serveur Web peut s'écrire en Python grâce au module \Index{Flask}. Le programme \texttt{simple\_server.py} permet de créer un serveur Web sur son ordinateur.}
+\lge{A Web server can be written in Python thanks to the module \Index{Flask}. The program \texttt{simple\_server.py} allows to create a Web server on its computer.}
+
 
  \pythonlst{simple\_server.py}
  
- Ce script nécessite quelques explications :
+\lgf{Ce script nécessite quelques explications~:}
+\lge{This script requires some explanation~:}
 
 \begin{itemize}
-    \item Limport ligne 1 importe l'objet Flask à partir du module flask.
-    \item A la ligne 2 une instance d'un objet Flask, c'est-à-dire un serveur web, est créée. Un nom lui est associé à des fins de débogage.
-    \item A la ligne 4 contient la partie la plus délicate du script. \texttt{@} est un décorateur qui est utilisé en python pour ajouter des propriétés à une fonction. Ici, nous associons un chemin d'URI et une méthode REST à la fonction qui est ensuite définie. De cette façon, lorsque le serveur Flash recevra une requête GET sur ce chemin d'URI, il appellera la fonction \texttt{hello\_word}.
-    \item La fonction texttt{hello\_word} retourne simplement un texte que le navigateur affichera.
-    \item le serveur est lancé, ligne 8, en appelant la methode \pfunction{Flask}{run}. Il va attendre sur toutes les interfaces (adresse joker \texttt{0.0.0.0}) et sur le port 8080. 
+    \item 
+        \lgf{L'import ligne 1 inclut l'objet \texttt{Flask} à partir du module flask.}
+        \lge{The import line 1 includes the \texttt{Flask} object from the flask module.}
+    \item 
+        \lgf{A la ligne 2 une instance d'un objet Flask, c'est-à-dire un serveur web, est créée. Un nom lui est associé à des fins de débogage.}
+        \lge{On line 2 an instance of a Flask object, i.e. a web server, is created. A name is associated to it for debugging purposes.}
+    \item 
+        \lgf{A la ligne 4 contient la partie la plus délicate du script. \texttt{@} est un décorateur qui est utilisé en python pour ajouter des propriétés à une fonction. Ici, nous associons un chemin d'URI et une méthode REST à la fonction qui est ensuite définie. De cette façon, lorsque le serveur Flash recevra une requête GET sur ce chemin d'URI, il appellera la fonction \texttt{hello\_word}.}
+        \lge{Line 4 contains the most delicate part of the script. \texttt{@} is a decorator that is used in python to add properties to a function. Here we associate a URI path and a REST method to the function which is then defined. This way, when the Flash server receives a GET request on this URI path, it will call the function \texttt{hello\_word}.}
+    \item 
+        \lgf{La fonction \texttt{hello\_word} retourne simplement un texte que le navigateur affichera.}
+        \lge{The function \texttt{hello\_word} simply returns a text that the browser will display.}
+    \item 
+        \lgf{le serveur est lancé, ligne 8, en appelant la methode \pfunction{Flask}{run}. Il va attendre sur toutes les interfaces (adresse joker \texttt{0.0.0.0}) et sur le port 8080. }
+        \lge{the server is launched, line 8, by calling the method \pfunction{Flask}{run}. It will wait on all interfaces (wildcard address \texttt{0.0.0.0}) and on port 8080. }
 \end{itemize}
 
   \vspace{1em}
 
-Pour lancer le serveur, vous devez d'abord installer le module \texttt{Flask} avec \texttt{\Index{pip}}.
+\lgf{Pour lancer le serveur, vous devez d'abord installer le module \texttt{Flask} avec \texttt{\Index{pip}}.}
+\lge{To launch the server, you must first install the \texttt{Flask} module with \texttt{Index{pip}}.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\textbf{pip3 install Flask}@
@@ -720,7 +739,9 @@ Collecting Jinja2>=3.0
 
   \vspace{1em}
 
-Une fois le paquetage installé, il suffit d'exécuter le programme:
+\lgf{Une fois le paquetage installé, il suffit d'exécuter le programme~:}
+\lge{Once the package is installed, simply run the program:}
+
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\textbf{python3.9 simple\_server.py}@
  * Serving Flask app 'My First Web Server' (lazy loading)
@@ -739,17 +760,30 @@ Une fois le paquetage installé, il suffit d'exécuter le programme:
 
 
 \Question{loopback}
-{Quelle URI devez vous entrer dans votre navigateur pour accéder en local à ce serveur.}
-{L'adresse de loopback est \texttt{127.0.0.1} et le port est 8080, le chemin d'URI est \texttt{/}. L'URI est donc \texttt{http://127.0.0.1:8080/}.}
+{
+\lgf{Quelle URI devez vous entrer dans votre navigateur pour accéder en local à ce serveur.}
+\lge{What URI should you enter in your browser to access this server locally.}
+}
+{
+\lgf{L'adresse de loopback est \texttt{127.0.0.1} et le port est 8080, le chemin d'URI est \texttt{/}. L'URI est donc \texttt{http://127.0.0.1:8080/}.}
+\lge{The loopback address is \texttt{127.0.0.1} and the port is 8080, the URI path is \texttt{/}. The URI is therefore \texttt{http://127.0.0.1:8080/}.}
+}
 
-\Question{Nom du serveur}{
-A l'aide de Wireshark, pouvez vous déterminer dans la réponse les valeurs des options HTTP \texttt{\Index{Content-Type}} et \texttt{Server}.
+\Question{\lgf{Nom du serveur}\lge{Server name}}
+{
+\lgf{A l'aide de Wireshark, pouvez vous déterminer dans la réponse les valeurs des options HTTP \texttt{\Index{Content-Type}} et \texttt{Server}.}
+\lge{Using Wireshark, you can determine in the response the values of the HTTP options \texttt{Index{Content-Type}} and \texttt{Server}.}
 
-Ne pas oublier que le trafic passe par l'interface \textit{loopback}. Pour afficher le trafic sur un port particulier, vous pouvez utiliser le filtre \texttt{tcp.port==XXXX}.
+\lgf{Ne pas oublier que le trafic passe par l'interface \textit{loopback}. Pour afficher le trafic sur un port particulier, vous pouvez utiliser le filtre \texttt{tcp.port==XXXX}.}
+\lgf{Don't forget that the traffic goes through the interface \textit{loopback}. To display traffic on a particular port, you can use the \texttt{tcp.port==XXXX} filter.}
 }{
-On trouve les valeurs suivantes~:
+\lgf{On trouve les valeurs suivantes~:}
+\lge{We find the following values:}
 \begin{itemize}
     \item \texttt{Server: Werkzeug/2.0.2 Python/3.9.6}
-    \item \texttt{Content-Type: text/html; charset=utf-8}. La ressource est codée en HTML en utilisant un codage ASCII sur 8 bits.
+    \item \texttt{Content-Type: text/html; charset=utf-8}. 
+        \lgf{La ressource est codée en HTML en utilisant un codage ASCII sur 8 bits.}
+        \lge{The resource is encoded in HTML using 8-bit ASCII encoding.}
+        
 \end{itemize}
 }

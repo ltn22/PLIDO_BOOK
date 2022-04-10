@@ -292,7 +292,7 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-%\setboolean{allchap}{true} % true: take all, false take nothing only /input
+\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
 \setboolean{lfrench}{false}\setboolean{lenglish}{true}  % ENGLISH
 %\setboolean{lfrench}{true}\setboolean{lenglish}{false} % FRENCH
@@ -300,13 +300,13 @@ showstringspaces=false
 \Input{Part00-liminaire}
 \Input{Part01.0-Intro}
 \Input{Part02.0-ArchiIP}
-\input{Part02.5-Wireshark}
+\Input{Part02.5-Wireshark}
 \Input{Part03.0-Modbus}
 \Input{Part04.0-ArchiIoT}
 \Input{Part05.0-Data}
 \Input{Part06.0-VSensors}
 \Input{Part06.5-beebotte}
-\Input{Part07.0-LoPy}
+\input{Part07.0-LoPy}
 \Input{Part08.0-Sigfox}
 \Input{Part09.0-LoRaWAN}
 \Input{Part10.0-CoAP}
@@ -326,7 +326,8 @@ showstringspaces=false
 \setboolean{Response}{false}
 
 \cleardoublepage
-\chapter{Réponses aux questions}
+\lgf{\chapter{Réponses aux questions}}
+\lge{\chapter{Answers to the questions}}
 \input{questions}
 
 \cleardoublepage

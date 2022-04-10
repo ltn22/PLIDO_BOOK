@@ -16,80 +16,119 @@
   \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/Jj9Tmci7gXU}
 \end{wrapfigure}
- \Index{Modbus} est apparu en 1979 à une époque où l'internet n'existait pas encore ! Il est toujours très populaire dans l'industrie. A l'origine Modbus était construit sur un bus série \Index{RS-485} qui connectait différents équipements  appelé (cf. figure~\vref{fig-modbus1})~:
+
+\lgf{\Index{Modbus} est apparu en 1979 à une époque où l'internet n'existait pas encore ! Il est toujours très populaire dans l'industrie. A l'origine Modbus était construit sur un bus série \Index{RS-485} qui connectait différents équipements  appelé (cf. figure~\vref{fig-modbus1})~:}
+\lge{\Index{Modbus} appeared in 1979 at a time when the Internet did not exist yet! It is still very popular in the industry. Originally Modbus was built on a serial bus \Index{RS-485} which connected different equipments called (see figure~\vref{fig-modbus1})~:}
+
  \begin{itemize}
- \item secondaires ou slaves et 
- \item un primaire appelée aussi master qui gère les communications. 
+ \item 
+    \lgf{secondaires ou slaves et }
+    \lge{secondary or slaves and }
+ \item 
+    \lgf{un primaire appelée aussi master qui gère les communications. }
+    \lge{a primary, also called master, which manages communications. }
  \end{itemize}
  
  
  
  \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture35.png}}
-\caption{Architecture filaire de Modbus}
+\lgf{\caption{Architecture filaire de Modbus}}
+\lge{\caption{Modbus wired architecture}}
 \label{fig-modbus1}
 \end{figure}
 
- 
- 
- Chaque secondaire à un numéro unique ou adresse. Les adresses sont comprises entre 1 et 247. Le primaire n'a pas besoin d'une adresse puisque toutes les communications ont lieu avec lui. 
+\lgf{Chaque secondaire à un numéro unique ou adresse. Les adresses sont comprises entre 1 et 247. Le primaire n'a pas besoin d'une adresse puisque toutes les communications ont lieu avec lui. }
+\lge{Each secondary has a unique number or address. The addresses are between 1 and 247. The primary does not need an address since all communication is with it. }
  
    \vspace{1em}
 
 
- Le primaire envoie une requête à un secondaire et le secondaire répond au primaire. Les communications directes entre deux secondaires ne sont pas possibles. 
+\lgf{Le primaire envoie une requête à un secondaire et le secondaire répond au primaire. Les communications directes entre deux secondaires ne sont pas possibles. }
+\lge{The primary sends a request to a secondary and the secondary replies to the primary. Direct communication between two secondaries is not possible. }
  
- \subsection{Registres}
+\lgf{\subsection{Registres}}
+\lge{\subsection{Registers}}
  
  
- Un équipement de Modbus peut prendre deux choses à travers des registres : 
+ \lgf{Un équipement de Modbus peut prendre deux choses à travers des registres~:}
+ \lge{A Modbus device can take two types of data through registers~:}
  \begin{itemize}
-     \item les relais qui peuvent prendre une valeur binaire "on" ou "off". Si le primaire peut modifier l'état et, bien sûr le lire, c'est appeler un \textit{\Index{coil}}. Si la valeur binaire peut uniquement être lu c'est un \textit{\Index{discrete input}}.
-     \item des registres sur 16 bits. Ils sont utilisés pour représenter une valeur comme un courant électrique, une température, une vitesse de rotation,... De même, si on peut uniquement lire la valeur à est appelée un \textit{\Index{input register}} sinon, si elle peut être également être modifiée par le primaire, elle est appelée un \textit{\Index{holding register}}.
+     \item 
+        \lgf{les relais qui peuvent prendre une valeur binaire "on" ou "off". Si le primaire peut modifier l'état et, bien sûr le lire, c'est appeler un \textit{\Index{coil}}. Si la valeur binaire peut uniquement être lu c'est un \textit{\Index{discrete input}}.}
+        \lge{relays that can take a binary value "on" or "off". If the primary can change the state and, of course, read it, it is called a \textit{\Index{coil}}. If the binary value can only be read it is a \textit{\Index{discrete input}}.}
+     \item 
+        \lgf{des registres sur 16 bits. Ils sont utilisés pour représenter une valeur comme un courant électrique, une température, une vitesse de rotation,... De même, si on peut uniquement lire la valeur à est appelée un \textit{\Index{input register}} sinon, si elle peut être également être modifiée par le primaire, elle est appelée un \textit{\Index{holding register}}.}
+        \lge{16-bit registers. They are used to represent a value such as an electric current, a temperature, a rotation speed,... Similarly, if one can only read the value at is called an \textit{\Index{input register}} otherwise, if it can also be modified by the primary, it is called an \textit{\Index{holding register}}.}
  \end{itemize}
  
     \vspace{1em}
 
  
-Un équipement Modbus peut avoir jusqu'à 10~000 registres de ces quatre catégories. 
+\lgf{Un équipement Modbus peut avoir jusqu'à 10~000 registres de ces quatre catégories. }
+\lge{A Modbus device can have up to 10~000 registers of these four categories. }
 
-\subsection{Protocole}
+\lgf{\subsection{Protocole}}
+\lge{\subsection{Protocol}}
 
-Modbus est un protocole requête/réponse. Le primaire envoie une requête à l'adresse d'un équipement pour lire ou écrire un de ces registres. 
+\lgf{Modbus est un protocole requête/réponse. Le primaire envoie une requête à l'adresse d'un équipement pour lire ou écrire un de ces registres. }
+\lge{Modbus is a query/response protocol. The primary sends a request to the address of a device to read or write one of its registers. }
+
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture37.png}}
-\caption{Trame Modbus}
+\lgf{\caption{Trame Modbus}}
+\lge{\caption{Modbus frame}}
 \label{fig-modbus2}
 \end{figure}
 
- 
+\lgf{Une trame Modbus est une séquence de caractères commençant par un octet avec l'adresse du secondaire suivi d'une commande ou code de fonctions spécifique à chaque catégorie de registre~:}
+\lge{A Modbus frame is a sequence of characters starting with a byte with the address of the secondary followed by a command or function code specific to each register category:}
 
-Une trame Modbus est une séquence de caractères commençant par un octet avec l'adresse du secondaire suivi d'une commande ou code de fonctions spécifique à chaque catégorie de registre~:
 \begin{itemize}
-    \item 1 pour lire un coil,
-    \item 2 pour lire un discrete input,
-    \item 3 pour lire un holding register,
-    \item 4 pour lire un input register,
-    \item 5 pour écrire un coil,
-    \item 6 pour écrire un holding register,
+    \item 
+        \lgf{1 pour lire un coil,}
+        \lge{1 to read a coil,}
+    \item 
+        \lgf{2 pour lire un discrete input,}
+        \lge{2 to read a discrete input,}
+    \item 
+        \lgf{3 pour lire un holding register,}
+        \lge{3 to read a holding register,}
+    \item 
+        \lgf{4 pour lire un input register,}
+        \lge{4 to read an input register,}
+    \item 
+        \lgf{5 pour écrire un coil,}
+        \lge{5 to write a coil,}
+    \item 
+        \lgf{6 pour écrire un holding register.}
+        \lge{6 to write a holding register.}
 \end{itemize}
 
     \vspace{1em}
 
-La suite de la trame contient les données puis un \ac{CRC} pour valider qu'il n'y a pas d'erreur de transmission dans la trame. La partie donnée peut être différente dans la requête et la réponse. Par exemple pour lire un holding register, la requête contient l'adresse du premier registre à lire et le nombre de registres à lire et la réponse contient le nombre de données transmises suivi de leurs valeurs. Pour écrire sur un registre, les données de la trame seront l'adresse du registre et les données à écrire.
+\lgf{La suite de la trame contient les données puis un \ac{CRC} pour valider qu'il n'y a pas d'erreur de transmission dans la trame. La partie donnée peut être différente dans la requête et la réponse. Par exemple pour lire un holding register, la requête contient l'adresse du premier registre à lire et le nombre de registres à lire et la réponse contient le nombre de données transmises suivi de leurs valeurs. Pour écrire sur un registre, les données de la trame seront l'adresse du registre et les données à écrire.}
+\lge{The rest of the frame contains the data and then a \ac{CRC} to validate that there is no transmission error in the frame. The data part can be different in the request and the response. For example, to read a holding register, the request contains the address of the first register to be read and the number of registers to be read and the response contains the number of data transmitted followed by their values. To write to a register, the data in the frame will be the address of the register and the data to write.}
 
-\subsection{Exemple: XY-MD02}
+
+\lgf{\subsection{Exemple~: XY-MD02}}
+\lge{\subsection{Example: XY-MD02}}
 
 
-Regardons de plus près un exemple concret. On va utiliser un capteur de température et d'humidité, le \Index{XY-MD02} (cf. figure~\vref{fig-XYMD02}) dont les spécifications sont facilement accessibles via une recherche sur Internet. 
+\lgf{Regardons de plus près un exemple concret. On va utiliser un capteur de température et d'humidité, le \Index{XY-MD02} (cf. figure~\vref{fig-XYMD02}) dont les spécifications sont facilement accessibles via une recherche sur Internet. }
+\lge{Let's take a closer look at a concrete example. We will use a temperature and humidity sensor, the \Index{XY-MD02} (see figure~\vref{fig-XYMD02}) whose specifications are easily accessible via an Internet search. }
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=0.6\columnwidth]{Pictures/XY-MD02.png}\includegraphics[width=0.4\columnwidth]{Pictures/rs485-usb.png}}
-\caption{XY-MD02 et Adaptateur USB/RS-485}
+\lgf{\caption{XY-MD02 et Adaptateur USB/RS-485}}
+\lge{\caption{XY-MD02 and USB/RS-485 Adapter}}
 \label{fig-XYMD02}
 \end{figure}
 
-La partie verte, se compose de quatre connecteurs dont la signification est indiquée sur l'étiquette. Les deux bornes de gauche constituent le bus \Index{RS-485} nommées \texttt{A+} et \texttt{B-} et les deux bornes de droites permettent d'alimenter électriquement l'équipement avec une tension comprise entre 5V et 30V.
+\lgf{La partie verte, se compose de quatre connecteurs dont la signification est indiquée sur l'étiquette. Les deux bornes de gauche constituent le bus \Index{RS-485} nommées \texttt{A+} et \texttt{B-} et les deux bornes de droites permettent d'alimenter électriquement l'équipement avec une tension comprise entre 5V et 30V.}
+\lge{The green part is composed of four connectors whose meaning is indicated on the label. The two left connectors constitute the bus named \texttt{A+} and \texttt{B-} and the two right connectors allow to supply the equipment with a voltage between 5V and 30V.}
+
 
     \vspace{1em}
 
@@ -97,29 +136,39 @@ La partie verte, se compose de quatre connecteurs dont la signification est indi
 \Youtube{https://youtu.be/mnRiYaYt2uI}
 \end{wrapfigure}
 
-Un adaptateur \Index{USB}/\Index{RS-485} (cf. figure~\vref{fig-XYMD02}) est connecté à un ordinateur. On y retrouve les deux bornes A+ et B- du bus RS-846. L'ordinateur joue le rôle de primaire qui va interroger le capteur de température.  
-
+\lgf{Un adaptateur \Index{USB}/\Index{RS-485} (cf. figure~\vref{fig-XYMD02}) est connecté à un ordinateur. On y retrouve les deux bornes A+ et B- du bus RS-846. L'ordinateur joue le rôle de primaire qui va interroger le capteur de température.}
+\lge{An adapter \Index{USB}/\Index{RS-485} (see figure~ref{fig-XYMD02}) is connected to a computer. It contains the two connectors A+ and B- of the RS-846 bus. The computer plays the role of primary which will interrogate the temperature sensor.}
 
     \vspace{1em}
 
-Le programme \Index{QModMaster}\footnote{\url{https://sourceforge.net/projects/qmodmaster/}} (cf. figure~\vref{fig-qmodmaster}) permet d'interroger ou d'écrire les registres des secondaires. Dans la fenêtre de gauche permet d'accèder aux registres des secondaires. La fenêtre de droite montre le trafic ayant circulé sur le bus RS-485.
+\lgf{Le programme \Index{QModMaster}\footnote{\url{https://sourceforge.net/projects/qmodmaster/}} (cf. figure~\vref{fig-qmodmaster}) permet d'interroger ou d'écrire les registres des secondaires. Dans la fenêtre de gauche permet d'accèder aux registres des secondaires. La fenêtre de droite montre le trafic ayant circulé sur le bus RS-485.}
+\lge{The program \Index{QModMaster}\footnote{\url{https://sourceforge.net/projects/qmodmaster/}} (see figure~\vref{fig-qmodmaster}) allows to query or write the registers of the secondaries. In the left window you can access the registers of a secondary. The right window shows the traffic on the RS-485 bus.}
+
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/modbus-trace.png}}
-\caption{QModMaster avec trace des messages}
+\lgf{\caption{QModMaster avec trace des messages}}
+\lge{\caption{QModMaster with message dump}}
 \label{fig-qmodmaster}
 \end{figure}
 
-Pour que le primaire puisse se connecter au secondaire, en plus du nom du port série (ici \texttt{COM3}), il faut disposer de plusieurs informations que l'on peut retrouver dans sa documentation :
+\lgf{Pour que le primaire puisse se connecter au secondaire, en plus du nom du port série (ici \texttt{COM3}), il faut disposer de plusieurs informations que l'on peut retrouver dans sa documentation~:}
+\lge{In order for the primary to be able to connect to the secondary, in addition to the name of the serial port (here \texttt{COM3}), it needs several pieces of information that can be found in its documentation:}
 
 \begin{itemize}
-    \item la vitesse de transmission sur le bus (ici 9~600 bit/s) et le codage des caractères transmis (ici 8 bits sans bit de parité et un bit de stop)\footnote{\url{https://en.wikipedia.org/wiki/8-N-1}}.
-    \item l'adresse du secondaire sur le bus.
+    \item 
+        \lgf{la vitesse de transmission sur le bus (ici 9~600 bit/s) et le codage des caractères transmis (ici 8 bits sans bit de parité et un bit de stop)\footnote{\url{https://en.wikipedia.org/wiki/8-N-1}}.}
+        \lge{the transmission speed on the bus (here 9~600 bit/s) and the coding of the transmitted characters (here 8 bits without parity bit and one stop bit)\footnote{\url{https://en.wikipedia.org/wiki/8-N-1}}}
+    \item 
+        \lgf{l'adresse du secondaire sur le bus.}
+        \lge{the address of the secondary on the bus.}
 \end{itemize}
 
     \vspace{1em}
 
-La documentation donne également la nature des registres et leur codage. Le tableau~\vref{tab-XY-IR} reprend la définiton des \textit{Input Registers}. Il s'agit de registres qui ne peuvent qu'être lus. La spécification indique que la température est stockée dans le registre 1 sur une longueur de 2 octets, soit l'intégralité de celui-ci.
+\lgf{La documentation donne également la nature des registres et leur codage. Le tableau~\vref{tab-XY-IR} reprend la définiton des \textit{Input Registers}. Il s'agit de registres qui ne peuvent qu'être lus. La spécification indique que la température est stockée dans le registre 1 sur une longueur de 2 octets, soit l'intégralité de celui-ci.}
+\lge{The documentation also gives the nature of the registers and their coding. The table~\vref{tab-XY-IR} takes up the definition of \textit{Input Registers}. These are registers that can only be read. The specification indicates that the temperature is stored in register 1 over a length of 2 bytes, i.e. the entire length of the register.}
 
 \begin{table}
 \begin{center}
@@ -130,42 +179,71 @@ La documentation donne également la nature des registres et leur codage. Le tab
                                  & 0x0002 & Humidity & 2 \\  \hline
 \end{tabular}
 \end{center}
-\caption{Input Register d'un XY-MD02}
+\lgf{\caption{Input Register d'un XY-MD02}}
+\lge{\caption{Input Register of an XY-MD02}}
 \label{tab-XY-IR}
 \end{table}
 
     \vspace{1em}
 
-La documentation indique que le secondaire a l'adresse 0x01 sur le bus RS-485. Il ne reste plus qu'à y envoyer une requête Modbus pour lire ce registre. La fenêtre de trace à droite sur la figure~\vref{fig-qmodmaster} donne les échanges. Nous allons analyser les deux dernières lignes. La première indique le contenu de la requête et la dernière la réponse du secondaire~:
+\lgf{La documentation indique que le secondaire a l'adresse \texttt{0x01} sur le bus RS-485. Il ne reste plus qu'à y envoyer une requête Modbus pour lire ce registre. La fenêtre de trace à droite sur la figure~\vref{fig-qmodmaster} donne les échanges. Nous allons analyser les deux dernières lignes. La première indique le contenu de la requête et la dernière la réponse du secondaire~:}
+\lge{The documentation indicates that the secondary has the address \texttt{0x01} on the RS-485 bus. It only remains to send a Modbus request to read this register. The trace window on the right on the figure~\vref{fig-qmodmaster} gives the exchanges. We will analyze the last two lines. The first one indicates the content of the request and the last one the answer of the secondary~:}
 
 \begin{termc}[backgroundcolor=\color{backcolour}, escapechar=@]
 @\texttt{01 \textcolor{blue}{04} \textcolor{purple}{00 01} \textcolor{green!60!black}{00 01} \textcolor{black!30}{60 0A}}@
 @\texttt{01 \textcolor{blue}{04} \textcolor{orange}{02} \textbf{00 D5} \textcolor{black!30}{78 AF}}@
 \end{termc}
 
-La requête commence par l'adresse du secondaire (\texttt{01}), puis par l'action (\texttt{\textcolor{blue}{04}}) pour lire un \textit{Input Register}, suivit de l'adresse du registre (\texttt{\textcolor{purple}{00 01}}) et du nombre de registres à lire (\textcolor{green!60!black}{00 01}). La requête se termine par la \ac{CRC} validant l'intégrité de la trame (\texttt{\textcolor{black!30}{60 0A}}).
+\lgf{La requête commence par l'adresse du secondaire (\texttt{01}), puis par l'action (\texttt{\textcolor{blue}{04}}) pour lire un \textit{Input Register}, suivit de l'adresse du registre (\texttt{\textcolor{purple}{00 01}}) et du nombre de registres à lire (\texttt{\textcolor{green!60!black}{00 01}}). La requête se termine par la \ac{CRC} validant l'intégrité de la trame (\texttt{\textcolor{black!30}{60 0A}}).}
+\lge{The request starts with the address of the secondary (\texttt{01}), then the action (\texttt{\textcolor{blue}{04}}) to read an \textit{Input Register}, followed by the address of the register (\texttt{\textcolor{purple}{00 01}}) and the number of registers to read (\texttt{\textcolor{green!60!black}{00 01}}). The request ends with the \ac{CRC} validating the integrity of the frame (\texttt{\textcolor{black!30}{60 0A}}).}
 
-la réponse contient également l'adresse du secondaire (\texttt{01}) et l'action, suivi de la taille de la réponse en octets (\texttt{\textcolor{orange}{02}}) et du résultat demandé (\texttt{\textbf{00 D5}}). 
+\lgf{La réponse contient également l'adresse du secondaire (\texttt{01}) et l'action, suivi de la taille de la réponse en octets (\texttt{\textcolor{orange}{02}}) et du résultat demandé (\texttt{\textbf{00 D5}}). }
+\lge{The response also contains the address of the secondary (\texttt{01}) and the action, followed by the size of the response in bytes (\texttt{\textcolor{orange}{02}}) and the requested result (\texttt{\textbf{00 D5}}). }
 
-\Question{Humidité}
-{En regardant les échanges de la figure~\vref{fig-qmodmaster} quelle est la valeur mesurée pour l'humidité ?}
-{Seul le premier échange demande la lecture de 2 registres à partir du registre ayant l'adresse 0x0001. Dans la réponse on obtient la valeur des deux registres consécutif (\texttt{00 DA} et \texttt{01 D4}). Le tableau~\vref{tab-XY-IR} indique que l'humidité est le second registre, on a donc \texttt{01 D4}.}
+\Question{\lgf{Humidité}\lge{Humidity}}
+{
+\lgf{En regardant les échanges de la figure~\vref{fig-qmodmaster} quelle est la valeur mesurée pour l'humidité ?}
+\lge{Looking at the exchanges in figure~\vref{fig-qmodmaster} what is the measured value for humidity?}
+}
+{
+\lgf{Seul le premier échange demande la lecture de 2 registres à partir du registre ayant l'adresse 0x0001. Dans la réponse on obtient la valeur des deux registres consécutif (\texttt{00 DA} et \texttt{01 D4}). Le tableau~\vref{tab-XY-IR} indique que l'humidité est le second registre, on a donc \texttt{01 D4}.}
+\lge{Only the first exchange asks for the reading of 2 registers from the register with the address 0x0001. In the answer we obtain the value of the two consecutive registers (\texttt{00 DA} and \texttt{01 D4}). The table~\vref{tab-XY-IR} indicates that humidity is the second register, so we have \texttt{01 D4}.}
 
-Reste à pouvoir interpréter cette valeur. La documentation indique que la valeur est en dixièmes de degrés et que l'unité est le Celsius. En convertissant \texttt{\textbf{00 D5}} en décimal, on obtient 213, soit 21.3\textcelsius.
+}
 
-\Question{Évolution des températures}
-{En regardant les échanges de la figure~\vref{fig-qmodmaster} quelle est l'évolution de la température au cours du temps ?}
-{On trouve 3 valeurs mesurées à 19:11:48, 20:02:39 et 20:02:44~: \texttt{00 DA}, \texttt{00 D5} et \texttt{00 D5}. Soit 21.8\textcelsius, 21.3\textcelsius ~~et 21.3\textcelsius.}
+\lgf{Reste à pouvoir interpréter cette valeur. La documentation indique que la valeur est en dixièmes de degrés et que l'unité est le Celsius. En convertissant \texttt{\textbf{00 D5}} en décimal, on obtient 213, soit 21.3\textcelsius.}
+\lge{It remains to be able to interpret this value. The documentation indicates that the value is in tenths of degrees and that the unit is Celsius. By converting \texttt{\bf{00 D5}} into decimal, we obtain 213, that is 21.3\textcelsius.}
 
-En résumé, on voit qu'il serait très difficile de faire fonctionner l'équipement sans documentation pour connaître : la vitesse du bus RS-485, l'adresse du secondaire, les adresses des registres utilisés et leur contenu et le codage de l'information dans les registres et les unités utilisées. On a donc un degrés d'interopérabilité faible, les deux entités doivent s'accorder sur un grand nombre de paramètres.
+\Question{\lgf{Évolution des températures}\lge{Evolution of temperatures}}
+{
+\lgf{En regardant les échanges de la figure~\vref{fig-qmodmaster} quelle est l'évolution de la température au cours du temps ?}
+\lge{Looking at the exchanges in figure~\vref{fig-qmodmaster} what is the evolution of the temperature over time?}
+}
+{
+\lgf{On trouve 3 valeurs mesurées à 19:11:48, 20:02:39 et 20:02:44~: \texttt{00 DA}, \texttt{00 D5} et \texttt{00 D5}. Soit 21.8\textcelsius, 21.3\textcelsius ~~et 21.3\textcelsius.}
+\lge{We find 3 values measured at 19:11:48, 20:02:39 and 20:02:44~: \texttt{00 DA}, \texttt{00 D5} and \texttt{00 D5}. That is, 21.8\textcelsius, 21.3\textcelsius ~~and 21.3\textcelsius.}
+}
 
-\Question{Taux d'Humidité}
-{Quel est le taux d'humidité au moment de la mesure ? La documentation précise qu'il s'agit d'un pourcentage avec une précision au dizième de pourcent. }
-{On avait lu la valeur \texttt{01 D4} dans le registre 0x02, soit 468 en décimal. D'où un taux d'humidité de 46.8\%}
+\lgf{En résumé, on voit qu'il serait très difficile de faire fonctionner l'équipement sans documentation pour connaître : la vitesse du bus RS-485, l'adresse du secondaire, les adresses des registres utilisés et leur contenu et le codage de l'information dans les registres et les unités utilisées. On a donc un degrés d'interopérabilité faible, les deux entités doivent s'accorder sur un grand nombre de paramètres.}
+\lge{In summary, we can see that it would be very difficult to operate the equipment without documentation to know: the speed of the RS-485 bus, the address of the secondary, the addresses of the registers used and their contents and the coding of the information in the registers and the units used. Therefore, there is a low degree of interoperability, the two entities must agree on a large number of parameters.}
+
+\Question{\lgf{Taux d'Humidité}\lgf{Humidity rate}}
+{
+\lgf{Quel est le taux d'humidité au moment de la mesure ? La documentation précise qu'il s'agit d'un pourcentage avec une précision au dizième de pourcent. }
+\lge{What is the moisture content at the time of measurement? The documentation states that it is a percentage with an accuracy of one tenth of a percent.}
+}
+{
+\lgf{On avait lu la valeur \texttt{01 D4} dans le registre 0x02, soit 468 en décimal. D'où un taux d'humidité de 46.8\%}
+\lge{We had read the value \texttt{01 D4} in the register 0x02, that is 468 in decimal. Hence a humidity rate of 46.8\%}
+}
     \vspace{1em}
 
-On a pu communiquer avec l'objet en utilisant les paramètres par défaut. Mais pour l'insérer dans un bus, il faut pouvoir modifier certains paramètres. La vitesse de transmission et le codage des octets doit être le même, des secondaires ne peuvent pas avoir la même adresses sur le bus.
-Le XY-MD02 dispose aussi de \textit{holding register} permettant de le paramétrage comme le montre la table~\vref{tab-XY-HR}
+\lgf{On a pu communiquer avec l'objet en utilisant les paramètres par défaut. Mais pour l'insérer dans un bus, il faut pouvoir modifier certains paramètres. La vitesse de transmission et le codage des octets doit être le même, des secondaires ne peuvent pas avoir la même adresses sur le bus.}
+\lge{We could communicate with the object using the default parameters. But to insert it in a bus, it is necessary to be able to modify certain parameters. The baud rate and the byte coding must be the same, the secondaries cannot have the same address on the bus.}
+
+\lgf{Le XY-MD02 dispose aussi de \textit{holding register} permettant de le paramétrage comme le montre la table~\vref{tab-XY-HR}}
+\lge{The XY-MD02 has also \textit{holding register} allowing to parameterize it as shown in the table~\vref{tab-XY-HR}}
+
 
 
 \begin{table}
@@ -184,17 +262,21 @@ Le XY-MD02 dispose aussi de \textit{holding register} permettant de le paramétr
                                  &         & -10\%RH - 10\%RH &  \\ \hline
 \end{tabular}
 \end{center}
-\caption{Holding Register d'un XY-MD02}
+\lgf{\caption{Holding Register d'un XY-MD02}}
+\lge{\caption{Holding Register of an XY-MD02}}
 \label{tab-XY-HR}
 \end{table}
 
-\subsection{Passerelle IP}
+\lgf{\subsection{Passerelle IP}}
+\lge{\subsection{IP Gateway}}
 
 \begin{wrapfigure}{r}{8cm}
 \centerline{\includegraphics[width=.5\columnwidth]{Pictures/encaps3.png}}
 \end{wrapfigure}
 
-Il est possible d'étendre la portée d'un réseau Modbus en ajoutant une passerelle IP. Cela correspond au troisième méthode d'interconnexion de la figure~\vref{fig-encap}. La passerelle, connectée sur le bus où restent connectés les secondaires, possède une adresse IP. Le primaire ouvre une connexion TCP avec la passerelle et y envoie ses requêtes. La passerelle recopie les données sur le bus. Inversement, les réponses des objets sont retournées à la passerelle qui les envoie au primaire en utilisation la connexion TCP. La figure~\vref{fig-gwmodbus} illustre les échanges. On note l'ouverture de connexion TCP qui se fait au démarrage du primaire qui reste active pour toute les échanges. On peut aussi remarquer que les messages TCP sont acquittés. La figure~\vref{fig-msg-modbus} montre les champs commun aux format sur le bus RS-485 et dans des paquets IP.
+\lgf{Il est possible d'étendre la portée d'un réseau Modbus en ajoutant une passerelle IP. Cela correspond au troisième méthode d'interconnexion de la figure~\vref{fig-encap}. La passerelle, connectée sur le bus où restent connectés les secondaires, possède une adresse IP. Le primaire ouvre une connexion TCP avec la passerelle et y envoie ses requêtes. La passerelle recopie les données sur le bus. Inversement, les réponses des objets sont retournées à la passerelle qui les envoie au primaire en utilisation la connexion TCP. La figure~\vref{fig-gwmodbus} illustre les échanges. On note l'ouverture de connexion TCP qui se fait au démarrage du primaire qui reste active pour toute les échanges. On peut aussi remarquer que les messages TCP sont acquittés. La figure~\vref{fig-msg-modbus} montre les champs commun aux format sur le bus RS-485 et dans des paquets IP.}
+\lge{It is possible to extend the scope of a Modbus network by adding an IP gateway. This corresponds to the third method of interconnection of the figure~\vref{fig-encap}. The gateway, connected on the bus where the secondaries remain connected, has an IP address. The primary opens a TCP connection with the gateway and sends its requests. The gateway copies the data on the bus. Conversely, the responses of the objects are returned to the gateway which sends them to the primary using the TCP connection. The figure~\vref{fig-gwmodbus} illustrates the exchanges. We note the opening of TCP connection which is done at the starting of the primary which remains active for all the exchanges. We can also notice that the TCP messages are acknowledged. The figure~\vref{fig-msg-modbus} shows the fields common to the format on the RS-485 bus and in IP packets.}
+
 
 
 \begin{figure}
@@ -278,7 +360,8 @@ Il est possible d'étendre la portée d'un réseau Modbus en ajoutant une passer
    
     \end{tikzpicture}
     
-    \caption{Passerelle entre le réseau Internet et Modbus.}
+    \lgf{\caption{Passerelle entre le réseau Internet et Modbus.}}
+    \lge{\caption{Gateway between the Internet and Modbus.}}
     
     \label{fig-gwmodbus}
 \end{figure}
@@ -340,13 +423,16 @@ Il est possible d'étendre la portée d'un réseau Modbus en ajoutant une passer
     \draw(x) node [left] {\small{RS-385}};
     \end{tikzpicture}
     
-    \caption{Messages Modbus sur bus RS-485 et sur IP/TCP}
+    \lgf{\caption{Messages Modbus sur bus RS-485 et sur IP/TCP}}
+    \lge{\caption{Modbus messages on RS-485 bus and on IP/TCP}}
     
     \label{fig-msg-modbus}
 \end{figure}
 
 
-Comme dans l'exemple précédent du capteur de température, les spécifications du \Index{compteur électrique} sont nécessaires pour comprendre la signification des registres utilisables. Le compteur code ses valeurs sur des nombres flottant sur 32 bits dont le codage est spécifié par la norme \Index{IEEE 754}\footnote{\url{https://en.wikipedia.org/wiki/IEEE_754}}. Ces valeurs sur 32 bits doivent être codées sur deux registres consécutifs d'où l'incrémentation de 2 en 2 que l'on retrouve sur la tableau~\vref{tab-meter-IR}, le compteur pouvant mesurer trois phase électriques.
+\lgf{Comme dans l'exemple précédent du capteur de température, les spécifications du \Index{compteur électrique} sont nécessaires pour comprendre la signification des registres utilisables. Le compteur code ses valeurs sur des nombres flottant sur 32 bits dont le codage est spécifié par la norme \Index{IEEE 754}\footnote{\url{https://en.wikipedia.org/wiki/IEEE_754}}. Ces valeurs sur 32 bits doivent être codées sur deux registres consécutifs d'où l'incrémentation de 2 en 2 que l'on retrouve sur la tableau~\vref{tab-meter-IR}, le compteur pouvant mesurer trois phase électriques.}
+\lge{As in the previous example of the temperature sensor, the specifications of the \Index{electric counter} are necessary to understand the meaning of the usable registers. The counter encodes its values on 32 bits floating numbers whose encoding is specified by the \Index{IEEE 754} standard. These values on 32 bits must be coded on two consecutive registers, hence the incrementation of 2 in 2 that we find on the table~\vref{tab-meter-IR}, the counter being able to measure three electrical phases.}
+
 
 
 \begin{table}
@@ -368,17 +454,20 @@ Comme dans l'exemple précédent du capteur de température, les spécifications
 
 \end{tabular}
 \end{center}
-\caption{quelques \textit{Input Register} du compteur électrique}
+\lgf{\caption{quelques \textit{Input Register} du compteur électrique}}
+\lge{\caption{some \textit{Input Register} of the electric meter}}
 \label{tab-meter-IR}
 \end{table}
 
     \vspace{1em}
 
-\Index{Wireshark} peut capturer une requête ayant circulé sur le réseau Ethernet, coté primaire (cf. figure~\vref{fig-modbus-ws}).
+\lgf{\Index{Wireshark} peut capturer une requête ayant circulé sur le réseau Ethernet, coté primaire (cf. figure~\vref{fig-modbus-ws}).}
+\lge{\Index{Wireshark} can capture a request having circulated on the Ethernet network, primary side (cf. figure~\vref{fig-modbus-ws}).}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/modbus-ws.png}}
-\caption{Capture avec \Index{Wireshark} d'une trame contenant un message Modbus.}
+\lgf{\caption{Capture avec \Index{Wireshark} d'une trame contenant un message Modbus.}}
+\lge{\caption{Capture with \Index{Wireshark} of a frame containing a Modbus message.}}
 \label{fig-modbus-ws}
 \end{figure}
 
@@ -391,26 +480,44 @@ Comme dans l'exemple précédent du capteur de température, les spécifications
 #\texttt{\small{0040  \textcolor{green}{00 02}   ..              }}#                                 
 \end{termc}
 
-On retrouve les encapsulations des protocoles Ethernet, IP et TCP, suivi des données TCP. Elles se composent de  trois champs qui n'existent pas dans la requête circulant sur le bus RS-485~:
+\lgf{On retrouve les encapsulations des protocoles Ethernet, IP et TCP, suivi des données TCP. Elles se composent de  trois champs qui n'existent pas dans la requête circulant sur le bus RS-485~:}
+\lge{We find the encapsulations of the Ethernet, IP and TCP protocols, followed by the TCP data. They consist of three fields which do not exist in the request circulating on the RS-485~ bus:}
+
 \begin{itemize}
-    \item le numéro de la transaction sur deux octets incrémenté à chaque requête,
-    \item la version du protocole sur deux octets, 
-    \item la longueur en octet de la transaction.
+    \item 
+        \lgf{le numéro de la transaction sur deux octets incrémenté à chaque requête,}
+        \lge{the transaction number on two bytes incremented at each request,}
+    \item 
+        \lgf{la version du protocole sur deux octets, }
+        \lge{the protocol version on two bytes, }
+    \item 
+        \lgf{la longueur en octet de la transaction.}
+        \lge{the length in bytes of the transaction.}
 \end{itemize}
 
     \vspace{1em}
 
-Les champs suivants sont identiques à ceux de la trame sur le bus RS-485~:
+\lgf{Les champs suivants sont identiques à ceux de la trame sur le bus RS-485~:}
+\lge{The following fields are identical to those of the frame on the RS-485 bus:}
 \begin{itemize}
-    \item l'adresse du secondaire sur un octet, ici 0x1c ou 28,
-    \item la nature de la requête : 0x04 pour lire un \textit{input register},
-    \item le registre à lire sur deux octets, ici 0x0000 correspondant à la tension sur la phase A.
-    \item le nombre de registre à lire, ici 2 pour obtenir les 32 bits de la valeur.
+    \item 
+        \lgf{l'adresse du secondaire sur un octet, ici 0x1c ou 28,}
+        \lge{the address of the secondary on one byte, here 0x1c or 28,}
+    \item  
+        \lgf{la nature de la requête : 0x04 pour lire un \textit{input register},}
+        \lge{the nature of the request : 0x04 to read an \textit{input register},}
+    \item  
+        \lg{le registre à lire sur deux octets, ici 0x0000 correspondant à la tension sur la phase A,}
+        \lge{the register to be read on two bytes, here 0x0000 corresponding to the voltage on phase A,}
+    \item  
+        \lgf{le nombre de registre à lire, ici 2 pour obtenir les 32 bits de la valeur.}
+        \lge{the number of registers to read, here 2 to obtain the 32 bits of the value.}
 \end{itemize}
 
     \vspace{1em}
 
-Le primaire reçoit la réponse suivante~:
+\lgf{Le primaire reçoit la réponse suivante~:}
+\lge{The primary receives the following response:}
 
 \begin{termc}[backgroundcolor=\color{backcolour}, escapechar=#]
 #\texttt{\small{0000  \colorbox{purple!50}{10 65 30 b0 54 bf 98 d8 63 62 29 49 08 00}\colorbox{blue!30}{45 00}   .e0.T...cb)I..E.}}# 
@@ -421,41 +528,82 @@ Le primaire reçoit la réponse suivante~:
                            
 \end{termc}
 
-On y retrouve, après les encapsulations protocolaires d'Ethernet, IP et TCP les données suivantes~:
+\lgf{On y retrouve, après les encapsulations protocolaires d'Ethernet, IP et TCP les données suivantes~:}
+\lge{After the protocol encapsulations of Ethernet, IP and TCP, we find the following data:}
+
 \begin{itemize}
-    \item le numéro de transaction qui correspond à celui employé dans la requête précédente. cela permet de faire le lien entre les deux messages qui aurait pu se défaire en cas de perte de paquets sur le réseau Internet,
-    \item la version du protocole,
-    \item la longueur de la réponse, ici 7 octets,
-    \item l'adresse du secondaire ayant répondu, ici 28,
-    \item la nature de la requête,
-    \item le nombre d'octets retournés, ici 4,
-    \item et la valeur des deux registres \texttt{0x43699e4a} qui correspond à un nombre flottant tel que le représente le standard IEEE 754. Il existe de nombreux sites sur Internet qui permettent la conversion\footnote{\url{https://www.h-schmidt.net/FloatConverter/IEEE754.html}}. Comme le montre la figure~\vref{fig-ieee754}, on obtient la valeur \SI{233.61831665}\volt qui correspond bien à une tension offerte par un réseau électrique.
+    \item 
+        \lgf{le numéro de transaction qui correspond à celui employé dans la requête précédente. cela permet de faire le lien entre les deux messages qui aurait pu se défaire en cas de perte de paquets sur le réseau Internet,}
+        \lge{the transaction number that corresponds to the one used in the previous request. This makes it possible to make the link between the two messages that could have been lost in case of packet loss on the Internet network,}
+    \item  
+        \lgf{la version du protocole,}
+        \lge{the protocol version,}
+    \item  
+        \lgf{la longueur de la réponse, ici 7 octets,}
+        \lge{the length of the response, here 7 bytes,}
+    \item  
+        \lgf{l'adresse du secondaire ayant répondu, ici 28,}
+        \lge{the address of the secondary school that responded, here 28,}
+    \item  
+        \lgf{la nature de la requête,}
+        \lge{the nature of the request,}
+    \item  
+        \lgf{le nombre d'octets retournés, ici 4,}
+        \lge{the number of bytes returned, here 4,}
+    \item  
+        \lgf{et la valeur des deux registres \texttt{0x43699e4a} qui correspond à un nombre flottant tel que le représente le standard IEEE 754. Il existe de nombreux sites sur Internet qui permettent la conversion\footnote{\url{https://www.h-schmidt.net/FloatConverter/IEEE754.html}}. Comme le montre la figure~\vref{fig-ieee754}, on obtient la valeur \SI{233.61831665}\volt qui correspond bien à une tension offerte par un réseau électrique.}
+        \lge{and the value of the two registers \texttt{0x43699e4a} which corresponds to a floating-point number as represented by the IEEE 754 standard. There are many sites on the Internet that allow the conversion of footnoteurl{\url{https://www.h-schmidt.net/FloatConverter/IEEE754.html}}. As shown in figure~\vref{fig-ieee754}, we obtain the value \SI{233.61831665}\volt which corresponds well to a voltage offered by an electrical network.}
 \end{itemize}
 
   \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/IEEE754.png}}
-\caption{Conversion d'un nombre flottant}
+\lgf{\caption{Conversion d'un nombre flottant}}
+\lge{\caption{Conversion of a floating number}}
 \label{fig-ieee754}
 \end{figure}
 
-\Question{Requête Modbus TCP}
-{Soit l'échange donné figure~\vref{fig-exo-ws} correspondant à une requête Modbus et à une réponse.
-Quel est le numéro de port utilisé par Modbus TCP.}
-{Il y a deux ports dasn l'en-tête TCP, mais comme il s'agit d'une requête, il faut prendre le port destination~:0x1f6, soit 502 en décimal}
+\Question{\lgf{Requête Modbus TCP}\lge{Modbus TCP request}}
+{
+\lgf{Soit l'échange donné figure~\vref{fig-exo-ws} correspondant à une requête Modbus et à une réponse. Quel est le numéro de port utilisé par Modbus TCP.}
+\lge{Let the given exchange figure~\vref{fig-exo-ws} correspond to a Modbus request and a response. What is the port number used by Modbus TCP.}
+}
+{
+\lgf{Il y a deux ports dans l'en-tête TCP, mais comme il s'agit d'une requête, il faut prendre le port destination~:0x1f6, soit 502 en décimal}
+\lge{There are two ports in the TCP header, but as it is a request, it is necessary to take the destination port~:0x1f6, which is 502 in decimal}
+}
 
-\Question{Requête Modbus TCP}
-{En poursuivant l'analyse du trafic, quelle valeur de registre est demandée.}
-{Le registre 0x36 est demandé, en regardant dans la table~\vref{tab-meter-IR}, il s'agit de la fréquence en Hz}
+\Question{\lgf{Requête Modbus TCP}\lge{Modbus TCP request}}
+{
+\lgf{En poursuivant l'analyse du trafic, quelle valeur de registre est demandée.}
+\lge{Continuing the traffic analysis, which register value is requested.}
+}
+{
+\lgf{Le registre 0x36 est demandé, en regardant dans la table~\vref{tab-meter-IR}, il s'agit de la fréquence en Hz.}
+\lge{Register 0x36 is requested, by looking in the table~\vvref{tab-meter-IR}, it is the frequency in Hz.}
+}
 
-\Question{Réponse Modbus TCP}
-{En analysant le paquet suivant, 
-Comment peut-on vérifier que la réponse peut correspondre à la requête précédente.}
-{Le numéro de séquence 0x000c est le même dans les deux trames.}
+\Question{\lgf{Réponse Modbus TCP}\lge{Modbus TCP response}}
+{
+\lgf{En analysant le paquet suivant, 
+comment peut-on vérifier que la réponse peut correspondre à la requête précédente.}
+\lge{By analyzing the following packet, 
+how can we verify that the response can match the previous request.}
+}
+{
+\lgf{Le numéro de séquence 0x000c est le même dans les deux trames.}
+\lge{The sequence number 0x000c is the same in both frames.}
+}
 
 
-\Question{Réponse Modbus TCP}
-{Quelle valeur est retournée. Est-ce cohérent ?}
-{La valeur du registre est 0x4247e95b correspond à un nombre flottant IEEE 754, en convertissant on obtient la valeur 49.9778862 Hz qui est très proche de la fréquence du réseau électrique européen.}
+\Question{\lgf{Réponse Modbus TCP}\lge{Modbus TCP response}}
+{
+\lgf{Quelle valeur est retournée. Est-ce cohérent ?}
+\lge{What value is returned. Is this consistent?}
+}
+{
+\lgf{La valeur du registre est 0x4247e95b correspond à un nombre flottant IEEE 754, en convertissant on obtient la valeur 49.9778862 Hz qui est très proche de la fréquence du réseau électrique européen.}
+\lge{The value of the register is 0x4247e95b corresponding to a floating number IEEE 754, converting it we obtain the value 49.9778862 Hz which is very close to the frequency of the European electrical network.}
+}
 
 \begin{figure}[tbp]
 
@@ -476,6 +624,7 @@ Comment peut-on vérifier que la réponse peut correspondre à la requête préc
 #\texttt{\small{0040  47 e9 5b \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  G.[}}#
                            
 \end{termc}
-\caption{Capture à étudier.}
+\lgf{\caption{Capture à étudier.}}
+\lge{\caption{Capture to be studied.}}
 \label{fig-exo-ws}
 \end{figure}

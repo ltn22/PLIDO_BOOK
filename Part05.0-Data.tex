@@ -1,81 +1,113 @@
 \cleardoublepage
 
-\chapter{LA REPRESENTATION DE LA DONNEE}
+\lgf{\chapter{LA REPRESENTATION DE LA DONNEE}}
+\lge{\chapter{THE REPRESENTATION OF DATA}}
 
 \section{Introduction}
      \vspace{1em}
 
-Envoyer une donnée sur un réseau n’est pas aussi simple que l’on croit.
+\lgf{Envoyer une donnée sur un réseau n’est pas aussi simple que l’on croit.}
+\lge{Sending data over a network is not as simple as it seems.}
      \vspace{1em}
 
  \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/k-RhgiwKx2M}
 \end{wrapfigure}
-Il faut faire la différence entre le format utilisé pour stocker des données dans la mémoire de l'ordinateur et celui employé pour l'envoyer à une autre machine. En effet, chaque machine à sa propre représentation souvent liée aux capacités de leur processeur. Cela est surtout vrai pour les nombres. Ils peuvent être stockés sur un nombre de bits plus ou moins important ou peuvent être représentés en mémoire de manière optimisée pour accélérer leur traitement. 
 
-En revanche, la représentation des chaînes de caractères (non accentués) est relativement uniforme car elle se base sur le code ASCII qui est le même pour tous les ordinateurs. Un texte de base est facilement compréhensible par toutes les machines. Une solution serait donc de n'utiliser que des chaînes de caractères. 
+\lgf{Il faut faire la différence entre le format utilisé pour stocker des données dans la mémoire de l'ordinateur et celui employé pour l'envoyer à une autre machine. En effet, chaque machine à sa propre représentation souvent liée aux capacités de leur processeur. Cela est surtout vrai pour les nombres. Ils peuvent être stockés sur un nombre de bits plus ou moins important ou peuvent être représentés en mémoire de manière optimisée pour accélérer leur traitement. }
+\lge{There is a difference between the format used to store data in the computer's memory and the one used to send it to another machine. Indeed, each machine has its own representation often linked to the capacities of their processor. This is especially true for numbers. They can be stored on a more or less important number of bits or can be represented in memory in an optimized way to accelerate their treatment. }
+
+
+\lgf{En revanche, la représentation des chaînes de caractères (non accentués) est relativement uniforme car elle se base sur le code ASCII qui est le même pour tous les ordinateurs. Un texte de base est facilement compréhensible par toutes les machines. Une solution serait donc de n'utiliser que des chaînes de caractères. }
+\lge{On the other hand, the representation of (unaccented) character strings is relatively uniform because it is based on the ASCII code which is the same for all computers. A basic text is easily understandable by all machines. A solution would therefore be to use only strings of characters. }
 
      \vspace{1em}
 
-Par exemple, si l’on veut envoyer l'entier ayant pour valeur 123, il existe plusieurs représentations possibles :
+\lgf{Par exemple, si l’on veut envoyer l'entier ayant pour valeur 123, il existe plusieurs représentations possibles :}
+\lge{For example, if we want to send the integer with the value 123, there are several possible representations:}
+
 \begin{itemize}
-\item envoyer une chaîne de caractères ”123” contenant les chiffres du nombre ;
-\item envoyer la valeur binaire 1111011.
+\item 
+    \lgf{envoyer une chaîne de caractères ”123” contenant les chiffres du nombre ;}
+    \lge{send a string "123" containing the digits of the number;}
+\item 
+    \lgf{envoyer la valeur binaire 1111011.}
+    \lge{send the binary value 1111011.}
 \end{itemize}
 
      \vspace{1em}
 
-On voit que juste pour transmettre une simple valeur stockée dans la mémoire d'un ordinateur, il existe plusieurs options et évidemment pour que cette valeur soit interprétée de la bonne façon, il faut que les deux extrémités se soient mises d'accord sur une représentation.
+\lgf{On voit que juste pour transmettre une simple valeur stockée dans la mémoire d'un ordinateur, il existe plusieurs options et évidemment pour que cette valeur soit interprétée de la bonne façon, il faut que les deux extrémités se soient mises d'accord sur une représentation.}
+\lge{We see that just to transmit a simple value stored in the memory of a computer, there are several options and obviously for this value to be interpreted in the right way, it is necessary that both ends have agreed on a representation.}
 
-Quand on veut transmettre plusieurs valeurs, c'est-à-dire quand on a des données structurées, d'autres problèmes surviennent.
+\lgf{Quand on veut transmettre plusieurs valeurs, c'est-à-dire quand on a des données structurées, d'autres problèmes surviennent.}
+\lge{When you want to transmit several values, i.e. when you have structured data, other problems arise.}
 
-Par exemple : quelle est la taille des blocs que l’on va transmettre ? Comment indiquer la fin de la transmission ? Pour une chaîne de caractères, comment indiquer qu’elle se termine ? Autre exemple : si l'on veut transmettre "12" puis "3", comment faire pour que l'autre extrémité ne comprenne pas "123" ?
-
-     \vspace{1em}
-
-
-Pour que la transmission se fasse correctement, il faut que l’émetteur et le récepteur adoptent les mêmes conventions. Quand il s’agit d’un ensemble de données, il faut être capable de les séparer. Avec les tableurs, une première méthode est possible avec la notation \ac{CSV} Comme son nom l’indique, les valeurs sont séparées par des virgules. Les valeurs sont représentées par des chaînes de caractères. Les textes sont différenciés des valeurs numériques, par l’utilisation de guillemets. Ainsi, 123 sera interprété comme un nombre et ”123” comme un texte.
-
-Si cette représentation est adaptée aux tableurs, elle est relativement pauvre car elle ne permet de représenter que des valeurs sur des lignes et des colonnes. Pour les usages du Web, il a fallu trouver un format plus souple permettant de représenter des structures de données complexes. Évidemment, comme rien n'est simple, il en existe plusieurs et les applications échangeant des données devront utiliser le même.
+\lgf{Par exemple : quelle est la taille des blocs que l’on va transmettre ? Comment indiquer la fin de la transmission ? Pour une chaîne de caractères, comment indiquer qu’elle se termine ? Autre exemple : si l'on veut transmettre "12" puis "3", comment faire pour que l'autre extrémité ne comprenne pas "123" ?}
+\lge{For example: what is the size of the blocks we are going to transmit? How to indicate the end of the transmission? For a string, how to indicate that it ends ? Another example : if we want to transmit "12" and then "3", how do we make sure that the other end does not include "123"?}
 
      \vspace{1em}
 
 
-On voit que l'envoi de la chaîne de caractères ne suffit pas, il faut la formater pour que le récepteur puisse trouver le type de la donnée transmise, qu'un nombre ne soit pas interprété comme une chaîne de caractères, qu'une chaîne de caractères reste une chaîne de caractères même si elle ne contient que des chiffres.   
+\lgf{Pour que la transmission se fasse correctement, il faut que l’émetteur et le récepteur adoptent les mêmes conventions. Quand il s’agit d’un ensemble de données, il faut être capable de les séparer. Avec les tableurs, une première méthode est possible avec la notation \ac{CSV} Comme son nom l’indique, les valeurs sont séparées par des virgules. Les valeurs sont représentées par des chaînes de caractères. Les textes sont différenciés des valeurs numériques, par l’utilisation de guillemets. Ainsi, 123 sera interprété comme un nombre et ”123” comme un texte.}
+\lge{In order for the transmission to take place correctly, the sender and receiver must adopt the same conventions. When it is a question of a set of data, it is necessary to be able to separate them. With spreadsheets, a first method is possible with the notation \ac{CSV} As its name indicates, the values are separated by commas. The values are represented by strings. The texts are differentiated from the numerical values by the use of quotation marks. Thus, 123 will be interpreted as a number and "123" as a text.}
+
+\lgf{Si cette représentation est adaptée aux tableurs, elle est relativement pauvre car elle ne permet de représenter que des valeurs sur des lignes et des colonnes. Pour les usages du Web, il a fallu trouver un format plus souple permettant de représenter des structures de données complexes. Évidemment, comme rien n'est simple, il en existe plusieurs et les applications échangeant des données devront utiliser le même.}
+\lge{If this representation is adapted to spreadsheets, it is relatively poor because it only allows to represent values on rows and columns. For Web uses, it was necessary to find a more flexible format allowing to represent complex data structures. Obviously, as nothing is simple, there are several of them and applications exchanging data will have to use the same one.}
+
+
+     \vspace{1em}
+
+
+\lgf{On voit que l'envoi de la chaîne de caractères ne suffit pas, il faut la formater pour que le récepteur puisse trouver le type de la donnée transmise, qu'un nombre ne soit pas interprété comme une chaîne de caractères, qu'une chaîne de caractères reste une chaîne de caractères même si elle ne contient que des chiffres.  }
+\lge{We can see that sending the string is not enough, it must be formatted so that the receiver can find the type of the transmitted data, so that a number is not interpreted as a string, so that a string remains a string even if it contains only numbers.  }
+
     \vspace{1em}
    
-\section{La \Index{sérialisation}}
+\lgf{\section{La \Index{sérialisation}}}
+\lge{\section{The \Index{serialization}}}
 
-Sous ce nom barbare se cache la méthode utilisée pour transmettre 
-des données d’un ordinateur à un autre.
-Une donnée peut être simple
-(un nombre, un texte) ou plus complexe (un tableau, une structure...). 
-Elle est stockée dans la mémoire de l'ordinateur suivant une représentation qui lui est propre. Par exemple, la taille des entiers peut varier d'une technologie de processeur à une autre, l'ordre des octets dans un nombre peut aussi être différente (little et big endian). 
-Pour des structures complexes comme les tableaux, les éléments peuvent être rangés à différents emplacements de la mémoire. 
+\lgf{Sous ce nom barbare se cache la méthode utilisée pour transmettre 
+des données d’un ordinateur à un autre. Une donnée peut être simple (un nombre, un texte) ou plus complexe (un tableau, une structure...).  Elle est stockée dans la mémoire de l'ordinateur suivant une représentation qui lui est propre. Par exemple, la taille des entiers peut varier d'une technologie de processeur à une autre, l'ordre des octets dans un nombre peut aussi être différente (little et big endian).  Pour des structures complexes comme les tableaux, les éléments peuvent être rangés à différents emplacements de la mémoire. }
+\lge{Under this barbaric name hides the method used to transmit 
+data from one computer to another. A data can be simple (a number, a text) or more complex (an array, a structure...). It is stored in the computer's memory according to a representation that is specific to it. For example, the size of integers can vary from one processor technology to another, the order of bytes in a number can also be different (little and big endian).  For complex structures such as arrays, the elements can be stored in different locations in the memory. }
 
-La sérialisation consiste à transformer une structure de données en une séquence qui pourra être transmise sur le réseau, stockée dans un fichier ou une base de données. L'opération inverse, consistant à reconstruire localement une structure de données, s'appelle désérialisation. 
 
-Il existe plusieurs formats pour sérialiser les données. Ils peuvent être binaires mais ceux généralement utilisés sont basés sur des chaînes de caractères. En effet, la représentation \ac{ASCII} définissant les caractères de base et codée sur 7 bits est commune à l'ensemble des ordinateurs. L'autre avantage du code ASCII est qu'il est facilement lisible et simplifie la mise au point des programmes.  
+\lgf{La sérialisation consiste à transformer une structure de données en une séquence qui pourra être transmise sur le réseau, stockée dans un fichier ou une base de données. L'opération inverse, consistant à reconstruire localement une structure de données, s'appelle désérialisation.}
+\lge{Serialization consists of transforming a data structure into a sequence that can be transmitted over the network, stored in a file or a database. The opposite operation, consisting in locally reconstructing a data structure, is called deserialization.}
 
-Wikipédia donne ce tableau (cf. figure~\vref{fig-ASCII}) des codes \ac{ASCII} datant de 1972 (une éternité en informatique) et recolorisé par nos soins.
+\lgf{Il existe plusieurs formats pour sérialiser les données. Ils peuvent être binaires mais ceux généralement utilisés sont basés sur des chaînes de caractères. En effet, la représentation \ac{ASCII} définissant les caractères de base et codée sur 7 bits est commune à l'ensemble des ordinateurs. L'autre avantage du code ASCII est qu'il est facilement lisible et simplifie la mise au point des programmes.  }
+\lge{There are several formats for serializing data. They can be binary but those generally used are based on character strings. Indeed, the representation \ac{ASCII} defining the basic characters and coded on 7 bits is common to all the computers. The other advantage of the ASCII code is that it is easily readable and simplifies the development of programs.  }
+
+\lgf{Wikipédia donne ce tableau (cf. figure~\vref{fig-ASCII}) des codes \ac{ASCII} datant de 1972 (une éternité en informatique) et recolorisé par nos soins.}
+\lge{Wikipedia gives this table (cf. figure~ref{fig-ASCII}) of the codes dating from 1972 (an eternity in computing) and recolored by us.}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture20.png}}
-\caption{Codage ASCII des caractères}
+\lgf{\caption{Codage ASCII des caractères}}
+\lge{\caption{ASCII character encoding}}
 \label{fig-ASCII}
 \end{figure}
 
-Les caractères en orange ne sont pas imprimables. Ils permettent de contrôler la communication des données ou de gérer l'affichage en revenant à la ligne. On les reconnait car la séquence binaire commence par 00X XXXX. On rappelle que le code ASCII est sur 7 bits ; le bit supplémentaire (bit de parité) conduisant à 1 octet était utilisé pour détecter des erreurs de transmission. Les valeurs de 0x30 à 0x39 codent les chiffres de 0 à 9. 
+\lgf{Les caractères en orange ne sont pas imprimables. Ils permettent de contrôler la communication des données ou de gérer l'affichage en revenant à la ligne. On les reconnait car la séquence binaire commence par 00X XXXX. On rappelle que le code ASCII est sur 7 bits ; le bit supplémentaire (bit de parité) conduisant à 1 octet était utilisé pour détecter des erreurs de transmission. Les valeurs de 0x30 à 0x39 codent les chiffres de 0 à 9. }
+\lge{The characters in orange are not printable. They are used to control data communication or to manage the display by returning to the line. They can be recognized because the binary sequence starts with 00X XXXX. One recalls that the ASCII code is on 7 bits; the additional bit (parity bit) leading to 1 byte was used to detect transmission errors. The values from 0x30 to 0x39 code the digits from 0 to 9. }
 
 \subsection*{Hexlify}
 
-En Python, il existe le module \Index{binascii} très pratique qui permet de convertir une séquence binaire en une chaîne de caractères ou inversement :
+\lgf{En Python, il existe le module \Index{binascii} très pratique qui permet de convertir une séquence binaire en une chaîne de caractères ou inversement :}
+\lge{In Python, there is the module \Index{binascii} very practical which makes it possible to convert a binary sequence into a character string or conversely:}
 \begin{itemize}
-\item \pfunction{binascii}{hexlify} prend un tableau d'octets et le convertit en une chaîne de caractères hexadécimaux plus lisible pour les spécialistes. Cela permet de visualiser n'importe quelle séquence de données. 
-\item \pfunction{binascii}{unhexify} fait l'inverse. Il prend une chaîne de caractères et la convertit en un tableau d'octets. Cela peut vous faciliter la programmation car, dans votre code, il est plus facile de manipuler des chaînes de caractères.
+\item 
+    \lgf{\pfunction{binascii}{hexlify} prend un tableau d'octets et le convertit en une chaîne de caractères hexadécimaux plus lisible pour les spécialistes. Cela permet de visualiser n'importe quelle séquence de données. }
+    \lge{\pfunction{binascii}{hexlify} takes an array of bytes and converts it to a more specialist-readable hexadecimal string. This allows you to view any sequence of data. }
+\item 
+    \lgf{\pfunction{binascii}{unhexify} fait l'inverse. Il prend une chaîne de caractères et la convertit en un tableau d'octets. Cela peut vous faciliter la programmation car, dans votre code, il est plus facile de manipuler des chaînes de caractères.}
+    \lge{\pfunction{binascii}{unhexify} does the opposite. It takes a string and converts it to an array of bytes. This can make programming easier for you because in your code it is easier to manipulate strings.}
 
 \end{itemize}
-Dans la suite, nous l'utiliserons pour manipuler des identifiants. Par exemple, ce bout de code illustre l'utilisation de ces fonctions :
+\lgf{Dans la suite, nous l'utiliserons pour manipuler des identifiants. Par exemple, ce bout de code illustre l'utilisation de ces fonctions :}
+\lge{In the following, we will use these functions to manipulate identifiers. For example, this piece of code illustrates the use of these functions:}
 
 \begin{python}
 mac = lora.mac()
@@ -86,29 +118,38 @@ app_eui = binascii.unhexlify('70 B3 D5 7E D0 03 3A E3'.replace(' ',''))
 
 \end{python}
 
-Comme nous le verrons par la suite, a fonction \pfunction{network}{lora.mac()} retourne un tableau d'octets. La fonction \pfunction{binascii}{hexlify} ligne suivante le convertit en chaîne de caractères pour un affichage plus propre. 
+\lgf{Comme nous le verrons par la suite, a fonction \pfunction{network}{lora.mac()} retourne un tableau d'octets. La fonction \pfunction{binascii}{hexlify} ligne suivante le convertit en chaîne de caractères pour un affichage plus propre. }
+\lge{As we will see later, the function \pfunction{network}{lora.mac()} returns an array of bytes. The function \pfunction{binascii}{hexlify} in the follwoing line converts it to a string for a cleaner display. }
 
-Inversement, nous devons affecter une séquence binaire à la variable \texttt{app\_eui}. Nous mettons cette séquence hexadécimale en chaîne de caractères. Les espaces offrent plus de lisibilité. Ils sont retirés par la méthode replace et le résultat est converti en binaire grâce à \pfunction{binascii}{unhexify}
+\lgf{Inversement, nous devons affecter une séquence binaire à la variable \texttt{app\_eui}. Nous mettons cette séquence hexadécimale en chaîne de caractères. Les espaces offrent plus de lisibilité. Ils sont retirés par la méthode replace et le résultat est converti en binaire grâce à \pfunction{binascii}{unhexify}}
+\lge{Conversely, we must assign a binary sequence to the variable \texttt{app\_eui}. We put this hexadecimal sequence into a string. Spaces offer more readability. They are removed by the replace method and the result is converted into binary thanks to \pfunction{binascii}{unhexify}}
 
 \section{Base64}
 
-Le passage d'une séquence binaire à une chaîne de caractères ASCII en représentant les valeurs conduit à un doublement du volume. Chaque bloc de 4 bits va conduire à produire un octet correspondant au caractère d'un chiffre ou d'une lettre de A à F. Le reste des codes n'est pas utilisé.
+\lgf{Le passage d'une séquence binaire à une chaîne de caractères ASCII en représentant les valeurs conduit à un doublement du volume. Chaque bloc de 4 bits va conduire à produire un octet correspondant au caractère d'un chiffre ou d'une lettre de A à F. Le reste des codes n'est pas utilisé.}
+\lge{The passage from a binary sequence to an ASCII character string representing the values leads to a doubling of the size. Each block of 4 bits will lead to produce a byte corresponding to the character of a digit or a letter from A to F. The rest of the codes are not used.}
 
-Le codage base64 offre un meilleur rendement en utilisant 64 bits pour coder les valeurs. Un dictionnaire fait la correspondance entre 64 valeurs et un caractère ASCII. Cependant, si l'on veut coder 4 octets, soit 32 bits, il faudra 5 blocs de 6 bits, et il y aura deux bits restants. Le symbole = indique que 2 bits sont ajoutés à la fin du codage. Donc, dans notre cas, il faudra ajouter deux symboles = comme le montre la figure ci-dessous :
+\lgf{Le codage \Index{base64} offre un meilleur rendement en utilisant 64 bits pour coder les valeurs. Un dictionnaire fait la correspondance entre 64 valeurs et un caractère ASCII. Cependant, si l'on veut coder 4 octets, soit 32 bits, il faudra 5 blocs de 6 bits, et il y aura deux bits restants. Le symbole = indique que 2 bits sont ajoutés à la fin du codage. Donc, dans notre cas, il faudra ajouter deux symboles = comme le montre la figure ci-dessous :}
+\lge{The encoding \Index{base64} offers a better performance by using 64 bits to encode the values. A dictionary maps 64 values to an ASCII character. However, if we want to encode 4 bytes, or 32 bits, we will need 5 blocks of 6 bits, and there will be 2 bits left. The symbol = indicates that 2 bits are added at the end of the coding. So, in our case, it will be necessary to add two symbols = as shown in the figure below:}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture21.png}}
-\caption{Codage Base64 de données binaires}
+\lgf{\caption{Codage Base64 de données binaires}}
+\lge{\caption{Base64 coding of binary data}}
 \label{fig-base64}
 \end{figure}
 
-On notera que pour les petites séquences, ce codage n'est pas meilleur que la transformation de la séquence hexadécimale en chaîne de caractères. Ici, il faut 8 caractères pour coder 4 octets. 
+\lgf{On notera que pour les petites séquences, ce codage n'est pas meilleur que la transformation de la séquence hexadécimale en chaîne de caractères. Ici, il faut 8 caractères pour coder 4 octets. }
+\lge{Note that for small sequences, this coding is not better than the transformation of the hexadecimal sequence into a string. Here, 8 characters are needed to encode 4 bytes. }
 
-Il existe beaucoup d'outils en ligne pour faire les conversions entre ces différentes représentations, comme le site \url{www.asciitohex.com}.
+\lgf{Il existe beaucoup d'outils en ligne pour faire les conversions entre ces différentes représentations, comme le site \url{www.asciitohex.com}.}
+\lge{There are many online tools to make conversions between these different representations, such as the site \url{www.asciitohex.com}.}
 
-\subsection*{Python module: base64}
+\lgf{\subsection*{Module Python : base64}}
+\lge{\subsection*{Python module: base64}}
 
-En Python3, le module base64 permet de faire ces conversions.  Ce module est un peu susceptible sur les types de données à utiliser.
+\lgf{En Python3, le module base64 permet de faire ces conversions.  Ce module est un peu susceptible sur les types de données à utiliser.}
+\lge{In Python3, the base64 module allows to do these conversions.  This module is a bit touchy about the data types to use.}
 
 \begin{python}[numbers=left,numbersep=5pt]
 import base64
@@ -121,7 +162,8 @@ ori = base64.b64decode(ser)
 print (ori)
 \end{python}
 
-qui donne à l’exécution :
+\lgf{qui donne à l’exécution :}
+\lge{which gives as a result of the execution :}
 
 \begin{termc}[backgroundcolor=\color{backcolour}]
 b'AQIzNA=='
@@ -129,35 +171,43 @@ AQIzNA==
 b'\x01\x0234'
 \end{termc}
 
-À noter que l'utilisation du \texttt{ser.\pfunction{str}{decode}()}, ligne 6, pour transformer une chaîne d'octets en chaîne de caractères, c'est-à-dire supprimer le \texttt{b} du début, peut être utilisé dans certains cas.
+\lgf{À noter que l'utilisation du \texttt{ser.\pfunction{str}{decode}()}, ligne 6, pour transformer une chaîne d'octets en chaîne de caractères, c'est-à-dire supprimer le \texttt{b} du début, peut être utilisé dans certains cas.}
+\lge{Note that the use of \texttt{ser.\pfunction{str}{decode}()}, line 6, to transform a string of bytes into a string of characters, i.e. remove the \texttt{b} at the beginning, can be used in certain cases.}
 
 
 
 \section{HTML}
 
-La sérialisation en chaînes de caractères (par exemple en Python via la commande \pfunction{binascii}{hexlify}) ou en Base64 concerne surtout des données binaires. Mais la donnée peut être aussi structurée, par exemple la page d'un tableur. Il faut donc formater le document pour éviter une fusion des différents champs.
+\lgf{La sérialisation en chaînes de caractères (par exemple en Python via la commande \pfunction{binascii}{hexlify}) ou en Base64 concerne surtout des données binaires. Mais la donnée peut être aussi structurée, par exemple la page d'un tableur. Il faut donc formater le document pour éviter une fusion des différents champs.}
+\lge{Serialization in strings (for example in Python via the command \pfunction{binascii}{hexlify}) or in Base64 concerns mainly binary data. But the data can also be structured, for example the page of a spreadsheet. The document must therefore be formatted to avoid merging the various fields.}
 
 
-\ac{HTML}, sans entrer dans les détails, définit un format où les champs sont repérés par un balisage.  Une balise de début est un mot clé entre \texttt{<>} et, pour une \Index{balise} de fin, le mot clé est précédé du caractère \texttt{/}. Par exemple, la figure~\vref{fig-HTML} avec le balisage, le premier paragraphe est formaté de cette manière, Dans le MOOC :
+\lgf{\ac{HTML}, sans entrer dans les détails, définit un format où les champs sont repérés par un balisage.  Une balise de début est un mot clé entre \texttt{<>} et, pour une \Index{balise} de fin, le mot clé est précédé du caractère \texttt{/}. Par exemple, la figure~\vref{fig-HTML} avec le balisage, le premier paragraphe est formaté de cette manière dans le MOOC :}
+\lge{\ac{HTML}, without going into detail,  defines a format where fields are marked up with markup.  A beginning tag is a keyword between \texttt{<>} and, for an ending \Index{tag}, the keyword is preceded by the character \texttt{/}. For example, the figure~\vref{fig-HTML} with the markup, the first paragraph is formatted this way in the MOOC:}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture22.png}}
-\caption{Codage HTML d'une page Web}
+\lgf{\caption{Codage HTML d'une page Web}}
+\lge{\caption{HTML coding of a Web page}}
 \label{fig-HTML}
 \end{figure}
 
-Les balises peuvent aussi prendre des arguments, comme la balise \Index{span} dans l'exemple précédent. Ainsi, si l'on regarde une page Web, comme indiqué figure~\vref{fig-Web-HTML}, le navigateur est capable de l'analyser pour trouver les \ac{URI} qu'elle contient. La balise \texttt{\Index{img}} indiquant qu'il s'agit d'une image, le client peut interroger le serveur pour l'afficher à l'écran. Ce format structuré de sérialisation nous permet de mettre en place une caractéristique de \ac{REST}, c'est-à-dire les liens entre ressources.
+\lgf{Les balises peuvent aussi prendre des arguments, comme la balise \Index{span} dans l'exemple précédent. Ainsi, si l'on regarde une page Web, comme indiqué figure~\vref{fig-Web-HTML}, le navigateur est capable de l'analyser pour trouver les \ac{URI} qu'elle contient. La balise \texttt{\Index{img}} indiquant qu'il s'agit d'une image, le client peut interroger le serveur pour l'afficher à l'écran. Ce format structuré de sérialisation nous permet de mettre en place une caractéristique de \ac{REST}, c'est-à-dire les liens entre ressources.}
+\lge{Tags can also take arguments, like the \Index{span} tag in the previous example. Thus, if we look at a Web page, as shown in figure~\vref{fig-Web-HTML}, the browser is able to analyze it to find the \ac{URI} it contains. With the text tag indicating that it is an image, the client can query the server to display it on the screen. This structured serialization format allows us to implement a feature of \ac{REST}, i.e. the links between resources.}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/Capture23.png}}
-\caption{Capture d'une page Web}
+\lgf{\caption{Capture d'une page Web}}
+\lge{\caption{Capture a web page}}
 \label{fig-Web-HTML}
 \end{figure}
 
 
 \section{XML}
 
-Si \ac{HTML} est dédié au formatage à l'écran de données textuelles et à la navigation sur le Web. \ac{XML}\footnote{\url{https://www.w3.org/TR/xml/}} défini par le \ac{W3C}, est un format d’échange entre deux applications. Par exemple, pour échanger les notes des étudiants entre la plate-forme FUN et une autorité de certification des cours, on pourrait utiliser le format suivant~:
+\lgf{Si \ac{HTML} est dédié au formatage à l'écran de données textuelles et à la navigation sur le Web. \ac{XML}\footnote{\url{https://www.w3.org/TR/xml/}} défini par le \ac{W3C}, est un format d’échange entre deux applications. Par exemple, pour échanger les notes des étudiants entre la plate-forme FUN et une autorité de certification des cours, on pourrait utiliser le format suivant~:}
+\lge{If \ac{HTML} is dedicated to the formatting on screen of textual data and to the navigation on the Web. \ac{XML}\footnote{\url{https://www.w3.org/TR/xml/}} defined by the \ac{W3C}, is a format for exchange between two applications. For example, to exchange student grades between the FUN platform and a course certification authority, one could use the following format~:}
 
 \begin{termc}[backgroundcolor=\color{palerod}]
 <etudiant>
@@ -168,13 +218,16 @@ Si \ac{HTML} est dédié au formatage à l'écran de données textuelles et à l
 
 \end{termc}
 
-Il est facile en lisant l'exemple de trouver le prénom, le nom et la note de l'étudiant. On peut noter qu'il n'y a pas de différence entre la note et le nom de l'élève. Il s'agit de caractères.
+\lgf{Il est facile en lisant l'exemple de trouver le prénom, le nom et la note de l'étudiant. On peut noter qu'il n'y a pas de différence entre la note et le nom de l'élève. Il s'agit de caractères.}
+\lge{It is easy by reading the example to find the student's first name, last name and grade. It can be noted that there is no difference between the grade and the student's name. They are characters.}
 
      \vspace{1em}
 
-S'il est syntaxiquement correct, rien ne dit que le créateur fournit quelque chose de correct qui pourra être interprété par une autre instance.  \ac{XML} peut inclure une grammaire ou un schéma qui est utilisé pour valider que les informations représentées dans le fichier sont non seulement syntaxiquement conformes au langage \ac{XML}, mais aussi conformes au schéma. Ce schéma va décrire les champs attendus et leur type (texte, nombre...). Vous pouvez accéder à ce cours si vous voulez en savoir plus sur les schémas \ac{XML}.
+\lgf{S'il est syntaxiquement correct, rien ne dit que le créateur fournit quelque chose de correct qui pourra être interprété par une autre instance.  \ac{XML} peut inclure une grammaire ou un schéma qui est utilisé pour valider que les informations représentées dans le fichier sont non seulement syntaxiquement conformes au langage \ac{XML}, mais aussi conformes au schéma. Ce schéma va décrire les champs attendus et leur type (texte, nombre...). Vous pouvez accéder à ce cours si vous voulez en savoir plus sur les schémas \ac{XML}.}
+\lge{If it is syntactically correct, there is no guarantee that the creator is providing something correct that can be interpreted by another instance.  \XML can include a grammar or schema that is used to validate that the information represented in the file is not only syntactically compliant with the language, but also complies with the schema. This schema will describe the expected fields and their type (text, number...). You can access this course if you want to know more about schemas.}
 
-Du point de vue de l’internet des objets, même si le XML pourrait être un bon candidat pour l’échange d’informations, il est un format trop lourd et donc énergivore. On peut noter que pour envoyer une note sur 20 qui, dans l'absolu, prendrait 6 bits, on transmet \texttt{<note>18</note>}, soit 15 caractères soit 120 bits! 
+\lgf{Du point de vue de l’internet des objets, même si le XML pourrait être un bon candidat pour l’échange d’informations, il est un format trop lourd et donc énergivore. On peut noter que pour envoyer une note sur 20 qui, dans l'absolu, prendrait 6 bits, on transmet \texttt{<note>18</note>}, soit 15 caractères soit 120 bits! }
+\lge{From the point of view of the Internet of Things, even if XML could be a good candidate for the exchange of information, it is too heavy a format and therefore energy consuming. We can note that to send a note out of 20 which, in the absolute, would take 6 bits, we transmit \texttt{<note>18</note>}, that is to say 15 characters or 120 bits! }
 
 \section{JSON}
 
@@ -182,9 +235,11 @@ Du point de vue de l’internet des objets, même si le XML pourrait être un bo
 \Youtube{https://youtu.be/IhZ9w6jWnq8}
 \end{wrapfigure}
 
-\ac{JSON}  offre un moyen de structurer l’information de manière plus compacte que \ac{XML}. JSON s’impose comme le langage commun pour échanger les informations. A l’origine, JSON était utilisé par\Index{Javascriptt} pour échanger des informations ; par exemple, pour afficher en temps réel l’évolution des cours de la bourse ou pour afficher des graphiques dynamiques sur l’écran de l’utilisateur.
+\lgf{\ac{JSON}  offre un moyen de structurer l’information de manière plus compacte que \ac{XML}. JSON s’impose comme le langage commun pour échanger les informations. A l’origine, JSON était utilisé par\Index{Javascriptt} pour échanger des informations ; par exemple, pour afficher en temps réel l’évolution des cours de la bourse ou pour afficher des graphiques dynamiques sur l’écran de l’utilisateur.}
+\lge{\ac{JSON} offers a way to structure information in a more compact way than XML. JSON is emerging as the common language for exchanging information. Originally, JSON was used by \Index{Javascript} to exchange information; for example, to display in real time the evolution of stock exchange prices or to display dynamic graphs on the user's screen.}
 
-JSON \rfc{8259} est un format d’échange simple. Il définit 4 types de données :
+\lgf{JSON \rfc{8259} est un format d’échange simple. Il définit 4 types de données :}
+\lge{JSON \rfc{8259} is a simple exchange format. It defines 4 data types:}
 
 \begin{itemize}
     \item nombre~: Les nombres sont composés de chiffres et peuvent être positifs, négatifs, entiers ou flottants.
