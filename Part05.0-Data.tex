@@ -242,29 +242,54 @@ b'\x01\x0234'
 \lge{JSON \rfc{8259} is a simple exchange format. It defines 4 data types:}
 
 \begin{itemize}
-    \item nombre~: Les nombres sont composés de chiffres et peuvent être positifs, négatifs, entiers ou flottants.
-    \item texte~: Le texte est délimité par des guillemets simples ou doubles.
-    \item \Index{tableau}~: Les tableaux sont des listes d’éléments séparés par des virgules et entourés de crochets.
-    \item \Index{objet}~: L’objet est une liste de paires composées d’une \Index{clé} et d’une valeur. La clé est une chaîne de caractères et la valeur peut être de n’importe quel type. La clé doit être unique à l’intérieur d’un objet, et référence entièrement la valeur qui la suit. Le couple clé - valeur est séparé par le caractère 2 points  \texttt{:}. Les éléments de l’objet sont séparés par des virgules. L'objet est délimité par des accolades.
+    \item 
+        \lgf{nombre~: Les nombres sont composés de chiffres et peuvent être positifs, négatifs, entiers ou flottants.}
+        \lge{Number: Numbers are composed of digits and can be positive, negative, integers or floats.}
+    \item  
+        \lgf{texte~: Le texte est délimité par des guillemets simples ou doubles.}
+        \lge{Text: The text is delimited by single or double quotation marks.}
+    \item  
+        \lgf{\Index{tableau}~: Les tableaux sont des listes d’éléments séparés par des virgules et entourés de crochets.}
+        \lge{\Index{Array}~: Arrays are lists of elements separated by commas and surrounded by square brackets.}
+    \item  
+        \lgf{\Index{objet}~: L’objet est une liste de paires composées d’une \Index{clé} et d’une valeur. La clé est une chaîne de caractères et la valeur peut être de n’importe quel type. La clé doit être unique à l’intérieur d’un objet, et référence entièrement la valeur qui la suit. Le couple clé - valeur est séparé par le caractère 2 points  \texttt{:}. Les éléments de l’objet sont séparés par des virgules. L'objet est délimité par des accolades.}
+        \lge{\Index{Object}~: The object is a list of pairs composed of an \Index{key} and a value. The key is a string and the value can be of any type. The key must be unique within an object, and fully references the value that follows it. The couple key - value is separated by the colon character \texttt{:}. The elements of the object are separated by commas. The object is delimited by braces.}
 \end{itemize}
 
-Par exemple, quelques structures \ac{JSON} :
+\lgf{Par exemple, quelques structures \ac{JSON} :}
+\lge{For example, some \ac{JSON} structures :}
 
 \begin{itemize}
-    \item \texttt{[1, -2, 0.3, 4e1]} est un tableau qui contient 4 nombres ;
-    \item \texttt{[1, ”2”, ”34”]} est un tableau contenant un nombre et deux chaines de caractères ;
-    \item \texttt{[1, [2, 3 , ”4”]]} est un tableau de deux éléments dont le second est également un tableau de 3 éléments ;
-    \item \texttt{\{ ”couleur” : [34, 16, 3]\}} est un objet qui contient un élément et la valeur est un tableau ; 
-    \item \texttt{\{ ”name” : ”bob”, ”age” : 30\}} est un objet qui contient deux éléments référencés par les chaînes de caractères (ou index)  ”name” et ”age”.
+    \item 
+        \lgf{\texttt{[1, -2, 0.3, 4e1]} est un tableau qui contient 4 nombres ;}
+        \lge{\texttt{[1, -2, 0.3, 4e1]} is an array that contains 4 numbers;}
+    \item  
+        \lgf{\texttt{[1, ”2”, ”34”]} est un tableau contenant un nombre et deux chaines de caractères ;}
+        \lge{\texttt{[1, "2", "34"]} is an array containing a number and two strings;}
+    \item  
+        \lgf{\texttt{[1, [2, 3 , ”4”]]} est un tableau de deux éléments dont le second est également un tableau de 3 éléments ;}
+        \lge{\texttt{[1, [2, 3 , "4"]]} is an array of two elements whose second element is also an array of 3 elements;}
+    \item  
+        \lgf{\texttt{\{ ”couleur” : [34, 16, 3]\}} est un objet qui contient un élément et la valeur est un tableau ; }
+        \lge{\texttt{\{ "color": [34, 16, 3]\}} is an object that contains an element and the value is an array; }
+    \item  
+        \lgf{\texttt{\{ ”name” : ”bob”, ”age” : 30\}} est un objet qui contient deux éléments référencés par les chaînes de caractères (ou index)  ”name” et ”age”.}
+     
+        \lgf{L’ordre dans lequel sont placés les éléments est indifférent. \texttt{\{”age” : 30, ”name” : ”bob”\}} est équivalent au dernier exemple. }
     
-    L’ordre dans lequel sont placés les éléments est indifférent. \texttt{\{”age” : 30, ”name” : ”bob”\}} est équivalent au dernier exemple. 
-
-    Cela impose que l’index utilisé pour accéder à une valeur doit être unique dans la structure objet \texttt{\{”name” : ”bob”, ”name” : ”alice”}\} est interdit.
+        \lgf{ Cela impose que l’index utilisé pour accéder à une valeur doit être unique dans la structure objet \texttt{\{”name” : ”bob”, ”name” : ”alice”}\} est interdit.}
+        
+        \lge{\texttt{ \{"name" : "bob", "age" : 30\}} is an object that contains two elements referenced by the strings (or index) "name" and "age".}
+     
+        \lge{The order in which the elements are placed is irrelevant. For example, \texttt{\{"age": 30, "name": "bob"\}} is equivalent to the last example. }
+    
+        \lge{This imposes that the index used to access a value must be unique in the object structure : \texttt{\{"name" : "bob", "name" : "alice"\}} is prohibited.}
 \end{itemize}
 
      \vspace{1em}
 
-Le listing suivant donne un exemple de structure JSON tirée du \rfc{8259}. Il contient un objet JSON avec une seule clé \texttt{”Image”}. La valeur de cette clé est une autre structure qui contient six éléments. 
+\lgf{Le listing suivant donne un exemple de structure JSON tirée du \rfc{8259}. Il contient un objet JSON avec une seule clé \texttt{”Image”}. La valeur de cette clé est une autre structure qui contient six éléments. }
+\lge{The following listing gives an example of a JSON structure from the \rfc{8259}. It contains a JSON object with a single key \texttt{"Image"}. The value of this key is another structure that contains six elements. }
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json]
 {
@@ -283,15 +308,20 @@ Le listing suivant donne un exemple de structure JSON tirée du \rfc{8259}. Il c
 }
 \end{termc}
 
-Le balisage par clé est un élément fondamental dans la structure des données. Il est primordial d'être cohérent et d'assurer une concordance entre émetteur et récepteur sur l'intitulé de la clé pour pouvoir récupérer l'information voulue. De la même façon, il faut s'accorder sur les unités de mesure : une interprétation d'une mesure en centimètre alors qu'elle est en pixel peut être désastreux ; c'est un problème d'interopérabilité.
+\lgf{Le balisage par clé est un élément fondamental dans la structure des données. Il est primordial d'être cohérent et d'assurer une concordance entre émetteur et récepteur sur l'intitulé de la clé pour pouvoir récupérer l'information voulue. De la même façon, il faut s'accorder sur les unités de mesure : une interprétation d'une mesure en centimètre alors qu'elle est en pixel peut être désastreux ; c'est un problème d'interopérabilité.}
+\lge{Key markup is a fundamental element in the structure of data. It is essential to be consistent and to ensure that the sender and receiver agree on the name of the key in order to be able to retrieve the desired information. In the same way, it is necessary to agree on the units of measurement: an interpretation of a measurement in centimeters when it is in pixels can be disastrous; it is an interoperability problem.}
+
+
      \vspace{1em}
 
-JSON est facilement exploitable dans d’autres langages. Par exemple en Python, le module JSON peut être utilisé pour convertir une structure JSON qui est une chaîne ASCII en une représentation interne Python. Les tableaux sont convertis en listes et les objets en dictionnaires.
+\lgf{JSON est facilement exploitable dans d’autres langages. Par exemple en Python, le module JSON peut être utilisé pour convertir une structure JSON qui est une chaîne ASCII en une représentation interne Python. Les tableaux sont convertis en listes et les objets en dictionnaires.}
+\lge{JSON is easily exploitable in other languages. For example in Python, the JSON module can be used to convert a JSON structure that is an ASCII string into a Python internal representation. Arrays are converted into lists and objects into dictionaries.}
 
      \vspace{1em}
      \pythonlst{example\_json.py}
 
-Le programme \pprog{example\_json.py}{cbor-example} reprend la structure précédente. La variable \texttt{struct\_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.
+\lgf{Le programme \pprog{example\_json.py}{cbor-example} reprend la structure précédente. La variable \texttt{struct\_python} est une structure Python. On peut voir que les valeurs pour \texttt{"Animated"} et \texttt{"Copyright"} sont les mots clé Python \texttt{False} (avec un F majuscule) et \texttt{None}. Le programme affiche deux fois cette valeur avec la commande standard \texttt{print} puis avec le module \pfunction{pprint}{pprint} pour avoir un affichage plus lisible. On peut remarquer que l'ordre d'affichage des clés est différent. Comme \texttt{"Title"} était défini deux fois, seul le dernier est conservé dans la structure Python.}
+\lge{The program \pprog{example\_json.py}{cbor-example} uses the previous structure. The variable \texttt{struct\_python} is a Python structure. We can see that the values for \texttt{"Animated"} and \texttt{"Copyright"} are the Python keywords \texttt{False} (with a capital F) and \texttt{None}. The program displays this value twice with the standard command \texttt{print} then with the module \pfunction{pprint}{pprint} to have a more readable display. You can notice that the order of display of the keys is different. As \texttt{"Title"} was defined twice, only the last one is kept in the Python structure.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {'Image': {'IDs': [17, 2371, 234, 38793], 'Height': 600, 'Animated': False, 'Title': 'Empty picture', 'Thumbnail': 
@@ -307,14 +337,16 @@ Le programme \pprog{example\_json.py}{cbor-example} reprend la structure précé
            'Width': 800}}
 \end{termc}
 
-Grâce à la fonction \pfunction{json}{dumps} du module \texttt{json}, la variable \texttt{struct\_python} est transformée en JSON. Les mots clé  \texttt{False} et  \texttt{None} sont remplacés par  \texttt{false} et  \texttt{null}. Le programme affiche une chaîne de caractères.
+\lgf{Grâce à la fonction \pfunction{json}{dumps} du module \texttt{json}, la variable \texttt{struct\_python} est transformée en JSON. Les mots clé  \texttt{False} et  \texttt{None} sont remplacés par  \texttt{false} et  \texttt{null}. Le programme affiche une chaîne de caractères.}
+\lge{Thanks to the function \pfunction{json}{dumps} of the module \texttt{json}, the variable \texttt{struct\_python} is transformed into JSON. The keywords \texttt{False} and \texttt{None} are replaced by \texttt{false} and \texttt{null}. The program displays a string.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {"Image": {"IDs": [17, 2371, 234, 38793], "Height": 600, "Animated": false, "Title": "Empty picture", "Thumbnail": 
 {"Url": "http://www.example.com/image/481989943", "Width": 100, "Height": 125}, "Width": 800, "Copyright": null}}
 \end{termc}
 
-Pour le retransformer, de JSON en variable Python, on utilise la fonction inverse \pfunction{json}{loads} qui traduit une chaîne de caractères en variable Python.
+\lgf{Pour le retransformer, de JSON en variable Python, on utilise la fonction inverse \pfunction{json}{loads} qui traduit une chaîne de caractères en variable Python.}
+\lge{To transform it back, from JSON to Python variable, we use the inverse function \pfunction{json}{loads} which translates a string into a Python variable.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny]
 {'Image': {'Animated': False,
@@ -329,11 +361,13 @@ Pour le retransformer, de JSON en variable Python, on utilise la fonction invers
 \end{termc}
 
 
-Les autres langues de programmation possèdent également leur propre bibliothèque pour effectuer la traduction.
+\lgf{Les autres langues de programmation possèdent également leur propre bibliothèque pour effectuer la traduction.}
+\lge{Other programming languages also have their own libraries for translation.}
 
      \vspace{1em}
 
-Par rapport à \ac{XML}, \ac{JSON} est beaucoup plus permissif et manque de formalisme pour décrire la structure. \ac{JSON-LD} défini par le \ac{W3C} renforce l’interopérabilité de JSON en introduisant des clés spécifiques décrivant la structure des données, une référence aux unités, etc. Nous verrons ces concepts dans la suite du cours.
+\lgf{Par rapport à \ac{XML}, \ac{JSON} est beaucoup plus permissif et manque de formalisme pour décrire la structure. \ac{JSON-LD} défini par le \ac{W3C} renforce l’interopérabilité de JSON en introduisant des clés spécifiques décrivant la structure des données, une référence aux unités, etc. Nous verrons ces concepts dans la suite du cours.}
+\lge{Compared to \ac{XML}, \ac{JSON} is much more permissive and lacks a formalism to describe the structure. The \ac{JSON-LD} defined by the W3C reinforces the interoperability of JSON by introducing specific keys describing the data structure, a reference to units, etc. We will see these concepts in the rest of the course.}
 
 \section{CBOR}
 
@@ -341,9 +375,11 @@ Par rapport à \ac{XML}, \ac{JSON} est beaucoup plus permissif et manque de form
 \Youtube{https://youtu.be/thSWuJ-1ld0}
 \end{wrapfigure}
 
-\ac{JSON} et \ac{CBOR} sont tous les deux des modes de codage de la donnée.
+\lgf{\ac{JSON} et \ac{CBOR} sont tous les deux des modes de codage de la donnée.}
+\lge{\ac{JSON} and \ac{CBOR} are both data encoding modes.}
 
-\ac{JSON} introduit une notation très flexible permettant de représenter toutes les structures de données. Le choix de l'\acs{ASCII} rend ce format universel et n'importe quel ordinateur pourra le comprendre. Mais l'utilisation de l'\acs{ASCII} ne permet pas de transmettre de manière optimale l'information sur un réseau. Quand les réseaux ont un débit raisonnable, cela ne pose pas de problème. Quand on en vient à l'internet des objets, il faut prendre en compte la capacité de traitement limité des équipements et la faible taille des messages échangés.
+\lgf{\ac{JSON} introduit une notation très flexible permettant de représenter toutes les structures de données. Le choix de l'\acs{ASCII} rend ce format universel et n'importe quel ordinateur pourra le comprendre. Mais l'utilisation de l'\acs{ASCII} ne permet pas de transmettre de manière optimale l'information sur un réseau. Quand les réseaux ont un débit raisonnable, cela ne pose pas de problème. Quand on en vient à l'internet des objets, il faut prendre en compte la capacité de traitement limité des équipements et la faible taille des messages échangés.}
+\lge{\ac{JSON} introduces a very flexible notation allowing to represent all data structures. The choice of the \acs{ASCII} makes this format universal and any computer will be able to understand it. But the use of the \acs{ASCII} does not make it possible to transmit information in an optimal way on a network. When the networks have a reasonable flow, it does not pose a problem. When it comes to the Internet of Things, we must take into account the limited processing capacity of the equipment and the small size of the messages exchanged.}
 
      \vspace{1em}
 
