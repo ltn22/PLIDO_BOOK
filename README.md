@@ -6,3 +6,5 @@ Ce livre open source, reprend les textes du MOOC PLIDO (Programmer l'Internet de
 
 Les videos sont également disponibles sur la playlist Youtube https://www.youtube.com/playlist?list=PLwy4KbYJoKLWeonJ8c5U6CLrxs_pZQi3q
 
+Pour tout commentaire ou remarque utilisez les issues de github ou les pull resquests. 
+
