@@ -27,9 +27,26 @@
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
+%-------- LANGUAGE ------
+\usepackage{ifthen}
+
+\provideboolean{lfrench}\setboolean{lfrench}{false} 
+\provideboolean{lenglish}\setboolean{lenglish}{false} 
+
+%\setboolean{lfrench}{true} 
+\setboolean{lenglish}{true}
+
+\ifthenelse{\boolean{lfrench}}{
 \usepackage[french]{varioref}
 \usepackage[french]{babel}
+}{}
 
+\ifthenelse{\boolean{lenglish}}{
+\usepackage[english]{varioref}
+\usepackage[english]{babel}
+}{}
+
+% ------------------
 \usepackage{wrapfig}
 \usepackage{listings}
 \usepackage{multicol}
@@ -96,7 +113,6 @@ showstringspaces=false
 % QUESTION
 
 \usepackage[most]{tcolorbox}
-\usepackage{ifthen}
 
 \provideboolean{Response}\setboolean{Response}{true}
 
@@ -218,8 +234,7 @@ showstringspaces=false
 
 %-----------
 
-\provideboolean{lfrench}\setboolean{lfrench}{false}
-\provideboolean{lenglish}\setboolean{lenglish}{true}
+
 
 \newcommand\lgf[1]{\ifthenelse{\boolean{lfrench}}{#1}{}}
 \newcommand\lge[1]{\ifthenelse{\boolean{lenglish}}{#1}{}}
@@ -237,11 +252,12 @@ showstringspaces=false
 
 \begingroup
 \thispagestyle{empty}
-\AddToShipoutPicture*{\put(0,0){\includegraphics[scale=1.25]{v}}} % Image background
+\AddToShipoutPicture*{\put(0,0){\includegraphics[scale=.70]{Pictures/cover.jpeg}}} % Image background
 \centering
 \vspace*{5cm}
 \par\normalfont\fontsize{35}{35}\sffamily\selectfont
-\textbf{PROGRAMMER L'INTERNET DES OBJETS }\\
+\lgf{\textbf{PROGRAMMER L'INTERNET DES OBJETS }}
+\lge{\textbf{PROGRAM THE INTERNET OF THINGS }}
 {\LARGE }\par % Book title
 \vspace*{1cm}
 {\Huge Laurent TOUTAIN}\par % Author name
@@ -259,21 +275,27 @@ showstringspaces=false
 
 \noindent \textsc{IMT Atlantique}\\
 
-\noindent Basé sur le MOOC PLIDO.\\ % License information
-
-\noindent \textit{Publié le \today} % Printing/edition date
+\noindent \lgf{Basé sur le \href{https://bit.ly/3Ku0aL8}{MOOC PLIDO}.}\\ % License information
+\lge{Based on the  \href{https://bit.ly/3Ku0aL8}{PLIDO MOOC}.} \\
+\noindent \textit{\lgf{Publié le \today}\lge{Published \today}} % Printing/edition date
 
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS
 %----------------------------------------------------------------------------------------
 
 
-\chapterimage{pano-5.jpg} % heading image
+\chapterimage{pano-tv1.png} % Chapter heading image
 
 \pagestyle{empty} % No headers
 
+\ifthenelse{\boolean{lfrench}}{
 \renewcommand\contentsname{Table des Matières}
 \renewcommand{\bibname}{Bibliographie}
+}{}
+\ifthenelse{\boolean{lenglish}}{
+\renewcommand\contentsname{Table of Contents}
+\renewcommand{\bibname}{Bibliography}
+}{}
 
 \cleardoublepage
 \tableofcontents% Print the table of contents itself
@@ -287,15 +309,16 @@ showstringspaces=false
 %----------------------------------------------------------------------------------------
 \cleardoublepage
 
-\chapter*{Acronymes}
+\lgf{\chapter*{Acronymes}}
+\lge{\chapter*{Acronyms}}
+
 \begin{multicols}{2}
 \input{acronyms}
 \end{multicols}
 
-\setboolean{allchap}{true} % true: take all, false take nothing only /input
+%\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
-%\setboolean{lfrench}{false}\setboolean{lenglish}{true}  % ENGLISH
-\setboolean{lfrench}{true}\setboolean{lenglish}{false} % FRENCH
+
 
 \Input{Part00-liminaire}
 \Input{Part01.0-Intro}
@@ -305,8 +328,8 @@ showstringspaces=false
 \Input{Part04.0-ArchiIoT}
 \Input{Part05.0-Data}
 \Input{Part06.0-VSensors}
-\Input{Part06.5-beebotte}
-\input{Part07.0-LoPy}
+\input{Part06.5-beebotte}
+\Input{Part07.0-LoPy}
 \Input{Part08.0-Sigfox}
 \Input{Part09.0-LoRaWAN}
 \Input{Part10.0-CoAP}

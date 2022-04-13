@@ -383,69 +383,109 @@ b'\x01\x0234'
 
      \vspace{1em}
 
-Ainsi, en ASCII, la valeur \texttt{123} est codée sur 3 octets (un octet par caractère) tandis qu'en binaire elle n'occuperait qu'un seul octet : \texttt{0111 1011}. 
+\lgf{Ainsi, en ASCII, la valeur \texttt{123} est codée sur 3 octets (un octet par caractère) tandis qu'en binaire elle n'occuperait qu'un seul octet : \texttt{0111 1011}. }
+\lge{Thus, in ASCII, the value \texttt{123} is coded on 3 bytes (one byte by character) while in binary it would occupy only one byte: \texttt{0111 1011}. }
 
       \vspace{1em}
 
-\ac{CBOR}, défini dans le \rfc{8949}, permet de représenter les structures de \ac{JSON} mais suivant une représentation binaire. Comme nous le verrons par la suite, si \ac{CBOR} est complètement compatible avec \ac{JSON}, il est possible de représenter d'autres types d'information très utiles dans l'Internet des Objets.
+\lgf{\ac{CBOR}, défini dans le \rfc{8949}, permet de représenter les structures de \ac{JSON} mais suivant une représentation binaire. Comme nous le verrons par la suite, si \ac{CBOR} est complètement compatible avec \ac{JSON}, il est possible de représenter d'autres types d'information très utiles dans l'Internet des Objets.}
+\lge{\ac{CBOR}, defined in the \rfc{8949}, allows to represent the structures of \ac{JSON} but according to a binary representation. As we will see later, if \ac{CBOR} is completely compatible with \ac{JSON}, it is possible to represent other types of information very useful in the Internet of Things.}
 
-La taille de l'information est réduite et le traitement simplifié. Il faut savoir un peu jongler avec la représentation binaire mais cela reste basique.
+
+\lgf{La taille de l'information est réduite et le traitement simplifié. Il faut savoir un peu jongler avec la représentation binaire mais cela reste basique.}
+\lge{The size of the information is reduced and the processing simplified. You have to know how to juggle with the binary representation but it remains basic.}
 
       \vspace{1em}
 
-CBOR définit 8 types majeurs qui sont représentés par les 3 premiers bits d'une structure CBOR (cf. figure~\vref{fig-cbor-majeur}). Ces types majeurs ont donc des valeurs comprises entre 0 et 7 (\texttt{000} à \texttt{111} en binaire).
+\lgf{CBOR définit 8 types majeurs qui sont représentés par les 3 premiers bits d'une structure CBOR (cf. figure~\vref{fig-cbor-majeur}). Ces types majeurs ont donc des valeurs comprises entre 0 et 7 (\texttt{000} à \texttt{111} en binaire).}
+\lge{CBOR defines 8 major types which are represented by the first 3 bits of a CBOR structure (cf. figure~\vref{fig-cbor-major}). These major types thus have values ranging from 0 to 7 (\texttt{000} to \texttt{111} in binary).}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/cbor1.png}}
-\caption{Définition des majeurs en CBOR}
+\lgf{\caption{Définition des majeurs en CBOR}}
+\lge{\caption{Definition of major in CBOR}}
 \label{fig-cbor-majeur}
 \end{figure}
 
 
-Les cinq bits suivants contiennent soit une valeur soit une longueur indiquant combien d'octets sont nécessaires pour coder la valeur. \ac{CBOR} offre ainsi des optimisations qui permettent de réduire la longueur totale de la structure des données comme nous le verrons par la suite en étudiant les différents types majeurs.
+\lgf{Les cinq bits suivants contiennent soit une valeur soit une longueur indiquant combien d'octets sont nécessaires pour coder la valeur. \ac{CBOR} offre ainsi des optimisations qui permettent de réduire la longueur totale de la structure des données comme nous le verrons par la suite en étudiant les différents types majeurs.}
+\lge{The next five bits contain either a value or a length indicating how many bytes are needed to encode the value. \Thus, this type offers optimizations that allow to reduce the total length of the data structure as we will see later when studying the different major types.}
 
-\subsection{CBOR en python}
-Les exemples qui vont suivre peuvent être testés sur votre ordinateur avec Python3. Si une erreur se produit au moment de la définition du module \texttt{\Index{cbor2}}, vous devez l'installer sur votre ordinateur en tapant la commande :
+\lgf{\subsection{CBOR en python}}
+\lge{\subsection{CBOR in Python}}
+
+\lgf{Les exemples qui vont suivre peuvent être testés sur votre ordinateur avec Python3. Si une erreur se produit au moment de la définition du module \texttt{\Index{cbor2}}, vous devez l'installer sur votre ordinateur en tapant la commande :}
+\lge{The following examples can be tested on your computer with Python3. If an error occurs when defining the module \texttt{Index{cbor2}}, you must install it on your computer by typing the command :}
 
 \begin{termc}[backgroundcolor=\color{gray!10}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\texttt{pip3 install cbor2}@
 \end{termc}
 
 
-\subsection{Type Entier Positif}
-\ac{JSON} ne fait pas de différence entre les nombres, entiers, décimaux, positifs ou négatifs. \ac{CBOR} réintroduit une distinction pour optimiser la représentation.
+\lgf{\subsection{Type Entier Positif}}
+\lgf{\subsection{Type Positive Integer}}
+
+
+\lgf{\ac{JSON} ne fait pas de différence entre les nombres, entiers, décimaux, positifs ou négatifs. \ac{CBOR} réintroduit une distinction pour optimiser la représentation.}
+\lge{\ac{JSON} does not make a difference between numbers, integers, decimals, positive or negative. \ac{CBOR} reintroduces a distinction to optimize the representation.}
+
 
       \vspace{1em}
 
-Le premier type majeur correspond aux entiers positifs. Il est codé par 3 bits à 0 ; les 5 bits suivants finissent l'octet et, suivant leur valeur, vont avoir une signification différente :
+\lgf{Le premier type majeur correspond aux entiers positifs. Il est codé par 3 bits à 0 ; les 5 bits suivants finissent l'octet et, suivant leur valeur, vont avoir une signification différente :}
+\lge{The first major type corresponds to the positive integers. It is coded by 3 bits at 0; the 5 following bits end the byte and, according to their value, will have a different meaning:}
+
 \begin{itemize}
-    \item de 0 à 23, il s'agit de la valeur de l'entier à coder ;
-    \item 24 indique que l'entier est codé sur 1 octet qui sera codé dans l'octet suivant ;
-    \item 25 indique que l'entier est codé sur 2 octets qui seront codés dans les deux octets suivants ;
-    \item 26 indique que l'entier est codé sur 4 octets qui seront codés dans les quatre octets suivants ;
-    \item 27 indique que l'entier est codé sur 8 octets qui seront codés dans les huit octets suivants.
+    \item 
+        \lgf{de 0 à 23, il s'agit de la valeur de l'entier à coder ;}
+        \lge{from 0 to 23, it is the value of the integer to be coded;}
+    \item 
+        \lgf{24 indique que l'entier est codé sur 1 octet qui sera codé dans l'octet suivant ;}
+        \lge{24 indicates that the integer is coded on 1 byte which will be coded in the following byte ;}
+    \item 
+        \lgf{25 indique que l'entier est codé sur 2 octets qui seront codés dans les deux octets suivants ;}
+        \lge{25 indicates that the integer is coded on 2 bytes which will be coded in the two following bytes ;}
+    \item 
+        \lgf{26 indique que l'entier est codé sur 4 octets qui seront codés dans les quatre octets suivants ;}
+        \lge{26 indicates that the integer is coded on 4 bytes which will be coded in the four following bytes ;}
+    \item 
+        \lgf{27 indique que l'entier est codé sur 8 octets qui seront codés dans les huit octets suivants.}
+        \lge{27 indicates that the integer is coded on 8 bytes which will be coded in the eight following bytes.}
 \end{itemize}
 
       \vspace{1em}
 
-On peut noter qu'il n'y a pas de surcoût pour coder un entier de 0 à 23. Ainsi, la valeur 15 sera codée 0x0F (\texttt{000-0 1111}) tandis que, pour toutes les autres valeurs supérieures, le surcoût ne sera que d'un octet. La valeur 100 sera codé \texttt{000-1 1000}\footnote{\texttt{11000} correspond à 24} suivi du codage sut 1 octet de la valeur 100 (\texttt{0110 0100}).
+\lgf{On peut noter qu'il n'y a pas de surcoût pour coder un entier de 0 à 23. Ainsi, la valeur 15 sera codée 0x0F (\texttt{000-0 1111}) tandis que, pour toutes les autres valeurs supérieures, le surcoût ne sera que d'un octet. La valeur 100 sera codé \texttt{000-1 1000}\footnote{\texttt{11000} correspond à 24} suivi du codage sut 1 octet de la valeur 100 (\texttt{0110 0100}).}
+\lge{One can note that there is no extra cost to code an integer from 0 to 23. Thus, the value 15 will be coded 0x0F (\texttt{000-0 1111}) while, for all the other higher values, the overcost will be only of one byte. The value 100 will be coded \texttt{000-1 1000}\footnote{\texttt{11000} corresponds to 24} followed by the coding on 1 byte of the value 100 (\texttt{0110 0100}).}
+
+
 
       \vspace{1em}
 
 \pythonlst{cbor-integer-ex1.py}
 
-Le programme \pprog{cbor-integer-ex1.py}{cbor-example}  affiche les puissances de $10$ entre $10^0$ et $10^{18}$~:
+\lgf{Le programme \pprog{cbor-integer-ex1.py}{cbor-example}  affiche les puissances de $10$ entre $10^0$ et $10^{18}$~:}
+\lge{The program \pprog{cbor-integer-ex1.py}{cbor-example} displays the powers of $10$ between $10^0$ and $10^{18}$~:}
 
 \begin{itemize}
-    \item Ligne 1, le programme importe le module \texttt{\Index{cbor2}} et le renomme pour plus de simplicité \texttt{cbor}.
-    \ligne 5, la boucle permet d'avoir les multiples de 10 (variable \texttt{v)}. 
-    \item ligne 6, le module \texttt{cbor} utilise comme pour JSON la méthode \pfunction{cbor2}{dumps} pour sérialiser une structure interne de Python dans la représentation demandée. À l'inverse, la méthode \pfunction{cbor2}{loads} sera utilisée pour importer une structure CBOR dans une représentation interne.
-    \item Ligne 7, le \texttt{print} permet d'aligner les données pour que l'affichage soit plus clair ; entre les accolades, le premier chiffre indique la position dans les arguments de format ; le second, après le \texttt{:}, le nombre de caractères. Par exemple, \textttt{\{1:30\}} indique l'argument \texttt{v} de format affiché sur 30 caractères.
+    \item 
+        \lgf{Ligne 1, le programme importe le module \texttt{\Index{cbor2}} et le renomme pour plus de simplicité \texttt{cbor}.}
+        \lge{Line 1, the program imports the module \texttt{Index{cbor2}} and renames it for simplicity \texttt{cbor}.}
+    \ligne  
+        \lgf{Ligne 5, la boucle permet d'avoir les multiples de 10 (variable \texttt{v)}. }
+        \lge{Line 5, the loop allows to have the multiples of 10 (variable \texttt{v)}. }
+    \item  
+        \lgf{Ligne 6, le module \texttt{cbor} utilise comme pour JSON la méthode \pfunction{cbor2}{dumps} pour sérialiser une structure interne de Python dans la représentation demandée. À l'inverse, la méthode \pfunction{cbor2}{loads} sera utilisée pour importer une structure CBOR dans une représentation interne.}
+        \lge{Line 6, the module \texttt{cbor} uses as for JSON the method \pfunction{cbor2}{dumps} to serialize an internal Python structure into the requested representation. Conversely, the \pfunction{cbor2}{loads} method will be used to import a CBOR structure into an internal representation.}
+    \item  
+        \lgf{Ligne 7, le \texttt{print} permet d'aligner les données pour que l'affichage soit plus clair ; entre les accolades, le premier chiffre indique la position dans les arguments de format ; le second, après le \texttt{:}, le nombre de caractères. Par exemple, \texttt{\{1:30\}} indique l'argument \texttt{v} de format affiché sur 30 caractères.}
+        \lge{On line 7, the \texttt{print} is used to align the data so that the display is clearer; between the braces, the first number indicates the position in the format arguments; the second, after the \texttt{:}, the number of characters. For example, \texttt{\{:1:30\}} indicates the format argument \texttt{v} displayed in 30 characters.}
 \end{itemize}
  
        \vspace{1em}
 
-Le programme donne le résultat suivant~:
+\lgf{Le programme donne le résultat suivant~:}
+\lge{The program gives the following result:}
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
  # @\textbf{python3 cbor-integer-ex1.py}@
@@ -473,26 +513,36 @@ Le programme donne le résultat suivant~:
        \vspace{1em}
 
 
-On voit facilement que les valeurs 1 et 10 sont codées sur 1 octet ; que 100 est codé sur 2 octets tandis que les valeurs 1 000 et 10 000 sont codées sur 3 octets. Les valeurs entre 100 000 et 1 000 000 000 nécessitent 5 octets et les valeurs suivantes, 9 octets.
+\lgf{On voit facilement que les valeurs 1 et 10 sont codées sur 1 octet ; que 100 est codé sur 2 octets tandis que les valeurs 1 000 et 10 000 sont codées sur 3 octets. Les valeurs entre 100 000 et 1 000 000 000 nécessitent 5 octets et les valeurs suivantes, 9 octets.}
+\lge{It is easy to see that the values 1 and 10 are coded on 1 byte; that 100 is coded on 2 bytes while the values 1 000 and 10 000 are coded on 3 bytes. The values between 100 000 and 1 000 000 000 require 5 bytes and the following values, 9 bytes.}
+
 
        \vspace{1em}
 
 
-La taille de la représentation s'adapte à la valeur. Ainsi, il n'est pas nécessaire de définir une taille fixe pour coder une donnée.
+\lgf{La taille de la représentation s'adapte à la valeur. Ainsi, il n'est pas nécessaire de définir une taille fixe pour coder une donnée.}
+\lge{The size of the representation adapts to the value. Thus, it is not necessary to define a fixed size to encode a data.}
 
-On peut aussi noter que comme le type majeur est sur 3 bits, ce type peut être reconnu dans une lecture hexadécimale du résultat car la séquence commence toujours par le symbole \texttt{0} ou \textttt{1}..
+\lgf{On peut aussi noter que comme le type majeur est sur 3 bits, ce type peut être reconnu dans une lecture hexadécimale du résultat car la séquence commence toujours par le symbole \texttt{0} ou \textttt{1}.}
+\lge{We can also note that as the major type is on 3 bits, this type can be recognized in a hexadecimal reading of the result because the sequence always starts with the symbol \texttt{0} or \textttt{1}.}
 
-\subsection{Type Entier Négatif}
+\lgf{\subsection{Type Entier Négatif}}
+\lge{\subsection{Type Negative Integer}}
 
-Le type majeur entier négatif est à peu près similaire à l'entier positif. Le type majeur est \texttt{001} et le codage de la valeur se fait sur la valeur absolue du nombre à laquelle on retranche 1. Cela évite deux codes différents pour les valeurs 0 et -0.
+
+\lgf{Le type majeur entier négatif est à peu près similaire à l'entier positif. Le type majeur est \texttt{001} et le codage de la valeur se fait sur la valeur absolue du nombre à laquelle on retranche 1. Cela évite deux codes différents pour les valeurs 0 et -0.}
+\lge{The major type negative integer is roughly similar to the positive integer. The major type is \texttt{001} and the encoding of the value is done on the absolute value of the number to which we subtract 1. This avoids two different codes for the values 0 and -0.}
 
        \vspace{1em}
 
-Ainsi, pour coder -15, on va coder la valeur 14, ce qui donne en binaire 001-1 1110. Ainsi, -24 peut également être codé sur 1 octet tandis que +24 sera codé sur 2 octets.
+\lgf{Ainsi, pour coder -15, on va coder la valeur 14, ce qui donne en binaire 001-1 1110. Ainsi, -24 peut également être codé sur 1 octet tandis que +24 sera codé sur 2 octets.}
+\lge{Thus, to code -15, we will code the value 14, which gives in binary 001-1 1110. Thus, -24 can also be coded on 1 byte while +24 will be coded on 2 bytes.}
 
 \pythonlst{cbor-integer-ex2.py}
 
-Le programme \pprog{cbor-integer-ex2.py}{cbor-example} reprend le même code que le programme précédent, mais la variable \texttt{v} est initialisée avec la valeur -1. Ce programme va traiter les puissances de 10 négatives.
+\lgf{Le programme \pprog{cbor-integer-ex2.py}{cbor-example} reprend le même code que le programme précédent, mais la variable \texttt{v} est initialisée avec la valeur -1. Ce programme va traiter les puissances de 10 négatives.}
+\lge{The program \pprog{cbor-integer-ex2.py}{cbor-example} uses the same code as the previous program, but the variable \texttt{v} is initialized with the value -1. This program will process negative powers of 10.}
+
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
   # @\textbf{python3.5 cbor-integer-ex2.py}@
@@ -518,35 +568,58 @@ Le programme \pprog{cbor-integer-ex2.py}{cbor-example} reprend le même code que
 \end{termc}
 
 
-\subsection{Type Séquence binaire ou Chaîne de caractères}
+\lgf{\subsection{Type Séquence binaire ou Chaîne de caractères}}
+\lge{\subsection{Type Binary sequence or Character string}}
 
-Les séquences binaires et les chaînes de caractères ont le même comportement. Le type majeur est respectivement \texttt{010} et \texttt{011}. Il est suivi par la longueur de la séquence ou de la chaîne. Le même type de codage que pour les entiers est utilisé :
+\lgf{Les séquences binaires et les chaînes de caractères ont le même comportement. Le type majeur est respectivement \texttt{010} et \texttt{011}. Il est suivi par la longueur de la séquence ou de la chaîne. Le même type de codage que pour les entiers est utilisé :}
+\lge{Binary sequences and strings have the same behavior. The major type is respectively \texttt{010} and \texttt{011}. It is followed by the length of the sequence or the string. The same type of encoding as for integers is used:}
+
 \begin{itemize}
-    \item si la longueur est inférieure à 23, elle est codée dans la suite du premier octet. On trouve ensuite le nombre d'octets ou de caractères correspondant à cette longueur ;
-    \item si la longueur peut être codée dans 1 octet (donc inférieure à 255), la suite du premier octet contient 24 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.
-    \item si la longueur peut être codée dans 2 octets (donc inférieure à 65535), la suite du premier octet contient 25 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.
-    \item si la longueur peut être codée dans 4 octets, la suite du premier octet contient 26 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.
-    \item si la longueur peut être codée dans 8 octets, la suite du premier octet contient 27 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.
+    \item 
+        \lgf{si la longueur est inférieure à 23, elle est codée dans la suite du premier octet. On trouve ensuite le nombre d'octets ou de caractères correspondant à cette longueur ;}
+        \lge{if the length is lower than 23, it is coded in the continuation of the first byte. One finds then the number of bytes or characters corresponding to this length;}
+    \item  
+        \lgf{si la longueur peut être codée dans 1 octet (donc inférieure à 255), la suite du premier octet contient 24 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.}
+        \lge{if the length can be coded in 1 byte (thus lower than 255), the continuation of the first byte contains 24 then the following byte contains the length followed by the number of bytes or characters corresponding.}
+    \item  
+        \lgf{si la longueur peut être codée dans 2 octets (donc inférieure à 65535), la suite du premier octet contient 25 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.}
+        \lge{if the length can be coded in 2 bytes (thus lower than 65535), the continuation of the first byte contains 25 then the following byte contains the length followed by the number of bytes or characters corresponding.}
+    \item  
+        \lgf{si la longueur peut être codée dans 4 octets, la suite du premier octet contient 26 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.}
+        \lge{if the length can be coded in 4 bytes, the continuation of the first byte contains 26 then the following byte contains the length followed by the number of bytes or characters corresponding.}
+    \item  
+        \lgf{si la longueur peut être codée dans 8 octets, la suite du premier octet contient 27 puis l'octet suivant contient la longueur suivie du nombre d'octets ou de caractères correspondant.}
+        \lge{if the length can be encoded in 8 bytes, the continuation of the first byte contains 27 then the following byte contains the length followed by the number of bytes or characters corresponding.}
 \end{itemize}
 
        \vspace{1em}
 
-Ce codage est aussi assez optimal. Il est rare d'envoyer plus de 23 caractères.
+\lgf{Ce codage est aussi assez optimal. Il est rare d'envoyer plus de 23 caractères.}
+\lge{This coding is also quite optimal. It is rare to send more than 23 characters.}
+
 
 \pythonlst{cbor-string.py}
 
-Le programme \pprog{cbor-string.py}{cbor-example} montre la représentation de chaînes de caractères de longueur croissante ainsi qu'une séquence binaire~:
+\lgf{Le programme \pprog{cbor-string.py}{cbor-example} montre la représentation de chaînes de caractères de longueur croissante ainsi qu'une séquence binaire~:}
+\lge{The program \pprog{cbor-string.py}{cbor-example} shows the representation of strings of increasing length and a binary sequence:}
 
 \begin{itemize}
-    \item ligne 3, la variable \texttt{i} prend des valeurs de 1 à 9.
-    \item ligne 6, La multiplication d'une chaîne de caractères par un entier (ligne 4) indique le nombre de répétitions de celle-ci.
-    \item lignes 8 et 9 montrent le codage d'une chaîne d'octets. La variable bs contient la représentation en CBOR d'une chaîne d'octets Python (représenté par le caractère \texttt{b} avant les guillemets, les valeurs qui ne correspondent pas à des caractères ASCII sont précédées des symboles \texttt{$\backslash$x}). La représentation en hexadécimal de l'objet CBOR est ensuite affichée.
+    \item 
+        \lgf{ligne 3, la variable \texttt{i} prend des valeurs de 1 à 9.}
+        \lge{line 3, the variable \texttt{i} takes values from 1 to 9.}
+    \item  
+        \lgf{ligne 6, La multiplication d'une chaîne de caractères par un entier (ligne 4) indique le nombre de répétitions de celle-ci.}
+        \lge{line 6, The multiplication of a string by an integer (line 4) indicates the number of repetitions of it.}
+    \item  
+        \lgf{lignes 8 et 9 montrent le codage d'une chaîne d'octets. La variable bs contient la représentation en CBOR d'une chaîne d'octets Python (représenté par le caractère \texttt{b} avant les guillemets, les valeurs qui ne correspondent pas à des caractères ASCII sont précédées des symboles \texttt{$\backslash$x}). La représentation en hexadécimal de l'objet CBOR est ensuite affichée.}
+        \lge{lines 8 and 9 show the encoding of a byte string. The variable bs contains the CBOR representation of a Python byte string (represented by the character \texttt{b} before the quotation marks, the values which do not correspond to ASCII characters are preceded by the symbols \texttt{$\backslash$x}). The hexadecimal representation of the CBOR object is then displayed.}
 \end{itemize}
 
        \vspace{1em}
 
  
-Le résultat est le suivant :
+\lgf{Le résultat est le suivant~:}
+\lge{The result is as follows:}
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\tiny, escapechar=@]
 # @\textbf{python3.5 cbor-string.py}@
@@ -563,39 +636,62 @@ Le résultat est le suivant :
 \end{termc}
 
 
-Jusqu'à 3 répétitions de la chaîne de caractères "LoRaWAN", le codage de la longueur est optimal (codé sur 2 octets).
+\lgf{Jusqu'à 3 répétitions de la chaîne de caractères "LoRaWAN", le codage de la longueur est optimal (codé sur 2 octets).}
+\lge{Up to 3 repetitions of the string "LoRaWAN", the length coding is optimal (coded on 2 bytes).}
 
-\subsection{Type tableau}
+\lgf{\subsection{Type tableau}}
+\lge{\subsection{Type Array}}
 
-Le type tableau va regrouper un ensemble d'éléments. Chacun de ces éléments étant une structure CBOR, la seule information nécessaire pour connaître le début et la fin d'un tableau est son nombre d'éléments. Le type majeur est \texttt{100}. Il existe deux méthodes pour coder la longueur d'un tableau :
+\lgf{Le type tableau va regrouper un ensemble d'éléments. Chacun de ces éléments étant une structure CBOR, la seule information nécessaire pour connaître le début et la fin d'un tableau est son nombre d'éléments. Le type majeur est \texttt{100}. Il existe deux méthodes pour coder la longueur d'un tableau~:}
+\lge{The array type will group a set of elements. Each of these elements being a CBOR structure, the only information needed to know the beginning and the end of an array is its number of elements. The major type is \texttt{100}. There are two methods to encode the length of an array:}
 \begin{itemize}
-    \item si celle-ci est connue au moment du codage, il suffit de l'indiquer avec un codage identique à celui utilisé pour indiquer la longueur d'une chaîne de caractères ;
-    \item si celle-ci n'est pas connue au moment du codage, il existe un code spécial pour indiquer la fin du tableau. Nous en reparlerons par la suite.
+    \item 
+        \lgf{si celle-ci est connue au moment du codage, il suffit de l'indiquer avec un codage identique à celui utilisé pour indiquer la longueur d'une chaîne de caractères ;}
+        \lge{if this one is known at the time of coding, it is enough to indicate it with a coding identical to the one used to indicate the length of a character string ;}
+    \item 
+        \lgf{si celle-ci n'est pas connue au moment du codage, il existe un code spécial pour indiquer la fin du tableau. Nous en reparlerons par la suite.}
+        \lge{if this is not known at the time of coding, there is a special code to indicate the end of the table. We will talk about this later.}
+        
 \end{itemize}
 
 \pythonlst{cbor-array.py}
 
-Le programme \pprog{cbor-array.py}{cbor-example} donne quelques exemples de codage de tableau :
+\lgf{Le programme \pprog{cbor-array.py}{cbor-example} donne quelques exemples de codage de tableau :}
+\lge{The program \pprog{cbor-array.py}{cbor-example} gives some examples of array coding:}
+
 \begin{itemize}
-    \item \texttt{[1,2,3,4]} défini ligne 3, devient \texttt{8401020304}. On peut deviner la structure du message CBOR : \texttt{0x84} indique un tableau de 4 éléments (attention le décodage n'est pas toujours aussi simple). Les 4 éléments sont des entiers inférieurs à 23 ;
-    \item \texttt{[1,[2, 3], 4]} défini ligne 7 devient \texttt{8301\ul{820203}04}. Il s'agit d'un tableau de 3 éléments dont le deuxième est un tableau de deux éléments ;
-    \item \texttt{[1000, +20, -10, +100, -30, -50, 12]} défini ligne 11, devient \texttt{871903e814291864 381d38310c}. On peut noter que le codage des éléments est de longueur variable, mais comme chaque élément code sa longueur, il est juste nécessaire d'en connaître le nombre.
+    \item 
+        \lgf{\texttt{[1,2,3,4]} défini ligne 3, devient \texttt{8401020304}. On peut deviner la structure du message CBOR : \texttt{0x84} indique un tableau de 4 éléments (attention le décodage n'est pas toujours aussi simple). Les 4 éléments sont des entiers inférieurs à 23 ;}
+        \lge{\texttt{[1,2,3,4]} defined on line 3, becomes \texttt{8401020304}. We can guess the structure of the CBOR message: \texttt{0x84} indicates an array of 4 elements (be careful, decoding is not always so simple). The 4 elements are integers lower than 23;}
+    \item 
+        \lgf{\texttt{[1,[2, 3], 4]} défini ligne 7 devient \texttt{8301\ul{820203}04}. Il s'agit d'un tableau de 3 éléments dont le deuxième est un tableau de deux éléments ;}
+        \lge{\texttt{[1,[2, 3], 4]} defined on line 7 becomes \texttt{8301\ul{820203}04}. This is an array of 3 elements, the second of which is an array of two elements;}
+    \item 
+        \lgf{\texttt{[1000, +20, -10, +100, -30, -50, 12]} défini ligne 11, devient \texttt{871903e814291864 381d38310c}. On peut noter que le codage des éléments est de longueur variable, mais comme chaque élément code sa longueur, il est juste nécessaire d'en connaître le nombre.}
+        \lge{\texttt{[1000, +20, -10, +100, -30, -50, 12]} defined on line 11, becomes \texttt{871903e814291864 381d38310c}. Note that the coding of the elements is of variable length, but as each element codes its length, it is only necessary to know the number of elements.}
 \end{itemize}
 
-\subsection{Type map (Liste de paires)}
+\lgf{\subsection{Type Map (Liste de paires)}}
+\lgf{\subsection{Type Map (List of pairs)}}
 
 
 
-Le type Liste de paires ou Map est indiqué par la valeur \texttt{101}. Il fonctionne de la même manière que les tableaux en comptant le nombre d'éléments. Mais cette fois-ci, la valeur représente une paire, c'est-à-dire deux objets CBOR consécutifs.
+\lgf{Le type Liste de paires ou Map est indiqué par la valeur \texttt{101}. Il fonctionne de la même manière que les tableaux en comptant le nombre d'éléments. Mais cette fois-ci, la valeur représente une paire, c'est-à-dire deux objets CBOR consécutifs.}
+\lge{The type List of pairs or Map is indicated by the value \texttt{101}. It works in the same way as arrays by counting the number of elements. But this time, the value represents a pair, i.e. two consecutive CBOR objects.}
+
 
 \pythonlst{cbor-mapped.py}
 
-Le programme \pprog{cbor-mapped.py}{cbor-example} donne un exemple d'encodage. A noter que la structure à encoder n'est pas directement compatible avec JSON\footnote{json.\pfunction{json}{dumps} aurait converti les clés numériques en chaînes de caractères \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}, certaines clés ne sont pas des chaînes de caractères.
+\lgf{Le programme \pprog{cbor-mapped.py}{cbor-example} donne un exemple d'encodage. A noter que la structure à encoder n'est pas directement compatible avec JSON\footnote{json.\pfunction{json}{dumps} aurait converti les clés numériques en chaînes de caractères \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}, certaines clés ne sont pas des chaînes de caractères.}
+\lge{The program \pprog{cbor-mapped.py}{cbor-example} gives an example of encoding. Note that the structure to be encoded is not directly compatible with JSONfootnote{json.\pfunction{json}{dumps} would have converted the numeric keys into strings \texttt{'\{"type": "hamster", "2": "program", "taille": 300, "15": 113\}'}}, some keys are not strings.}
+
 
        \vspace{1em}
 
 
-Le résultat est \texttt{a464747970656768616d73746572667461696c6c6519012c026770726f6772 616d0f1871} ce qui n'est pas très facile à lire. 
+\lgf{Le résultat est \texttt{a464747970656768616d73746572667461696c6c6519012c026770726f6772 616d0f1871} ce qui n'est pas très facile à lire. }
+\lge{The result is \texttt{a464747970656768616d73746572667461696c6c6519012c026770726f6772 616d0f1871} which is not very easy to read. }
+
 
 
 \subsubsection{cbor.me}
@@ -604,27 +700,41 @@ Le résultat est \texttt{a464747970656768616d73746572667461696c6c6519012c0267707
 \Youtube{https://youtu.be/h1XnaFy_FoI}
 \end{wrapfigure}
 
-Le site web \url{https://cbor.me} permet de faire automatiquement le codage dans un sens ou dans l'autre.
+\lgf{Le site web \url{https://cbor.me} permet de faire automatiquement le codage dans un sens ou dans l'autre.
 La colonne de gauche représente la donnée en JSON et celle de droite en CBOR (dite "représentation canonique" qui facilite la lecture). En ayant entré la séquence hexadécimale ci-dessus, le site la présente comme indiqué figure~\vref{fig-cbor-me}.
-La partie CBOR est indexée et commentée pour rendre l'objet CBOR plus lisible. Il peut également être traduit dans un équivalent JSON, bien que certaines clés restent numériques.
+La partie CBOR est indexée et commentée pour rendre l'objet CBOR plus lisible. Il peut également être traduit dans un équivalent JSON, bien que certaines clés restent numériques.}
+\lge{The web site \url{https://cbor.me} allows to do automatically the encoding in a direction or in the other.
+The left column represents the data in JSON and the right one in CBOR (called "canonical representation" which facilitates the reading). Having entered the above hexadecimal sequence, the site presents it as shown in figure~\vref{fig-cbor-me}.
+The CBOR part is indexed and commented to make the CBOR object more readable. It can also be translated into a JSON equivalent, although some keys remain numeric.}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/cbor-me.png}}
-\caption{Définition des majeurs en CBOR}
+\lgf{\caption{Définition des majeurs en CBOR}}
+\lge{\caption{Definition of major in CBOR}}
 \label{fig-cbor-me}
 \end{figure}
 
-Sur ces exemples, on peut voir que CBOR est beaucoup plus permissif et complet que JSON, le premier champ des map CBOR peut être numérique et n'a pas à être unique dans toute la structure. Néanmoins  CBOR
+\lgf{Sur ces exemples, on peut voir que CBOR est beaucoup plus permissif et complet que JSON, le premier champ des map CBOR peut être numérique et n'a pas à être unique dans toute la structure. Néanmoins  CBOR
 définit un mode strict dans lequel ces clés doivent être codées en ASCII et unique pour être compatibles avec
-JSON. Si une clé est répété plusieurs fois dans une structure CBOR, il traiter directement l'information dans la structure CBOR et ne pas chercher à la convertir ou la désérialiser car il y a un risque de perte d'information. 
+JSON. Si une clé est répété plusieurs fois dans une structure CBOR, il traiter directement l'information dans la structure CBOR et ne pas chercher à la convertir ou la désérialiser car il y a un risque de perte d'information. }
+\lge{On these examples, we can see that CBOR is much more permissive and complete than JSON, the first field of the CBOR map can be numeric and does not have to be unique in the whole structure. Nevertheless CBOR
+defines a strict mode in which these keys must be ASCII encoded and unique to be compatible with
+JSON. If a key is repeated several times in a CBOR structure, it is necessary to process the information directly in the CBOR structure and not to try to convert or deserialize it because there is a risk of losing information. }
 
-\subsection{Type étiquette}
 
-CBOR enrichit le typage des données ; ce qui permet de manipuler plus facilement des données. Par exemple, une chaîne de caractères peut représenter une date, une URI, voire une URI codée en base 64. Le type \texttt{110} peut être suivi d'une valeur ou \Index{tag} dont une liste exhaustive est maintenue parl'IANA\footnote{\url{https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml}}.
+\lgf{\subsection{Type étiquette}}
+\lge{\subsection{Type Tag}}
+
+
+\lgf{CBOR enrichit le typage des données ; ce qui permet de manipuler plus facilement des données. Par exemple, une chaîne de caractères peut représenter une date, une URI, voire une URI codée en base 64. Le type \texttt{110} peut être suivi d'une valeur ou \Index{tag} dont une liste exhaustive est maintenue parl'IANA\footnote{\url{https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml}}.}
+\lge{CBOR enriches the typing of data; this makes it easier to manipulate data. For example, a character string can represent a date, a URI, or even a URI encoded in base 64. The type \texttt{110} can be followed by a value or \Index{tag} of which an exhaustive list is maintained by the IANAfootnote{url{https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml}}.}
 
 \pythonlst{cbor-tag.py}
 
-Par exemple, le programme \pprog{cbor-tag.py}{cbor-example} retourne les résultats suivants:
+\lgf{Par exemple, le programme \pprog{cbor-tag.py}{cbor-example} retourne les résultats suivants~:}
+\lge{For example, the program \pprog{cbor-tag.py}{cbor-example} returns the following results:}
+
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 # @\textbf{python3.5 cbor-tag.py}@
@@ -636,95 +746,180 @@ c074323031382d30352d32325430303a30303a30305a
 \end{termc}
 
 
-La représentation canonique montre plus facilement le tag dans la séquence binaire :
+\lgf{La représentation canonique montre plus facilement le tag dans la séquence binaire :}
+\lge{The canonical representation shows more easily the tag in the binary sequence:}
+
+
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 C0                                      # tag(0)
    74                                   # text(20)
       323031382D30352D32325430303A30303A30305A # "2018-05-22T00:00:00Z"
 \end{termc}
 
-Le tag 0 implique un format normalisé pour la date ; d'où l'ajout des heures, minutes et secondes, alors qu'elles n'ont pas été spécifiées initialement. On peut également remarquer que \pfunction{cbor2}{loads} retourne un type \texttt{date} et non une chaîne de caractères.
+\lgf{Le tag 0 implique un format normalisé pour la date ; d'où l'ajout des heures, minutes et secondes, alors qu'elles n'ont pas été spécifiées initialement. On peut également remarquer que \pfunction{cbor2}{loads} retourne un type \texttt{date} et non une chaîne de caractères.}
+\lge{The tag 0 implies a normalized format for the date; hence the addition of hours, minutes and seconds, even though they were not initially specified. We can also notice that \pfunction{cbor2}{loads} returns a type \texttt{date} and not a character string.}
 
-\subsection{Le type flottant et valeurs particulières}
-Le dernier type majeur (111) permet de coder les nombres flottants en utilisant la représentation définie par l'\Index{IEEE 754}. Suivant la taille de la représentation, la suite de l'octet contient les valeurs 25 (demi précision sur 16 bits), 26 (simple précision sur 32 bits) ou 27 (double précision sur 64 bits).
 
-Ce type permet également de coder les valeurs définies par JSON : True (valeur 20), False (valeur 21) ou None (valeur 22).
+\lgf{\subsection{Le type flottant et valeurs particulières}}
+\lge{\subsection{The floating type and particular values}}
 
-Finalement, ce type peut indiquer la fin d'un tableau ou d'une liste de paires quand la taille n'est pas connue au début du codage.
 
-\section{Questions sur CBOR}
-\Question{Avantages de CBOR}{
-Quel sont les avantage de CBOR par rapport à JSON (2 réponses) ?
+\lgf{Le dernier type majeur (111) permet de coder les nombres flottants en utilisant la représentation définie par l'\Index{IEEE 754}. Suivant la taille de la représentation, la suite de l'octet contient les valeurs 25 (demi précision sur 16 bits), 26 (simple précision sur 32 bits) ou 27 (double précision sur 64 bits).}
+\lge{The last major type (111) allows to encode floating numbers by using the representation defined by the \Index{IEEE 754}. According to the size of the representation, the continuation of the byte contains the values 25 (half precision on 16 bits), 26 (simple precision on 32 bits) or 27 (double precision on 64 bits).}
+
+
+\lgf{Ce type permet également de coder les valeurs définies par JSON : True (valeur 20), False (valeur 21) ou None (valeur 22).}
+\lge{This type also allows to encode the values defined by JSON: True (value 20), False (value 21) or None (value 22).}
+
+
+\lgf{Finalement, ce type peut indiquer la fin d'un tableau ou d'une liste de paires quand la taille n'est pas connue au début du codage.}
+\lge{Finally, this type can indicate the end of an array or a list of pairs when the size is not known at the beginning of the coding.}
+
+
+\lgf{\section{Questions sur CBOR}}
+\lge{\section{Questions about CBOR}}
+
+\Question{\lgf{Avantages de CBOR}\lge{Benefits of CBOR}}
+{
+\lgf{Quel sont les avantage de CBOR par rapport à JSON (2 réponses) ?}
+\lge{What are the advantages of CBOR over JSON (2 answers)?}
+
 \begin{itemize}[label=$\square$]
-   \item \Correct{Il est plus compact dans la représentation des données.}
-   \item \Wrong{Il permet de représenter des nombres flottants.}
-   \item \Wrong{Il compresse les chaînes de caractères. }
-   \item \Correct{Il est plus simple à implémenter.}
+   \item \Correct{
+     \lgf{Il est plus compact dans la représentation des données.}
+     \lge{It is more compact in its data representation.}
+    }
+   \item \Wrong{
+    \lgf{Il permet de représenter des nombres flottants.}
+    \lge{It allows to represent floating numbers.}
+    }
+   \item \Wrong{
+    \lgf{Il compresse les chaînes de caractères. }
+    \lge{It compresses strings. }
+    }
+   \item \Correct{
+    \lgf{Il est plus simple à implémenter.}
+    \lge{It is easier to implement.}
+    }
  \end{itemize}
    
  }
 {
-CBOR ne compresse pas les chaînes de caractères. Il ajoute juste leur longueur. CBOR et JSON codent tous les deux des nombres flottants, ce n'est donc pas un avantage de CBOR. Par contre, le fait d'utiliser des valeurs binaires au lieu de l'ASCII pour représenter les nombres, de ne pas avoir de crochets ou accolades, permet d'avoir une représentation beaucoup plus compacte. Les petites valeurs numériques sont représentées sans surcoût. Réaliser un codeur ou un décodeur de CBOR est beaucoup plus simple qu'en JSON car la représentation des données est beaucoup plus stricte (pas d'espace, pas de retour à la ligne... ). Les deux représentations permettent d'utiliser des nombres flottant donc aucune n'a d'avantage sur ce point.
+\lgf{CBOR ne compresse pas les chaînes de caractères. Il ajoute juste leur longueur. CBOR et JSON codent tous les deux des nombres flottants, ce n'est donc pas un avantage de CBOR. Par contre, le fait d'utiliser des valeurs binaires au lieu de l'ASCII pour représenter les nombres, de ne pas avoir de crochets ou accolades, permet d'avoir une représentation beaucoup plus compacte. Les petites valeurs numériques sont représentées sans surcoût. Réaliser un codeur ou un décodeur de CBOR est beaucoup plus simple qu'en JSON car la représentation des données est beaucoup plus stricte (pas d'espace, pas de retour à la ligne... ). Les deux représentations permettent d'utiliser des nombres flottant donc aucune n'a d'avantage sur ce point.}
+\lge{CBOR does not compress strings. It just adds their length. Both CBOR and JSON encode floating-point numbers, so this is not an advantage of CBOR. On the other hand, using binary values instead of ASCII to represent numbers, not having brackets or braces, makes for a much more compact representation. Small numerical values are represented without any additional cost. Creating a CBOR encoder or decoder is much simpler than in JSON because the data representation is much stricter (no spaces, no line breaks, etc.). Both representations allow to use floating numbers so neither has an advantage on this point.}
+
+
 }
 
-\Question{Flottant}{
-Un flottant est-il toujours plus compact en CBOR qu'en JSON ? - Vous pouvez vous aider de \url{https://cbor.me}
+\Question{\lgf{Flottant}\lge{Floating}}{
+\lgf{Un flottant est-il toujours plus compact en CBOR qu'en JSON ? - Vous pouvez vous aider de \url{https://cbor.me}}
+\lge{Is a float always more compact in CBOR than in JSON? - You can help yourself with \url{https://cbor.me}}
+
 
 \begin{itemize}[label=$\circ$]
-   \item \Wrong{Oui, c'est le but de CBOR.}
-   \item \Wrong{Oui pour les flottants qui ont la partie décimale à 0..}
-   \item \Wrong{Oui pour les flottants de petite précision (jusqu'au centième).}
-   \item \Correct{Oui pour les flottants de grande précision (6 chiffres après la virgule).}
+   \item \Wrong{
+    \lgf{Oui, c'est le but de CBOR.}
+    \lge{Yes, that is the goal of CBOR.}
+    }
+   \item \Wrong{
+    \lgf{Oui, pour les flottants qui ont la partie décimale à 0.}
+    \lge{Yes, for floats that have the decimal part at 0.}
+    }
+   \item \Wrong{
+    \lgf{Oui, pour les flottants de petite précision (jusqu'au centième).}
+    \lge{Yes, for small precision floats (up to a hundredth).}
+    }
+   \item \Correct{
+    \lgf{Oui, pour les flottants de grande précision (6 chiffres après la virgule).}
+    \lge{Yes, for high precision floats (6 digits after the decimal point).}
+    }
  \end{itemize}
 }{
-Un nombre flottant, quelle que soit sa valeur, est représenté par 8 octets en CBOR. En JSON, un nombre flottant est représenté par une chaîne de caractères. Donc "3.0" nécessite 3 caractères, donc plus compacte que CBOR. Mais "3.1415926" est codé sur 9 caractères donc moins compacte que CBOR.
+\lgf{Un nombre flottant, quelle que soit sa valeur, est représenté par 8 octets en CBOR. En JSON, un nombre flottant est représenté par une chaîne de caractères. Donc "3.0" nécessite 3 caractères, donc plus compacte que CBOR. Mais "3.1415926" est codé sur 9 caractères donc moins compacte que CBOR.}
+\lge{A floating number, whatever its value, is represented by 8 bytes in CBOR. In JSON, a floating number is represented by a string. So "3.0" needs 3 characters, so it is more compact than CBOR. But "3.1415926" is coded on 9 characters so less compact than CBOR.}
+
 }
 
-\Question{Chaîne de caractères}{
-Soit une chaîne de caractères en CBOR.
+\Question{lgf{Chaîne de caractères}\lgf{Strings}}
+{
+\lgf{Soit une chaîne de caractères en CBOR.}
+\lge{Consider a string in CBOR.}
+
 \begin{itemize}[label=$\circ$]
-   \item \Wrong{Elle est compressée avec un algorithme entropique (e.g. codage de Huffman).}
-   \item \Correct{Elle peut contenir des caractères accentués.}
-   \item \Wrong{Chaque caractère est codé sur 6 bits.}
+   \item \Wrong{
+    \lgf{Elle est compressée avec un algorithme entropique (e.g. codage de Huffman).}
+    \lge{It is compressed with an entropy algorithm (e.g. Huffman coding).}
+    }
+   \item \Correct{
+    \lgf{Elle peut contenir des caractères accentués.}
+    \lge{It can contain accented characters.}
+    }
+   \item \Wrong{
+    \lgf{Chaque caractère est codé sur 6 bits.}
+    \lge{Each character is coded on 6 bits.}
+    }
  \end{itemize}
 
 }{
-Une chaîne de caractères est une séquence d'octets. Il est possible d'utiliser les représentations offrant des caractères accentués (voire des émoticones). Par contre, CBOR ne compresse pas les données.
+\lgf{A string is a sequence of bytes. It is possible to use representations offering accented characters (even emoticons). However, CBOR does not compress data.}
 }
 
-\Question{Taille variable}{
--En CBOR, la taille d'un entier varie en fonction de sa valeur !
+\Question{\lgf{Taille variable}\lge{Variable length}}
+{
+\lgf{En CBOR, la taille d'un entier varie en fonction de sa valeur !}
+\lge{In CBOR, the size of an integer varies according to its value!}
+
 \begin{itemize}[label=$\circ$]
-   \item \Correct{Vrai}
-   \item \Wrong{Faux}
-   \item \Wrong{Ça dépend de la manière dont on a déclaré cet entier.}
+   \item \Correct{\Vrai}
+   \item \Wrong{\Faux}
+   \item \Wrong{
+    \lgf{Ça dépend de la manière dont on a déclaré cet entier.}
+    \lge{It depends on how this integer was declared.}
+    }
  \end{itemize}
 
 }{
-Oui, un entier inférieur à 23 sera codé sur un seul octet. Pour les valeurs plus grandes, il faut ajouter la longueur.
+\lgf{Oui, un entier inférieur à 23 sera codé sur un seul octet. Pour les valeurs plus grandes, il faut ajouter la longueur.}
+\lge{Yes, an integer less than 23 will be encoded on a single byte. For larger values, the length must be added.}
 }
 
-\Question{Tableau}{
-En CBOR, un tableau peut contenir des objets de types différents.
+\Question{\lgf{Tableau}\lge{Array}}
+{
+\lgf{En CBOR, un tableau peut contenir des objets de types différents.}
+\lge{In CBOR, an array can contain objects of different types.}
+
 \begin{itemize}[label=$\circ$]
-   \item \Correct{Vrai}
-   \item \Wrong{Faux}
-   \item \Wrong{Ça dépend de la manière dont on a déclaré ce tableau.}
+   \item \Correct{\Vrai}
+   \item \Wrong{\Faux}
+   \item \Wrong{
+   \lgf{Ça dépend de la manière dont on a déclaré ce tableau.}
+   \lge{It depends on how this table was declared.}
+   }
  \end{itemize}
-}{
-Vrai, on a la même flexibilité qu'en JSON en imbriquant n'importe quel type de données dans un tableau.
+}
+{
+\lgf{Vrai, on a la même flexibilité qu'en JSON en imbriquant n'importe quel type de données dans un tableau.}
+\lge{True, we have the same flexibility as in JSON by nesting any data type in an array.}
 }
 
-\Question{Fraction}{
-On veut définir un tableau de deux éléments comme une fraction. Quel tag devra précéder la structure ?
-(vous pouvez vous aider du \rfc{8949}.
-}{
-Il s'agit du tag 4, voir le chapitre \textbf{3.4.4. Decimal Fractions and Bigfloats} du \rfc{8949}.
+
+\Question{\lgf{Fraction}\lge{Fractional}}
+{
+\lgf{On veut définir un tableau de deux éléments comme une fraction. Quel tag devra précéder la structure ?
+(vous pouvez vous aider du \rfc{8949}).}
+\lge{We want to define an array of two elements as a fraction. What tag should precede the structure?
+(you can use the \rfc{8949}).}
+}
+{
+\lgf{Il s'agit du tag 4, voir le chapitre \textbf{3.4.4. Decimal Fractions and Bigfloats} du \rfc{8949}.}
+\lge{This is tag 4, see the chapter \textbf{3.4.4. Decimal Fractions and Bigfloats} of the \rfc{8949}.}
 }
 
 \section{SenML}
 
-\ac{SenML} est une une spécification qui exploite JSON ou CBOR. Elle liste un ensemble de noms/unités/mesures et les standardise en un nom de clé unique. En utilisant cette standardisation, on facilite l'interopérabilité. Les clés et valeurs sont donc règlementées et typées pour éviter tous conflits d'interopérabilité. Le format est défini dans la \rfc{8428} et repose sur une structure de tableau regroupant des objets comme le montre la figure suivante tirée de la RFC.
+\lgf{\ac{SenML} est une une spécification qui exploite JSON ou CBOR. Elle liste un ensemble de noms/unités/mesures et les standardise en un nom de clé unique. En utilisant cette standardisation, on facilite l'interopérabilité. Les clés et valeurs sont donc règlementées et typées pour éviter tous conflits d'interopérabilité. Le format est défini dans la \rfc{8428} et repose sur une structure de tableau regroupant des objets comme le montre la figure suivante tirée de la RFC.}
+\lge{\SenML is a specification that leverages JSON or CBOR. It lists a set of names/units/measures and standardizes them into a unique key name. By using this standardization, interoperability is facilitated. The keys and values are therefore regulated and typed to avoid any interoperability conflicts. The format is defined in the RFC{8428} and is based on a table structure grouping objects as shown in the following figure taken from the RFC.}
+
 
 \begin{termc}[backgroundcolor=\color{palerod}, language=json, basicstyle=\ttfamily\small, escapechar=@]
 [
@@ -736,14 +931,21 @@ Il s'agit du tag 4, voir le chapitre \textbf{3.4.4. Decimal Fractions and Bigflo
 ...
 \end{termc}
 
-SenML définit les clés utilisées dans l’objet. Pour avoir une notation compacte, elles sont limitées à 1 ou 2 caractères. Parmi elles, ”bn” indique un nom de base et ”n” le nom d’un appareil. Si plusieurs appareils envoient la partie commune de l’identifiant de l’appareil, on peut mettre le ”bn” pour éviter de le répéter à chaque fois.
+\lgf{SenML définit les clés utilisées dans l’objet. Pour avoir une notation compacte, elles sont limitées à 1 ou 2 caractères. Parmi elles, ”bn” indique un nom de base et ”n” le nom d’un appareil. Si plusieurs appareils envoient la partie commune de l’identifiant de l’appareil, on peut mettre le ”bn” pour éviter de le répéter à chaque fois.}
+\lge{SenML defines the keys used in the object. To have a compact notation, they are limited to 1 or 2 characters. Among them, "bn" indicates a base name and "n" the name of a device. If several devices send the common part of the device identifier, we can put the "bn" to avoid repeating it each time.}
 
-Le temps de base (ou ”bt”) est également un moyen de compacter la notation du temps. Le temps (”t”) donne le décalage et conduit à une valeur plus petite comme on le voit dans l’exemple.
+\lgf{Le temps de base (ou ”bt”) est également un moyen de compacter la notation du temps. Le temps (”t”) donne le décalage et conduit à une valeur plus petite comme on le voit dans l’exemple.}
+\lge{The base time (or "bt") is also a way to compact the time notation. The time ("t") gives the offset and leads to a smaller value as seen in the example.}
 
-L’unité de base (”bu”) indique l’unité par défaut si les autres objets ne portent pas de mot clé indiquant l’unité (”u”).
 
-La \rfc{8428} définit une liste d’unités telles que le kilogramme (”kg”), le volt (”V”), etc. Dans l’exemple, ”%RH” désigne un pourcentage d’humidité relative. Une valeur numérique utilise la lettre ”v”, une chaîne de caractères utilise la touche ”vs”.
+\lgf{L’unité de base (”bu”) indique l’unité par défaut si les autres objets ne portent pas de mot clé indiquant l’unité (”u”).}
+\lge{The base unit ("bu") indicates the default unit if the other objects do not have a keyword indicating the unit ("u").}
 
-CBOR utilise la même structure mais les petits nombres entiers positifs et négatifs sont substitués dans les clés des objets de CBOR : ”bn”, ”bt”, ”bu” seront respectivement représentés par -1, -2 et -3 et ”n”, ”t”, ”u” par +0, +2 et +6.
+\lgf{La \rfc{8428} définit une liste d’unités telles que le kilogramme (”kg”), le volt (”V”), etc. Dans l’exemple, ”\%RH” désigne un pourcentage d’humidité relative. Une valeur numérique utilise la lettre ”v”, une chaîne de caractères utilise la touche ”vs”.}
+\lge{The \rfc{8428} defines a list of units such as kilogram ("kg"), volt ("V"), etc. In the example, "\%RH" refers to a percentage of relative humidity. A numeric value uses the letter "v", a string uses the "vs" key.}
+
+
+\lgf{CBOR utilise la même structure mais les petits nombres entiers positifs et négatifs sont substitués dans les clés des objets de CBOR : ”bn”, ”bt”, ”bu” seront respectivement représentés par -1, -2 et -3 et ”n”, ”t”, ”u” par +0, +2 et +6.}
+\lge{CBOR uses the same structure but small positive and negative integers are substituted in the keys of CBOR objects: "bn", "bt", "bu" will be represented by -1, -2 and -3 respectively and "n", "t", "u" by +0, +2 and +6.}
 
 
