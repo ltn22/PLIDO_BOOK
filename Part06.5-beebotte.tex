@@ -1,21 +1,30 @@
 \cleardoublepage
 
-\chapter{Séries temporelles}
+\lgf{\chapter{Séries temporelles}}
+\lge{\chapter{Time series}}
+
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/xrdCY4iN40s}
 \end{wrapfigure}
 
-Les capteurs virtuels que nous avons programmés jusqu’à présent émettent les données à chaque fois que celles-ci sont mesurées. 
+\lgf{Les capteurs virtuels que nous avons programmés jusqu’à présent émettent les données à chaque fois que celles-ci sont mesurées. 
 Cela permet au serveur de suivre en temps réel le comportement du système étudié. 
-Mais dans certains cas, le temps réel n’est pas nécessaire et il est préférable de limiter le nombre d’émissions, par exemple pour économiser l'énergie du capteur.
+Mais dans certains cas, le temps réel n’est pas nécessaire et il est préférable de limiter le nombre d’émissions, par exemple pour économiser l'énergie du capteur.}
+\lge{The virtual sensors that we have programmed so far emit data each time they have a measurement. 
+This allows the server to follow the behavior of the studied system in real time. 
+But in some cases, real time is not necessary and it is preferable to limit the number of emissions, for example to save the energy of the sensor.}
 
-Pour ce faire, nous pouvons utiliser un tableau qui va accumuler les valeurs et l’envoyer quand le tableau atteint une certaine taille.
+\lgf{Pour ce faire, nous pouvons utiliser un tableau qui va accumuler les valeurs et l’envoyer quand le tableau atteint une certaine taille.}
+\lge{To do this, we can use an array that will accumulate the values and send it when the array reaches a certain size.}
 
 
-\section{Envoi d'un tableau}
+\lgf{\section{Envoi d'un tableau}}
+\lge{\section{Sending an array}}
 
-Le programme \pprog{minimal\_humidity1.py}{plido-tp3} accumule les données dans un tableau \texttt{h\_humidity} quand celui-ci atteint 30 éléments (ligne 17), les données sont envoyées au serveur.
+
+\lgf{Le programme \pprog{minimal\_humidity1.py}{plido-tp3} accumule les données dans un tableau \texttt{h\_humidity} quand celui-ci atteint 30 éléments (ligne 17), les données sont envoyées au serveur.}
+\lge{The program \pprog{minimal\_humidity1.py}{plido-tp3} accumulates the data in an array \texttt{humidity} when this one reaches 30 elements (line 17), the data are sent to the server.}
 
 \pythonlst{minimal\_humidity1.py}
 
@@ -30,26 +39,39 @@ Le programme \pprog{minimal\_humidity1.py}{plido-tp3} accumule les données dans
 6 19 [3241, 2945, 2762, 2625, 2480, 2769]
 \end{termc}
 
-Le premier chiffre de la ligne indique le nombre d'éléments et le second la taille dans le codage CBOR. On remarque que l'ajout d'un élément augmente la taille du tableau de 3 octets. Les valeurs correspondant à une mesure d'humidité ne varient pas fortement. Ainsi un tableau de 30 mesures a une taille de 92 octets.
+\lgf{Le premier chiffre de la ligne indique le nombre d'éléments et le second la taille dans le codage CBOR. On remarque que l'ajout d'un élément augmente la taille du tableau de 3 octets. Les valeurs correspondant à une mesure d'humidité ne varient pas fortement. Ainsi un tableau de 30 mesures a une taille de 92 octets.}
+\lge{The first digit of the line indicates the number of elements and the second the size in the CBOR coding. We notice that adding an element increases the size of the array by 3 bytes. The values corresponding to a moisture measurement do not vary greatly. Thus an array of 30 measurements has a size of 92 bytes.}
 
-\section{Codage par différence}
+\lgf{\section{Codage par différence}}
+\lge{\section{Differential coding}}
 
-On peut optimiser le volume de données transférées en utilisant un codage par delta (i.e. la variation de l'humidité). 
-La première valeur du tableau correspond à la valeur mesurée tandis que les suivantes représentent la différence entre la valeur mesurée et la précédente.
+\lgf{On peut optimiser le volume de données transférées en utilisant un codage par delta (i.e. la variation de l'humidité). 
+La première valeur du tableau correspond à la valeur mesurée tandis que les suivantes représentent la différence entre la valeur mesurée et la précédente.}
+\lge{The amount of data transferred can be optimized by using delta coding (i.e. the variation in humidity). 
+The first value in the table is the measured value while the following values represent the difference between the measured value and the previous one.}
 
 \pythonlst[firstline=17,lastline=26,  firstnumber=17]{minimal\_humidity2.py}%[firstline=282,lastline=19, firstnumber=282]
 
-Le programme \pprog{minimal\_humidity2.py}{plido-tp3} gère différemment le remplissage du tableau~:
+\lgf{Le programme \pprog{minimal\_humidity2.py}{plido-tp3} gère différemment le remplissage du tableau~:}
+\lge{The program \pprog{minimal\_humidity2.py}{plido-tp3} handles the filling of the array differently:}
 
 \begin{itemize}
-    \item ligne 14 et 15, si le tableau est vide, le tableau est créé avec la valeur mesurée,
-    \item ligne 16 à 22, sinon si le tableau est plein, il est sérialisé en CBOR et envoyé au serveur, puis réinitialisé avec la valeur mesurée,
-    \item ligne 23 et 24, sinon la différence entre la précédente valeur et celle mesurée est stockée dans le tableau.
+    \item 
+        \lgf{ligne 14 et 15, si le tableau est vide, le tableau est créé avec la valeur mesurée,}
+        \lge{line 14 and 15, if the table is empty, the table is created with the measured value,}
+    \item 
+        \lgf{ligne 16 à 22, sinon si le tableau est plein, il est sérialisé en CBOR et envoyé au serveur, puis réinitialisé avec la valeur mesurée,}
+        \lge{line 16 to 22, otherwise if the table is full, it is serialized in CBOR and sent to the server, then reset with the measured value,}
+    \item 
+        \lgf{ligne 23 et 24, sinon la différence entre la précédente valeur et celle mesurée est stockée dans le tableau.}
+        \lge{line 23 and 24, otherwise the difference between the previous value and the measured value is stored in the table.}
 \end{itemize}
 
        \vspace{1em}
 
-Le listing suivant donne un exemple d'exécution.
+\lgf{Le listing suivant donne un exemple d'exécution.}
+\lge{The following listing gives an example of execution.}
+
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
 1 4 [2521]

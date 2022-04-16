@@ -33,8 +33,8 @@
 \provideboolean{lfrench}\setboolean{lfrench}{false} 
 \provideboolean{lenglish}\setboolean{lenglish}{false} 
 
-%\setboolean{lfrench}{true} 
-\setboolean{lenglish}{true}
+\setboolean{lfrench}{true} %FRANCAIS
+%\setboolean{lenglish}{true} % ENGLISH
 
 \ifthenelse{\boolean{lfrench}}{
 \usepackage[french]{varioref}
@@ -257,7 +257,7 @@ showstringspaces=false
 \vspace*{5cm}
 \par\normalfont\fontsize{35}{35}\sffamily\selectfont
 \lgf{\textbf{PROGRAMMER L'INTERNET DES OBJETS }}
-\lge{\textbf{PROGRAM THE INTERNET OF THINGS }}
+\lge{\textbf{PROGRAMMING THE INTERNET OF THINGS }}
 {\LARGE }\par % Book title
 \vspace*{1cm}
 {\Huge Laurent TOUTAIN}\par % Author name
@@ -316,7 +316,7 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-%\setboolean{allchap}{true} % true: take all, false take nothing only /input
+\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
 
 
