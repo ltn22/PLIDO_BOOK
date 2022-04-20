@@ -38,11 +38,13 @@ while True:
         rec = senml.SenmlRecord("humidity",
             unit=senml.SenmlUnits.SENML_UNIT_RELATIVE_HUMIDITY,
             value=h)
+        rec.time = time.mktime(datetime.datetime.now().timetuple())
         pack.add(rec)
 
         rec = senml.SenmlRecord("pressure",
             unit=senml.SenmlUnits.SENML_UNIT_PASCAL,
             value=p)
+        rec.time = time.mktime(datetime.datetime.now().timetuple())
         pack.add(rec)
 
         time.sleep(10)
