@@ -422,8 +422,8 @@ To be even more compact, the representation in CBOR will use short integers inst
         \lgf{l'objet \pfunction{kpn\_senml}{SenmlPack} inclus les informations commune à l'objet, comme le nom de base (ici \texttt{device1} ligne 23) ou la base de temps, ligne 24.}
         \lge{the object \pfunction{kpn\_senml}{SenmlPack} includes information common to the object, such as the base name (here \texttt{device1} line 23) or the time base, line 24.}
     \item 
-        \lgf{l'objet \pfunction{kpn\_senml}{SenmlRecord} contient une mesure où l'on peut préciser son nom, son unité et sa valeur (lignes 32, 38 et 43). Le temps est également précisé ligne 35. Ces enregistrements sont ajoutés à l'objet \texttt{pack}.}
-        \lge{the object \pfunction{kpn\_senml}{SenmlRecord} contains a measure where we can specify its name, its unit and its value (lines 32, 38 and 43). The time is also specified on line 35. These records are added to the object \texttt{pack}.}
+        \lgf{l'objet \pfunction{kpn\_senml}{SenmlRecord} contient une mesure où l'on peut préciser son nom, son unité et sa valeur (lignes 32, 38 et 44). Le temps est également précisé lignes 35, 41 et 47. Ces enregistrements sont ajoutés à l'objet \texttt{pack}.}
+        \lge{the object \pfunction{kpn\_senml}{SenmlRecord} contains a measure where we can specify its name, its unit and its value (lines 32, 38 and 44). The time is also specified on lines 35, 41 and 47. These records are added to the \texttt{pack} object.}
 \end{itemize}
 
 \lgf{Le programme récupère les trois valeurs de température, humidité et pression (lignes 27 à 29) en les arrondissant à 2 chiffres après la virgule pour la température et l'humidité et converti la pression, d'hecto Pascal en Pascal puisque c'est l'unité définie par SenML. }
@@ -435,12 +435,16 @@ To be even more compact, the representation in CBOR will use short integers inst
        \vspace{1em}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=\#]
-[{'bn': 'device1', 'bt': 1640110457.0,  
-  'n': 'temperature', 't': 0.0, 'u': 'Cel',   'v': 19.98},
- {'n': 'humidity', 'u': '%RH', 'v': 28.46},
- {'n': 'pressure', 'u': 'Pa', 'v': 100093}]
-JSON length:  177 bytes
-CBOR length:  104 bytes
+[{'bn': 'device1',
+  'bt': 1650463643.0,
+  'n': 'temperature',
+  't': 0.0,
+  'u': 'Cel',
+  'v': 20.08},
+ {'n': 'humidity', 't': 0.0, 'u': '%RH', 'v': 31.1},
+ {'n': 'pressure', 't': 0.0, 'u': 'Pa', 'v': 99920}]
+JSON length:  197 bytes
+CBOR length:  126 bytes
 \end{termc}
 
 \lgf{Ce premier listing montre le premier enregistrement pour les trois grandeurs mesurées. Il s'agit d'un tableau de 3 éléments. Le premier contient les valeurs de bases (ici le nom et l'heure de référence) suivi de la grandeur à mesurer, de son unité et sa valeur. Le deuxième et le troisième éléments, mettent à jours le nom de la grandeur, son unité et sa valeur, les autres informations précédemment définies restent valables.}
@@ -448,105 +452,144 @@ CBOR length:  104 bytes
 
 
 \begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\small, escapechar=@]
-[@\textcolor{gray}{\{'bn': 'device1',  'bt': 1640110457.0,}@
- @\textcolor{gray}{ 'n': 'temperature',  't': 0.0, 'u': 'Cel', 'v': 19.98\},}@
- @\textcolor{gray}{\{'n': 'humidity', 'u': '\%RH', 'v': 28.46\},}@
- @\textcolor{gray}{\{'n': 'pressure', 'u': 'Pa', 'v': 100093\},}@
- {'n': 'temperature', 't': 10.0, 'u': 'Cel', 'v': 20.03},
- {'n': 'humidity', 'u': '%RH', 'v': 26.86},
- {'n': 'pressure', 'u': 'Pa', 'v': 100065}]
-JSON length:  318 bytes
-CBOR length:  188 bytes
+[@\textcolor{gray}{\{'bn': 'device1',}@
+ @\textcolor{gray}{ 'bt': 1650463643.0,}@
+ @\textcolor{gray}{ 'n': 'temperature',}@
+ @\textcolor{gray}{ 't': 0.0,}@
+ @\textcolor{gray}{ 'u': 'Cel',}@
+ @\textcolor{gray}{ 'v': 20.08\},}@
+ @\textcolor{gray}{\{'n': 'humidity', 't': 0.0, 'u': '\%RH', 'v': 31.1\},}@
+ @\textcolor{gray}{\{'n': 'pressure', 't': 0.0, 'u': 'Pa', 'v': 99920},\}@
+ {'n': 'temperature', 't': 10.0, 'u': 'Cel', 'v': 20.04},
+ {'n': 'humidity', 't': 10.0, 'u': '%RH', 'v': 31.49},
+ {'n': 'pressure', 't': 10.0, 'u': 'Pa', 'v': 99872}]
+JSON length:  361 bytes
+CBOR length:  232 bytes
  \end{termc}
  
  \lgf{Quand on ajoute 10 secondes plus tard de nouvelles mesures,  un temps relatif de 10 secondes est indiqué pour l'enregistrement des températures et il reste valable pour les enregistrements suivants.}
  \lge{When new measurements are added 10 seconds later, a relative time of 10 seconds is indicated for the temperature recording and it remains valid for the following recordings.}
  
  
- \Question{codage}
- {A quoi correspond la clé \texttt{'u' : 'Cel'} que l'on retrouve dans la structure précédente ? }
- {Unité = degrés Celcius}
- 
- \Question{Accroissement}
- {Dans les deux représentations JSON et CBOR, de combien la taille est-elle accrue par l'ajout des mesures effectuées ? d'où viennent ces différences ?}
+ \Question{\lgf{Codage}\lge{Encoding}}
  {
- Si l'on regarde le listing précédent, l'ajout des trois mesures fait augmenter la taille de 141 octets pour JSON et 84 pour CBOR. La différence vient de l'utilisation de nombre plus que de chaînes de caractères pour les clés. Ainsi 't' demande 3 caractères en JSON avec les guillemets, codé en CBOR, il faudrait 2 octets, un nombre inférieur à 23 se code sur un seul octet. Il y a egalement les virgules, espaces et fermeture de crochets qui ne sont pas présent en CBOR. Les nombres flottant comme \texttt{19.98} ont une représentation plus compacte en JSON (5 octets) qu'en CBOR où ils consomment 9 octets. Dans tous les cas l'accroissement est fortement dépendant du nom des éléments. Ici, il faut répéter à chaque fois \texttt{temperature}, \texttt{humidity} et \texttt{pressure}, soit 26 caractères.
+ \lgf{A quoi correspond la clé \texttt{\{'u' : 'Cel'\}} que l'on retrouve dans la structure précédente ? }
+ \lge{What does the key \texttt{\{'u' : 'Cel'\}} found in the previous structure correspond to? }
+ }
+ {
+ \lgf{ Unité = degrés Celcius}
+ \lge{ Unit = degrees Celcius}
+ 
  }
  
- \Question {Une seule grandeur}
- {Si on ne s'intéressait qu'à une seule grandeur, par exemple l'humidité. A quoi ressemblerait la structure SenML en JSON ?}
+ \Question{\lgf{Accroissement}\lge{Growth}}
  {
- Chaque nouvelle entrée ajoute 35 octets à la structure~: 
+ \lgf{Dans les deux représentations JSON et CBOR, de combien la taille est-elle accrue par l'ajout des mesures effectuées ? d'où viennent ces différences ?}
+ \lge{In both JSON and CBOR representations, how much is the size increased by adding the measurements made? Where do these differences come from?}
+ }
+ {
+ \lgf{Si l'on regarde le listing précédent, l'ajout des trois mesures fait augmenter la taille de 164 octets pour JSON et 106 pour CBOR. La différence vient de l'utilisation de nombre plus que de chaînes de caractères pour les clés. Ainsi 't' demande 3 caractères en JSON avec les guillemets, codé en CBOR, il faudrait 2 octets, un nombre inférieur à 23 se code sur un seul octet. Il y a egalement les virgules, espaces et fermeture de crochets qui ne sont pas présent en CBOR. Les nombres flottant comme \texttt{19.98} ont une représentation plus compacte en JSON (5 octets) qu'en CBOR où ils consomment 9 octets. Dans tous les cas l'accroissement est fortement dépendant du nom des éléments. Ici, il faut répéter à chaque fois \texttt{temperature}, \texttt{humidity} et \texttt{pressure}, soit 26 caractères.}
+ \lge{If we look at the previous listing, adding the three measures increases the size by 164 bytes for JSON and 106 for CBOR. The difference comes from the use of numbers rather than strings for the keys. Thus 't' requires 3 characters in JSON with the quotes, encoded in CBOR, it would take 2 bytes, a number less than 23 is encoded on a single byte. There are also commas, spaces and closing brackets which are not present in CBOR. The floating numbers like \texttt{19.98} have a more compact representation in JSON (5 bytes) than in CBOR where they consume 9 bytes. In all cases the increase is strongly dependent on the name of the elements. Here, it is necessary to repeat each time \texttt{temperature}, \texttt{humidity} and \texttt{pressure}, that is 26 characters.}
+ }
+ 
+ \Question {\lgf{Une seule grandeur}\lge{A single value}}
+ {
+ \lgf{Si on ne s'intéressait qu'à une seule grandeur, par exemple l'humidité. A quoi ressemblerait la structure SenML en JSON ?}
+ \lge{If we were only interested in one quantity, for example humidity. What would the SenML structure look like in JSON?}
+ }
+ {
+ \lgf{Chaque nouvelle entrée ajoute 35 octets à la structure~: }
+ \lge{Each new entry adds 35 bytes to the structure~: }
+ 
+ \noindent
  [\{'bn': 'device1',  'bt': 1640110457.0, 'n': 'humidty', 'u': '\%RH', 'v': 28.46\},\\
  \{'t': 10.0, 'v': 26.86\},\\
  \{'t': 20.0, 'v': 26.96\},\\
  \{'t': 30.0, 'v': 27.01\}]\\
  }
  
- \subsubsection{Réception}
+ \lgf{\subsubsection{Réception}}
+ \lge{\subsubsection{Receiving}}
  
- Le traitement par le module SenML tel qu'il est mis en œuvre n'est pas complet, il ne gère pas correctement les timestamps. Mais, il n'est pas vraiment nécessaire pour traiter ces messages. En effet, comme on l'a vu précédemment, les objets SenML sont cumulatifs, une clé reste présente dans les enregistrements suivants sauf si elle est redéfinie. 
+ \lgf{Le traitement par le module SenML tel qu'il est mis en œuvre n'est pas complet, il ne gère pas correctement les timestamps. Mais, il n'est pas vraiment nécessaire pour traiter ces messages. En effet, comme on l'a vu précédemment, les valeurs SenML sont composés d'une base et d'une valeur. En concaténant les différents éléments du tableau, on garde les clés de base et on remplace les clés qui se répètent à chaque éléments. Cela permet d'avoir une mise en \oe{}uvre très simple du décodage, pour la série SenML qui nous est fournie.}
+ \lge{The processing by the SenML module as implemented is not complete, it does not handle timestamps correctly. But, it is not really necessary to process these messages. Indeed, as we have seen previously, SenML values are composed of a base and a value. By concatenating the different elements of the array, we keep the base keys and we replace the keys which are repeated at each element. This allows to have a very simple implementation of the decoding, for the SenML series which is provided to us.}
  
  
  \pythonlst{minimal\_senml\_server.py}
  
- Le programme \pprog{minimal\_senml\_server.py}{plido-tp3} va convertir le format SenML codé en CBOR dans le format attendu par Beebotte. 
- La version CBOR utilise ds nombres plutôt que des tags.
- Le dictionnaire \texttt{naming\_map} defini lignes 10 à 12 permet la correspondance utilisé par la suite pour rendre le code plus lisible.
+ \lgf{Le programme \pprog{minimal\_senml\_server.py}{plido-tp3} va convertir le format SenML codé en CBOR dans le format attendu par Beebotte. 
+ La version CBOR utilise des nombres plutôt que des tags.
+ Le dictionnaire \texttt{naming\_map} defini lignes 10 à 12 permet la correspondance utilisé par la suite pour rendre le code plus lisible.}
+ \lge{The program \pprog{minimal\_senml\_server.py}{plido-tp3} will convert the SenML format encoded in CBOR into the format expected by Beebotte. 
+ The CBOR version uses numbers rather than tags.
+ The dictionary \texttt{naming\_map} defined on lines 10 to 12 allows the correspondence used afterwards to make the code more readable.}
  
- Les lignes 14 à 17 initialisent les communications venant du capteur et celles allant à Beebotte. 
+ \lgf{Les lignes 14 à 17 initialisent les communications venant du capteur et celles allant à Beebotte. }
+ \lge{Lines 14 to 17 initialize the communications coming from the sensor and those going to Beebotte. }
  
- Les données reçues ligne 21 sont transformée en structure Python ligne 23. Cette correspondance est possible car Python autorise des clés numériques et celles-ci ne sont pas répétées plusieurs fois dans une map CBOR.
+\lgf{Les données reçues ligne 21 sont transformée en structure Python ligne 23. Cette correspondance est possible car Python autorise des clés numériques et celles-ci ne sont pas répétées plusieurs fois dans une map CBOR.}
+\lge{The data received on line 21 is transformed into a Python structure on line 23. This correspondence is possible because Python allows numerical keys and these are not repeated several times in a CBOR map.}
  
-La boucle commençant ligne 28 permet d'explorer tous les éléments du tableau SenML, les nouvelles entrées sont fusionnées avec les anciennes (ligne 29)\footnote{Dans les version plus récentes de Python, il est possible d'utiliser l'opérateur \texttt{|}.}. 
+\lgf{La boucle commençant ligne 28 permet d'explorer tous les éléments du tableau SenML, les nouvelles entrées sont fusionnées avec les anciennes (ligne 29)\footnote{Dans les version plus récentes de Python, il est possible d'utiliser l'opérateur \texttt{|}.}. }
+\lge{The loop starting on line 28 allows you to explore all the elements of the SenML array, the new entries are merged with the old ones (line 29)\footnote{ In more recent versions of Python, it is possible to use the \texttt{|} operator.} }
 
-Les informations concernant le temps sont ensuite recherchées. 
-D'abord le temps (ligne 32) et s'il un temps de base existe (ligne 33) il est ajouté. On procède de même pour la valeur (lignes 38 à 40). Pour le nom, il n'y a pas de concaténation car le nom de base sera utilisé comme canal Beebotte, il est récupéré à la fin ligne 46.
+\lgf{Les informations concernant le temps sont ensuite recherchées. 
+D'abord le temps (ligne 32) et s'il un temps de base existe (ligne 33) il est ajouté. On procède de même pour la valeur (lignes 38 à 40). Pour le nom, il n'y a pas de concaténation car le nom de base sera utilisé comme canal Beebotte, il est récupéré à la fin ligne 46.}
+\lge{The information about the time is then searched for. 
+First the time (line 32) and if there is a basic time (line 33) it is added. The same procedure is followed for the value (lines 38 to 40). For the name, there is no concatenation because the basic name will be used as a Beebotte channel, it is recovered at the end of line 46.}
 
-A partir de ces informations, la structure attendue par Beebotte est construite ligne 43 en ajoutant le dictionnaire dans le tableau \texttt{bbt\_record}.
+\lgf{A partir de ces informations, la structure attendue par Beebotte est construite ligne 43 en ajoutant le dictionnaire dans le tableau \texttt{bbt\_record}.}
+\lge{From this information, the structure expected by Beebotte is constructed line 43 by adding the dictionary in the table \texttt{bbt\_record}.}
 
-Ligne 47, l'information est envoyée à Beebotte. Si les clés d'authentification, le nom du canal et des ressources sont correct, les information s'affiche sur le site, comme précédemment. 
+\lgf{Ligne 47, l'information est envoyée à Beebotte. Si les clés d'authentification, le nom du canal et des ressources sont correct, les information s'affiche sur le site, comme précédemment. }
+\lge{Line 47, the information is sent to Beebotte. If the authentication keys, channel name and resources are correct, the information is displayed on the site, as before. }
 
 \begin{termc}[backgroundcolor=\color{palerod},  basicstyle=\ttfamily\tiny, escapechar=@]
-{0: 'temperature', 1: 'Cel', 2: 19.44, 6: 0.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'humidity', 1: '%RH', 2: 24.13, 6: 0.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'pressure', 1: 'Pa', 2: 101080, 6: 0.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'temperature', 1: 'Cel', 2: 19.48, 6: 10.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'humidity', 1: '%RH', 2: 21.85, 6: 10.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'pressure', 1: 'Pa', 2: 101090, 6: 10.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'temperature', 1: 'Cel', 2: 19.57, 6: 20.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'humidity', 1: '%RH', 2: 21.09, 6: 20.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'pressure', 1: 'Pa', 2: 101058, 6: 20.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'temperature', 1: 'Cel', 2: 19.52, 6: 30.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'humidity', 1: '%RH', 2: 20.39, 6: 30.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'pressure', 1: 'Pa', 2: 101120, 6: 30.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'temperature', 1: 'Cel', 2: 19.44, 6: 40.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'humidity', 1: '%RH', 2: 21.94, 6: 40.0, -3: 1640168049.0, -2: 'device1'}
-{0: 'pressure', 1: 'Pa', 2: 101128, 6: 40.0, -3: 1640168049.0, -2: 'device1'}
-[{'data': 19.44, 'resource': 'temperature', 'ts': 1640168049000.0},
- {'data': 24.13, 'resource': 'humidity', 'ts': 1640168049000.0},
- {'data': 101080, 'resource': 'pressure', 'ts': 1640168049000.0},
- {'data': 19.48, 'resource': 'temperature', 'ts': 1640168059000.0},
- {'data': 21.85, 'resource': 'humidity', 'ts': 1640168059000.0},
- {'data': 101090, 'resource': 'pressure', 'ts': 1640168059000.0},
- {'data': 19.57, 'resource': 'temperature', 'ts': 1640168069000.0},
- {'data': 21.09, 'resource': 'humidity', 'ts': 1640168069000.0},
- {'data': 101058, 'resource': 'pressure', 'ts': 1640168069000.0},
- {'data': 19.52, 'resource': 'temperature', 'ts': 1640168079000.0},
- {'data': 20.39, 'resource': 'humidity', 'ts': 1640168079000.0},
- {'data': 101120, 'resource': 'pressure', 'ts': 1640168079000.0},
- {'data': 19.44, 'resource': 'temperature', 'ts': 1640168089000.0},
- {'data': 21.94, 'resource': 'humidity', 'ts': 1640168089000.0},
- {'data': 101128, 'resource': 'pressure', 'ts': 1640168089000.0}]
+{0: 'temperature', 2: 19.94, 6: 0.0, 1: 'Cel', -2: 'device1', -3: 1650463732.0}
+{0: 'humidity', 2: 27.7, 6: 0.0, 1: '%RH', -2: 'device1', -3: 1650463732.0}
+{0: 'pressure', 2: 100109, 6: 0.0, 1: 'Pa', -2: 'device1', -3: 1650463732.0}
+{0: 'temperature', 2: 19.88, 6: 10.0, 1: 'Cel', -2: 'device1', -3: 1650463732.0}
+{0: 'humidity', 2: 24.82, 6: 10.0, 1: '%RH', -2: 'device1', -3: 1650463732.0}
+{0: 'pressure', 2: 100056, 6: 10.0, 1: 'Pa', -2: 'device1', -3: 1650463732.0}
+{0: 'temperature', 2: 19.93, 6: 20.0, 1: 'Cel', -2: 'device1', -3: 1650463732.0}
+{0: 'humidity', 2: 23.74, 6: 20.0, 1: '%RH', -2: 'device1', -3: 1650463732.0}
+{0: 'pressure', 2: 100123, 6: 20.0, 1: 'Pa', -2: 'device1', -3: 1650463732.0}
+{0: 'temperature', 2: 19.92, 6: 30.0, 1: 'Cel', -2: 'device1', -3: 1650463732.0}
+{0: 'humidity', 2: 25.82, 6: 30.0, 1: '%RH', -2: 'device1', -3: 1650463732.0}
+{0: 'pressure', 2: 100220, 6: 30.0, 1: 'Pa', -2: 'device1', -3: 1650463732.0}
+{0: 'temperature', 2: 19.9, 6: 40.0, 1: 'Cel', -2: 'device1', -3: 1650463732.0}
+{0: 'humidity', 2: 24.47, 6: 40.0, 1: '%RH', -2: 'device1', -3: 1650463732.0}
+{0: 'pressure', 2: 100173, 6: 40.0, 1: 'Pa', -2: 'device1', -3: 1650463732.0}
+[{'data': 19.94, 'resource': 'temperature', 'ts': 1650463732000.0},
+ {'data': 27.7, 'resource': 'humidity', 'ts': 1650463732000.0},
+ {'data': 100109, 'resource': 'pressure', 'ts': 1650463732000.0},
+ {'data': 19.88, 'resource': 'temperature', 'ts': 1650463742000.0},
+ {'data': 24.82, 'resource': 'humidity', 'ts': 1650463742000.0},
+ {'data': 100056, 'resource': 'pressure', 'ts': 1650463742000.0},
+ {'data': 19.93, 'resource': 'temperature', 'ts': 1650463752000.0},
+ {'data': 23.74, 'resource': 'humidity', 'ts': 1650463752000.0},
+ {'data': 100123, 'resource': 'pressure', 'ts': 1650463752000.0},
+ {'data': 19.92, 'resource': 'temperature', 'ts': 1650463762000.0},
+ {'data': 25.82, 'resource': 'humidity', 'ts': 1650463762000.0},
+ {'data': 100220, 'resource': 'pressure', 'ts': 1650463762000.0},
+ {'data': 19.9, 'resource': 'temperature', 'ts': 1650463772000.0},
+ {'data': 24.47, 'resource': 'humidity', 'ts': 1650463772000.0},
+ {'data': 100173, 'resource': 'pressure', 'ts': 1650463772000.0}]
+
  \end{termc}
  
- Le listing précédent montre cette transformation.
- Les premières lignes correspondent aux enregistrements fusionnées et le tableau final, ce qui a été envoyé à Beebotte.
+ \lgf{Le listing précédent montre cette transformation.
+ Les premières lignes correspondent aux enregistrements fusionnées et le tableau final, ce qui a été envoyé à Beebotte.}
+ \lge{The previous listing shows this transformation.
+ The first rows are the merged records and the final table is what was sent to Beebotte.}
+ 
  
  \Question{base value}
  {
- Pourrait-on utiliser le champ SenML \textit{base value} pour diminuer la taille des données de pression atmosphérique~?
+ \lgf{Pourrait-on utiliser le champ SenML \textit{base value} pour diminuer la taille des données de pression atmosphérique~?}
+ \lge{Could we use the SenML field \textit{base value} to decrease the size of the air pressure data~?}
  }
  {
-Cela serait possible, si cette ressource était envoyée seule.
+\lgf{Cela serait possible, si cette ressource était envoyée seule.}
+\lge{This would be possible, if this resource was sent alone.}
  }
