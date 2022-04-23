@@ -33,8 +33,8 @@
 \provideboolean{lfrench}\setboolean{lfrench}{false} 
 \provideboolean{lenglish}\setboolean{lenglish}{false} 
 
-%\setboolean{lfrench}{true} %FRANCAIS
-\setboolean{lenglish}{true} % ENGLISH
+\setboolean{lfrench}{true} %FRANCAIS
+%\setboolean{lenglish}{true} % ENGLISH
 
 \ifthenelse{\boolean{lfrench}}{
 \usepackage[french]{varioref}
@@ -242,6 +242,24 @@ showstringspaces=false
 \newcommand\Vrai[0]{\ifthenelse{\boolean{lfrench}}{Vrai}{}\ifthenelse{\boolean{lenglish}}{True}{}}
 \newcommand\Faux[0]{\ifthenelse{\boolean{lfrench}}{Faux}{}\ifthenelse{\boolean{lenglish}}{False}{}}
 
+\documentclass{article}
+
+\ifthenelse{\boolean{lfrench}}{
+\usepackage[
+    type={CC},
+    modifier={by-nc-nd},
+    version={3.0},
+]{doclicense}
+} { % by default in english
+\usepackage[
+    type={CC},
+    modifier={by-nc-nd},
+    version={3.0},
+    lang=English,
+]{doclicense}
+}
+
+
 \begin{document}
 
 \let\cleardoublepage\clearpage
@@ -274,6 +292,7 @@ showstringspaces=false
 %\noindent Copyright \copyright\ 2014 Andrea Hidalgo\\ % Copyright notice
 
 \noindent \textsc{IMT Atlantique}\\
+\doclicenseThis
 
 \noindent \lgf{Basé sur le \href{https://bit.ly/3Ku0aL8}{MOOC PLIDO}.}\\ % License information
 \lge{Based on the  \href{https://bit.ly/3Ku0aL8}{PLIDO MOOC}.} \\
@@ -316,7 +335,7 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-%\setboolean{allchap}{true} % true: take all, false take nothing only /input
+\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
 
 
