@@ -33,8 +33,8 @@
 \provideboolean{lfrench}\setboolean{lfrench}{false} 
 \provideboolean{lenglish}\setboolean{lenglish}{false} 
 
-\setboolean{lfrench}{true} %FRANCAIS
-%\setboolean{lenglish}{true} % ENGLISH
+%\setboolean{lfrench}{true} %FRANCAIS
+\setboolean{lenglish}{true} % ENGLISH
 
 \ifthenelse{\boolean{lfrench}}{
 \usepackage[french]{varioref}
@@ -59,7 +59,6 @@
 \usepackage{soul}
 \usepackage{tabto}
 \usepackage{multienum}
-
 
 \definecolor{deepblue}{rgb}{0.0,0.0,0.5}
 \definecolor{deepred}{rgb}{0.6,0,0}
@@ -172,7 +171,10 @@ showstringspaces=false
 \let\oldac\ac
 \renewcommand*{\ac}[1]{\oldac{#1}\index{#1}}
 
-\newcommand\Index[1]{\textbf{#1}\index{#1}}
+%\usepackage{marginnote}
+
+%\setmarginnotefont{\small\itshape\color{blue}}
+\newcommand\Index[1]{\textbf{#1}\index{#1} } %\marginnote{#1} }
 
 % Bibliography
 \usepackage[style=alphabetic,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
@@ -335,7 +337,7 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-\setboolean{allchap}{true} % true: take all, false take nothing only /input
+%\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
 
 
@@ -347,9 +349,9 @@ showstringspaces=false
 \Input{Part04.0-ArchiIoT}
 \Input{Part05.0-Data}
 \Input{Part06.0-VSensors}
-\input{Part06.5-beebotte}
+\Input{Part06.5-beebotte}
 \Input{Part07.0-LoPy}
-\Input{Part08.0-Sigfox}
+\input{Part08.0-Sigfox}
 \Input{Part09.0-LoRaWAN}
 \Input{Part10.0-CoAP}
 \Input{Part10.5-aiocoap}

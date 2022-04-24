@@ -7,41 +7,64 @@
 \end{wrapfigure}
 
 
-\Index{Sigfox} est l'un des tous premiers réseaux entièrement dédié à l'Internet des Objets. Comme nous l'avons vu auparavant, il est de la famille des \Index{LPWAN} qui privilégie la portée et la consommation d'énergie au débit. Les communications sont également fortement asymétrique, ce qui fait que les échanges ne sont pas comme sur un réseau Wi-Fi. 
+\lgf{\Index{Sigfox} est l'un des tous premiers réseaux entièrement dédié à l'Internet des Objets. Comme nous l'avons vu auparavant, il est de la famille des \Index{LPWAN} qui privilégie la portée et la consommation d'énergie au débit. Les communications sont également fortement asymétrique, ce qui fait que les échanges ne sont pas comme sur un réseau Wi-Fi. }
+\lge{\Index{Sigfox} is one of the very first networks entirely dedicated to the Internet of Things. As we have seen before, it belongs to the \Index{LPWAN} family, which favors range and energy consumption over throughput. The communications are also highly asymmetrical, which means that the exchanges are not like on a Wi-Fi network. }
+
 
      \vspace{1em}
 
-Les LoPy peuvent utiliser le réseau et bénéficie d'un an de connectivité gratuite sur le réseau Sigfox. Après les coûts d'abonnement sont relativement limités.
+\lgf{Les LoPy peuvent utiliser le réseau et bénéficie d'un an de connectivité gratuite sur le réseau Sigfox. Après les coûts d'abonnement sont relativement limités.}
+\lge{LoPy can use the network and benefits from one year of free connectivity on the Sigfox network. After that the subscription costs are relatively limited.}
 
-\section{Récupération des identifiants}
 
-Dans un premier temps, vous devez enregistrez votre capteur sur le site de Sigfox. Il vous faut deux éléments : son identifiant et son mot de passe appelé PAC (Porting Authorization Code). Ce dernier doit rester secret car il permet à toute personne qui le possède d’enregistrer un objet ou d’en changer le propriétaire.
+\lgf{\section{Récupération des identifiants}}
+\lge{\section{Retrieving identifiers}}
 
-Le programme \lprog{sigfox\_id.py}{pycom} permet d’afficher ces deux valeurs et d’envoyer un message sur le réseau Sigfox. 
-Avant de l’exécuter, vérifiez que vous avez branché une antenne sur le connecteur de droite, celui opposé au bouton Reset sur le Pycom, coté LED.
+\lgf{Dans un premier temps, vous devez enregistrez votre capteur sur le site de Sigfox. Il vous faut deux éléments : son identifiant et son mot de passe appelé \ac{PAC}. Ce dernier doit rester secret car il permet à toute personne qui le possède d’enregistrer un objet ou d’en changer le propriétaire.}
+\lge{First, you must register your sensor on the Sigfox website. You need two elements: its identifier and its password called \ac{PAC}. The latter must remain secret because it allows anyone who has it to register an object or change its owner.}
+
+
+\lgf{Le programme \lprog{sigfox\_id.py}{pycom} permet d’afficher ces deux valeurs et d’envoyer un message sur le réseau Sigfox. 
+Avant de l’exécuter, vérifiez que vous avez branché une antenne sur le connecteur de droite, celui opposé au bouton Reset sur le Pycom, coté LED.}
+\lge{The program \lprog{sigfox\_id.py}{pycom} allows to display these two values and to send a message on the Sigfox network. 
+Before running it, check that you have connected an antenna on the right connector, the one opposite to the Reset button on the Pycom, LED side.}
+
 
 \pycomlst{sigfox\_id.py} 
 
-Ce programme importe l’objet \pfunction{network}{Sigfox} du module \texttt{network} (ligne 1) et crée une instance \texttt{sigfox} (ligne 10). Il est important de bien spécifier la bonne région d’utilisation car les bandes de fréquences peuvent différer d'un continent à un autre. En plus d’émettre dans l’illégalité, le réseau Sigfox ne recevra pas les messages.
+\lgf{Ce programme importe l’objet \pfunction{network}{Sigfox} du module \texttt{network} (ligne 1) et crée une instance \texttt{sigfox} (ligne 10). Il est important de bien spécifier la bonne région d’utilisation car les bandes de fréquences peuvent différer d'un continent à un autre. En plus d’émettre dans l’illégalité, le réseau Sigfox ne recevra pas les messages.}
+\lge{This program imports the \pfunction{network}{Sigfox} object from the \texttt{network} module (line 1) and creates an instance of \texttt{sigfox} (line 10). It is important to specify the right region of use because frequency bands can differ from one continent to another. In addition to transmitting illegally, the Sigfox network will not receive the messages.}
 
-Les lignes 13 et 16 affichent les identifiants Sigfox de votre LoPy. Notez-les, ils nous serviront pour enregistrer l’objet sur le réseau de Sigfox.
+\lgf{Les lignes 13 et 16 affichent les identifiants Sigfox de votre LoPy. Notez-les, ils nous serviront pour enregistrer l’objet sur le réseau de Sigfox.}
+\lge{Lines 13 and 16 display the Sigfox identifiers of your LoPy. Note them, they will be used to register the object on the Sigfox network.}
 
-La ligne 18 crée une \pfunction{socket}{socket}, à l’instar de ce qui avait été fait avec UDP au chapitre précédent. On peut donc utiliser les mêmes primitives en Sigfox qu’en UDP. La ligne 19 permet d’envoyer un message que vous pouvez personnaliser dans la limite de 12 caractères~; taille maximale des trames Sigfox.
+\lgf{La ligne 18 crée une \pfunction{socket}{socket}, à l’instar de ce qui avait été fait avec UDP au chapitre précédent. On peut donc utiliser les mêmes primitives en Sigfox qu’en UDP. La ligne 19 permet d’envoyer un message que vous pouvez personnaliser dans la limite de 12 caractères~; taille maximale des trames Sigfox.}
+\lge{Line 18 creates a function{socket}{socket}, like what was done with UDP in the previous chapter. So we can use the same primitives in Sigfox as in UDP. The line 19 allows to send a message that you can customize within the limit of 12 characters~; maximum size of Sigfox frames.}
 
+\lgf{\section{Enregistrement de l'objet}}
+\lge{\section{Object registration}}
 
-\section{Enregistrement de l'objet}
-
-
-Maintenant que vous avez les précieux identifiants Sigfox, connectez-vous avec un navigateur sur le site \url{https://backend.sigfox.com/activate}. Le processus est très simple. Il suffit de remplir les champs des différents formulaires~:
+\lgf{Maintenant que vous avez les précieux identifiants Sigfox, connectez-vous avec un navigateur sur le site \url{https://backend.sigfox.com/activate}. Le processus est très simple. Il suffit de remplir les champs des différents formulaires~:}
+\lge{Now that you have the precious Sigfox identifiers, connect with a browser to the site \url{https://backend.sigfox.com/activate}. The process is very simple. You just have to fill the fields of the different forms:}
 
 \begin{itemize}
-    \item indiquez votre pays ;
-\item remplissez le formulaire avec l'identifiant de l'objet et le \Index{PAC} que vous avez obtenus avec le programme \lprog{sigfox\_id.py}{pycom} ;
-\item indiquez à des fins de statistique ce qui vous amène ici ;
-\item créez votre compte Sigfox ;
+    \item 
+        \lgf{indiquez votre pays ;}
+        \lge{indicate your country;}
+    \item  
+        \lgf{remplissez le formulaire avec l'identifiant de l'objet et le \Index{PAC} que vous avez obtenus avec le programme \lprog{sigfox\_id.py}{pycom} ;}
+        \lge{fill in the form with the object identifier and the \Index{PAC} that you obtained with the program \lprog{sigfox\_id.py}{pycom} ;}
+    \item  
+        \lgf{indiquez à des fins de statistique ce qui vous amène ici ;}
+        \lge{indicate for statistical purposes what brings you here;}
+    \item  
+        \lgf{créez votre compte Sigfox.}
+        \lge{create your Sigfox account.}
 \end{itemize}
 
-ce qui va conduire à enregistrer l’objet et à vous créer un compte sur le backend de Sigfox.
+\lgf{Ce qui va conduire à enregistrer l’objet et à vous créer un compte sur le backend de Sigfox.}
+\lge{This will lead to register the object and create an account on the Sigfox backend.}
+
 
 \section{Visualisation des données émises par le Pycom}
 
