@@ -66,125 +66,182 @@ Before running it, check that you have connected an antenna on the right connect
 \lge{This will lead to register the object and create an account on the Sigfox backend.}
 
 
-\section{Visualisation des données émises par le Pycom}
+\lgf{\section{Visualisation des données émises par le Pycom}}
+\lge{\section{Visualization of the data issued by the Pycom}}
 
 
-Rendez-vous sur le \Index{backend} de Sigfox (\usl{https://backend.sigfox.com/}) et identifiez-vous avec le compte que vous venez de créer.
+\lgf{Rendez-vous sur le \Index{backend} de Sigfox (\url{https://backend.sigfox.com/}) et identifiez-vous avec le compte que vous venez de créer.}
+\lge{Go to the Sigfox website (\url{https://backend.sigfox.com/}) and identify yourself with the account you just created.}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/sigfox-accueil.png} }
-\caption{Page d'accueil}
+\lgf{\caption{Page d'accueil}}
+\lge{\caption{Home page}}
 \label{fig-sigfox-accueil}
 \end{figure}
 
-
-
-Les onglets en haut de la page (cf. figure~\vref{fig-sigfox-accueil}) vont vous permettre de naviguer dans différents types d’information. Dans cette partie, nous n'utiliserons que l'onglet \textit{DEVICE}. Il donne accès aux objets enregistrés vous appartenant (cf.figure~\vref{fig-sigfox-device}). On y retrouve~:
+\lgf{Les onglets en haut de la page (cf. figure~\vref{fig-sigfox-accueil}) vont vous permettre de naviguer dans différents types d’information. Dans cette partie, nous n'utiliserons que l'onglet \textit{DEVICE}. Il donne accès aux objets enregistrés vous appartenant (cf.figure~\vref{fig-sigfox-device}). On y retrouve~:}
+\lge{The tabs at the top of the page (see figure~vref{fig-sigfox-home}) will allow you to navigate through different types of information. In this part, we will only use the tab \textit{DEVICE}. It gives access to the registered objects belonging to you (see figure~\vref{fig-sigfox-device}). It contains:}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/sigfox-device.png} }
-\caption{Objets enregistrés}
+\lgf{\caption{Objets enregistrés}}
+\lge{\caption{Registered objects}}
 \label{fig-sigfox-device}
 \end{figure}
 
 \begin{itemize}
-    \item un nom créé par Sigfox en fonction du type d’objet~: 
-    \item le propriétaire~;
-    \item l’ID que vous avez donnés lors de l’enregistrement~;
-    \item la date du dernier message reçu par Sigfox pour cet objet.
+    \item 
+        \lgf{un nom créé par Sigfox en fonction du type d’objet~; }
+        \lge{a name created by Sigfox according to the type of object; }
+    \item  
+        \lgf{le propriétaire~;}
+        \lge{the owner;}
+    \item  
+        \lgf{l’ID que vous avez donnés lors de l’enregistrement~;}
+        \lge{the ID you gave when you registered;}
+    \item  
+        \lgf{la date du dernier message reçu par Sigfox pour cet objet.}
+        \lge{the date of the last message received by Sigfox for this object.}
 \end{itemize}
 
      \vspace{1em}
 
-Il faut cliquer~:
+\lgf{Il faut cliquer~:}
+\lge{You must click:}
 \begin{itemize}
-    \item sur le nom de l’objet pour le configurer~;
-    \item sur le nom du groupe pour accéder à des paramètres d’administration des objets~;
-    \item  sur l’ID de l’objet pour obtenir des informations concernant les messages reçus puis \texiit{MESSAGES} dans le menu de gauche, pour avoir la liste des messages reçus par Sigfox, comme montré à la figure~\vref{fig-sigfox-message}\footnote{La séquence \texttt{48 69 21 20 53 69 67 66 6f 78} correspondant à la chaîne de caractères \texttt{Hi! Sigfox}.}.
+    \item 
+        \lgf{sur le nom de l’objet pour le configurer~;}
+        \lge{on the object name to configure it;}
+    \item 
+        \lgf{sur le nom du groupe pour accéder à des paramètres d’administration des objets~;}
+        \lge{on the group name to access object administration settings;}
+    \item 
+        \lgf{sur l’ID de l’objet pour obtenir des informations concernant les messages reçus puis \textit{MESSAGES} dans le menu de gauche, pour avoir la liste des messages reçus par Sigfox, comme montré à la figure~\vref{fig-sigfox-message}\footnote{La séquence \texttt{48 69 21 20 53 69 67 66 6f 78} correspondant à la chaîne de caractères \texttt{Hi! Sigfox}.}.}
+        \lge{on the object ID to get information about the received messages then \textit{MESSAGES} in the left menu, to get the list of messages received by Sigfox, as shown in figure~\vref{fig-sigfox-message}\footnote{The sequence \texttt{48 69 21 20 53 69 67 66 6f 78} corresponding to the string \texttt{Hi! Sigfox}.}}
 \end{itemize}
 
 
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/sigfox-message.png} }
-\caption{Liste des messages reçus}
+\lgf{\caption{Liste des messages reçus}}
+\lge{\caption{List of received messages}}
 \label{fig-sigfox-message}
 \end{figure}
 
+\lgf{\section{Que s'est-il passé coté radio}}
+\lge{\section{What happened on the radio side}}
 
-\section{Que s'est-il passé coté radio}
+\lgf{La figure~\vref{fig-sigfox-spectrum} montre sur un \Index{analyseur de spectre}, l'émission de 4 trames de données, dont une en cours, par un objet. Les petits traits verticaux correspondent à une émission. Ces traits sont très fin ; la bande passante utilisée est très petite, d'où le terme anglais de \ac{UNB}. Cela limite le risque de \Index{collision} qui rendrait la donnée incompréhensible lié à l'émission simultanée d'un autre équipement sur la même fréquence. }
+\lge{The figure~\vref{fig-sigfox-spectrum} shows on a \Index{spectrum analyzer}, the emission of 4 frames of data, including one in progress, by an object. The small vertical lines correspond to an emission. These lines are very fine; the bandwidth used is very small, hence the term \ac{UNB}. This limits the risk of \Index{collision} which would make the data incomprehensible linked to the simultaneous emission of another equipment on the same frequency. }
 
-
-La figure~\vref{fig-sigfox-spectrum} montre sur un \Index{analyseur de spectre}, l'émission de 4 trames de données, dont une en cours, par un objet. Les petits traits verticaux correspondent à une émission. Ces traits sont très fin ; la bande passante utilisée est très petite, d'où le terme anglais de \ac{UNB}. Cela limite le risque de \Index{collision} qui rendrait la donnée incompréhensible lié à l'émission simultanée d'un autre équipement sur la même fréquence. 
-
-En fait, le même message est émis 3 fois sur des fréquences différentes et aléatoire, augmentant ses chances d'être reçu. 
+\lgf{En fait, le même message est émis 3 fois sur des fréquences différentes et aléatoire, augmentant ses chances d'être reçu. }
+\lge{In fact, the same message is transmitted 3 times on different and random frequencies, increasing its chances of being received. }
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/sigfox-spectrum.png} }
-\caption{Emissions radio liées à l'envoi de trame Sigfox.}
+\lgf{\caption{Émissions radio liées à l'envoi de trame Sigfox.}}
+\lge{\caption{Radio emissions related to the sending of Sigfox frames.}}
 \label{fig-sigfox-spectrum}
 \end{figure}
 
-\section{Récupération des données}
+\lgf{\section{Récupération des données}}
+\lge{\section{Data retrieval}}
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/wBccbspakV0}
 \end{wrapfigure}
 
+\lgf{L'idéal serait d’avoir directement accès à ces données pour pouvoir les manipuler dans un programme. Pour ce faire, nous pouvons utiliser l’API REST développée par Sigfox.
+Dans l’onglet \textit{DEVICE} (figure~\vref{fig-sigfox-device}), il faut cliquer cette fois ci sur~:}
+\lge{Ideally, we would like to have direct access to this data in order to manipulate it in a program. To do this, we can use the REST API developed by Sigfox. In the tab \textit{DEVICE} (figure~\vref{fig-sigfox-device}), we have to click this time on:}
 
-L'idéal serait d’avoir directement accès à ces données pour pouvoir les manipuler dans un programme. Pour ce faire, nous pouvons utiliser l’API REST développée par Sigfox.
-Dans l’onglet \textit{DEVICE} (figure~\vref{fig-sigfox-device}), il faut cliquer cette fois ci sur~:
 \begin{itemize}
-    \item le nom de votre groupe~;
-    \item dans le menu de gauche, sur \texit{API ACCESS}~;
-    \item en haut à droite, sur le tout petit bouton \textit{New}.
+    \item 
+        \lgf{le nom de votre groupe~;}
+        \lge{the name of your group;}
+    \item  
+        \lgf{dans le menu de gauche, sur \texit{API ACCESS}~;}
+        \lge{from the left-hand menu, select \texit{API ACCESS};}
+    \item  
+        \lgf{en haut à droite, sur le tout petit bouton \textit{New}.}
+        \lge{at the top right, on the very small button \textit{New}.}
 \end{itemize}
 
-Une page similaire à la figure~\vref{fig-sigfox-api} s'affiche. Donnez un nom à cet accès et choisissez, dans le menu \textit{Profiles} le choix \textit{DEVICE MESSAGE [R]} pour avoir le droit de lire les messages. Puis évidemment, sur \texit{Ok}.
+\lgf{Une page similaire à la figure~\vref{fig-sigfox-api} s'affiche. Donnez un nom à cet accès et choisissez, dans le menu \textit{Profiles} le choix \textit{DEVICE MESSAGE [R]} pour avoir le droit de lire les messages. Puis évidemment, sur \texit{Ok}.}
+\lge{A page similar to figure~ref{fig-sigfox-api} is displayed. Give a name to this access and choose, in the menu \textit{Profiles} the choice \textit{DEVICE MESSAGE [R]} to have the right to read the messages. Then, of course, click on \texit{Ok}.}
+
 
      \vspace{1em}
 
-Vous voyez apparaître une nouvelle page avec deux champs en hexadécimal : \textit{login} et \textit{password}, que vous devez, comme pour l'API de Beebotte, noter quelqe part ou apprendre par cœur pour la suite.
+\lgf{Vous voyez apparaître une nouvelle page avec deux champs en hexadécimal~: \textit{login} et \textit{password}, que vous devez, comme pour l'API de Beebotte, noter quelqe part ou apprendre par cœur pour la suite.}
+\lge{You see a new page with two fields in hexadecimal: \textit{login} and \textit{password}, that you must, as for the Beebotte API, write down somewhere or learn by heart for the following.}
 
-Le mieux étant de remplir un fichier de configuration avec ces valeurs comme le montre le programme \lprog{config\_sigfox.py}{pycom}.
+\lgf{Le mieux étant de remplir un fichier de configuration avec ces valeurs comme le montre le programme \lprog{config\_sigfox.py}{pycom}.}
+\lge{The best is to fill a configuration file with these values as shown in the program \lprog{config\_sigfox.py}{pycom}.}
+
 
 \pycomlst{config\_sigfox.py}
 
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/sigfox-api-access.png} }
-\caption{Configuration de l'API REST.}
+\lgf{\caption{Configuration de l'API REST.}}
+\lge{\caption{REST API configuration.}}
 \label{fig-sigfox-api}
 \end{figure}
 
      \vspace{1em}
 
-Tous les éléments sont maintenant réunis pour émettre un relevé de température en utilisant le réseau Sigfox. 
+\lgf{Tous les éléments sont maintenant réunis pour émettre un relevé de température en utilisant le réseau Sigfox. }
+\lge{All the elements are now in place to transmit a temperature reading using the Sigfox network. }
 
 \subsection{Sur le serveur}
-Nous avons les clés d’accès à l’API, il suffit maintenant d’écrire un petit script Python.
 
-Pour des raisons de sécurité, nous vous invitons à prendre l'habitude de mettre les informations sensibles dans un fichier séparé.
+\lgf{Nous avons les clés d’accès à l’API, il suffit maintenant d’écrire un petit script Python.}
+\lge{We have the access keys to the API, now we just need to write a small Python script.}
 
-Le programme \pprog{device\_messages.py}{plido-tp3} permet de lister les messages reçus par Sigfox pour un objet particulier sur votre ordinateur.
+\lgf{Pour des raisons de sécurité, nous vous invitons à prendre l'habitude de mettre les informations sensibles dans un fichier séparé.}
+\lge{For security reasons, we invite you to make a habit of putting sensitive information in a separate file.}
+
+\lgf{Le programme \pprog{device\_messages.py}{plido-tp3} permet de lister les messages reçus par Sigfox pour un objet particulier sur votre ordinateur.}
+\lge{The program \pprog{device\_messages.py}{plido-tp3} allows to list the messages received by Sigfox for a particular object on your computer.}
+
 
 \pythonlst{device\_messages.py}
 
 Le programme~:
 \begin{itemize}
-    \item Ligne 1, importe le module \texttt{requests} pour pouvoir envoyer des requêtes http à un serveur.
-    \item Ligne 3, le module \pfunction{requests}{HTTPBasicAuth} est utilisé pour s'identifier de façon simple en utilisant un login et un mode de passe.
-    \item Ligne 6 ce login et ce mot de passe sont extrait du fichier rempli au chapitre précédent lors de la création de l'API REST.
-    \item Ligne 9, l’URL comportant l’ID de l'objet est construite et 
-    \item ligne 13 la requête HTTP est envoyée avec la méthode d’authentification basée sur le mot de passe. la variable  \texttt{r} est une structure contenant plusieurs informations. 
-    \item lignes 14 à 17, Si le code retourné est 200, tout s’est bien passé et r.text contient la réponse.
-    \item ligne 19, cette réponse est une chaîne de caractères qui est désérialisée de la représentation JSON pour en faire une structure Python grâce à la fonction \pfunction{json}{loads}.
-    \item ligne 20, la réponse est affichée et ensuite certains éléments sont donnés. On y retrouve tous les messages qui ont été émis par le LoPy.
+    \item 
+        \lgf{Ligne 1, importe le module \texttt{requests} pour pouvoir envoyer des requêtes http à un serveur.}
+        \lge{Line 1, import the module \texttt{requests} to be able to send http requests to a server.}
+    \item  
+        \lgf{Ligne 3, le module \pfunction{requests}{HTTPBasicAuth} est utilisé pour s'identifier de façon simple en utilisant un login et un mode de passe.}
+        \lge{Line 3, the module \pfunction{requests}{HTTPBasicAuth} is used to identify itself in a simple way using a login and a password.}
+    \item  
+        \lgf{Ligne 6 ce login et ce mot de passe sont extrait du fichier rempli au chapitre précédent lors de la création de l'API REST.}
+        \lge{Line 6 this login and password are extracted from the file filled in the previous chapter when the REST API was created.}
+    \item  
+        \lgf{Ligne 9, l’URL comportant l’ID de l'objet est construite et }
+        \lge{Line 9, the URL with the object ID is built and }
+    \item  
+        \lgf{ligne 13 la requête HTTP est envoyée avec la méthode d’authentification basée sur le mot de passe. la variable  \texttt{r} est une structure contenant plusieurs informations. }
+        \lge{line 13 the HTTP request is sent with the authentication method based on the password. the variable \texttt{r} is a structure containing several information. }
+    \item  
+        \lgf{Lignes 14 à 17, Si le code retourné est 200, tout s’est bien passé et \texttt{r.text} contient la réponse.}
+        \lge{Lines 14 to 17, If the returned code is 200, everything went well and \texttt{r.text} contains the answer.}
+    \item  
+        \lgf{Ligne 19, cette réponse est une chaîne de caractères qui est désérialisée de la représentation JSON pour en faire une structure Python grâce à la fonction \pfunction{json}{loads}.}
+        \lgf{Line 19, this response is a string that is deserialized from the JSON representation to a Python structure using the function \pfunction{json}{loads}.}
+    \item  
+        \lgf{Ligne 20, la réponse est affichée et ensuite certains éléments sont donnés. On y retrouve tous les messages qui ont été émis par le LoPy.}
+        \lge{Line 20, the answer is displayed and then some elements are given. All the messages that have been sent by the LoPy are shown.}
     \end{itemize}
 
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@]
->python3 device_messages.py
+>@\textbf{python3 device\_messages.py}@
 https://backend.sigfox.com/api/v2/devices/1B28CF4/messages
 200
 {'data': [{'country': 'FRA',
@@ -211,32 +268,50 @@ https://backend.sigfox.com/api/v2/devices/1B28CF4/messages
 1640279155000: 11 48692120536967666f78   [b'Hi! Sigfox']  received 0
 \end{termc}
 
-La fin de la trace affiche un résumé plus lisble de l'information reçue~:
+\lgf{La fin de la trace affiche un résumé plus lisble de l'information reçue~:}
+\lge{The end of the trace displays a more readable summary of the information received:}
 
 \begin{itemize}
-    \item  \texttt{time} donne l’heure de réception codée suivant le format \Index{Epoch}, évoqué lors de la communication avec Beebotte au chapitre précédent~;
-    \item \texttt{seqNumber} contient le numéro de la trame et est remis a 0 quand l’objet est reflashé. Il permet de détecter des pertes de données si les numéros ne sont pas contigu~; 
-    \item "data" contient les données codées dans une chaîne hexadécimale. Le programme utilise la fonction \pfunction{binascii}{unhexifily} pour la reconvertir en séquence d’octets qui peuvent être affichés s’il s’agit de caractères ACSII~;
-    \item \texttt{rinfos} donne les informations sur les différentes passerelles radio de l’opérateur qui ont reçu le message.
+    \item  
+        \lgf{\texttt{time} donne l’heure de réception codée suivant le format \Index{Epoch}, évoqué lors de la communication avec Beebotte au chapitre précédent~;}
+        \lge{\texttt{time} gives the reception time coded according to the format \Index{Epoch}, mentioned during the communication with Beebotte in the previous chapter~;}
+    \item  
+        \lgf{\texttt{seqNumber} contient le numéro de la trame et est remis a 0 quand l’objet est reflashé. Il permet de détecter des pertes de données si les numéros ne sont pas contigu~; }
+        \lge{\texttt{seqNumber} contains the frame number and is reset to 0 when the object is reflashed. It allows to detect data loss if the numbers are not contiguous; }
+    \item  
+        \lgf{"data" contient les données codées dans une chaîne hexadécimale. Le programme utilise la fonction \pfunction{binascii}{unhexifily} pour la reconvertir en séquence d’octets qui peuvent être affichés s’il s’agit de caractères ACSII~;}
+        \lge{"data" contains the data encoded in a hexadecimal string. The program uses the function \pfunction{binascii}{unhexifily} to convert it back into a sequence of bytes that can be displayed if they are ACSII~ characters;}
+    \item  
+        \lgf{\texttt{rinfos} donne les informations sur les différentes passerelles radio de l’opérateur qui ont reçu le message.}
+        \lge{\texttt{rinfos} gives the information about the different radio gateways of the operator that received the message.}
 \end{itemize}
 
 
+\lgf{\subsection{Sur le LoPy}}
+\lge{\subsection{On the LoPy}}
 
-
-\subsection{Sur le LoPy}
-
-Le programme \lprog{sigfox\_temperature.py}{pycom} est une adaptation de \lprog{wifi\_temperature.py}{pycom}, listing~\vref{prog-wifi-temp} dédié au Wi-Fi pour des transmission sur le réseau Sigfox.
+\lgf{Le programme \lprog{sigfox\_temperature.py}{pycom} est une adaptation de \lprog{wifi\_temperature.py}{pycom}, listing~\vref{prog-wifi-temp} dédié au Wi-Fi pour des transmission sur le réseau Sigfox.}
+\lge{The program \lprog{sigfox\_temperature.py}{pycom} is an adaptation of \lprog{wifi\_temperature.py}{pycom}, listing~\vref{prog-wifi-temp} dedicated to Wi-Fi for transmission on the Sigfox network.}
 
 \pycomlst{sigfox\_temperature.py}
 
 \begin{itemize}
-    \item ligne 5, la classe \pfunction{network}{Sigfox} du module \texttt{network} est installée~;
-    \item ligne 11, un objet \texttt{texttt} est instancié avec, ici, les paramètres pour l'Europe~;
-    \item ligne 12, au lieu de faire appel à \texttt{\Index{AF\_INET}} pour utiliser la pile protocolaire TCP/IP, la valeur \texttt{\Index{AF\_SIGFOX}} est utilisée.
-    \item ligne 14, la taille de la trame est fixée à 12 octets pour être compatible avec le réseau.
+    \item 
+        \lgf{ligne 5, la classe \pfunction{network}{Sigfox} du module \texttt{network} est installée~;}
+        \lge{line 5, the \pfunction{network}{Sigfox} class of the \texttt{network} module is set up;}
+    \item  
+        \lgf{ligne 11, un objet \texttt{texttt} est instancié avec, ici, les paramètres pour l'Europe~;}
+        \lge{line 11, an object \texttt{texttt} is instantiated with, here, the parameters for Europe;}
+    \item  
+        \lgf{ligne 12, au lieu de faire appel à \texttt{\Index{AF\_INET}} pour utiliser la pile protocolaire TCP/IP, la valeur \texttt{\Index{AF\_SIGFOX}} est utilisée.}
+        \lge{line 12, instead of using \texttt{\Index{AF\_INET}} to use the TCP/IP protocol stack, the value \texttt{\Index{AF\_SIGFOX}} is used.}
+    \item  
+        \lgf{ligne 14, la taille de la trame est fixée à 12 octets pour être compatible avec le réseau.}
+        \lge{line 14, the size of the frame is fixed at 12 bytes to be compatible with the network.}
 \end{itemize}
 
-Le programme s'exécute sur le LoPy.
+\lgf{Le programme s'exécute sur le LoPy.}
+\lge{The program runs on the LoPy.}
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\tiny, escapechar=@]
 >>> Running sigfox_temperature.py
@@ -266,7 +341,8 @@ Le programme s'exécute sur le LoPy.
 [1954, -4, -1] 6
 \end{termc}
 
-Le  programme \pprog{device\_messages.py}{plido-tp3} récupère également ces valeurs depuis l'ordinateur.
+\lgf{Le  programme \pprog{device\_messages.py}{plido-tp3} récupère également ces valeurs depuis l'ordinateur.}
+\lge{The program \pprog{device\_messages.py}{plido-tp3} also retrieves these values from the computer.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@]
 1640281923000: 15 891907cf2b24272825020024  [b"\x89\x19\x07\xcf+$'(%\x02\x00$"] received 0
@@ -276,7 +352,8 @@ Le  programme \pprog{device\_messages.py}{plido-tp3} récupère également ces v
 1640279155000: 11 48692120536967666f78      [b'Hi! Sigfox']      received 0
 \end{termc}
 
-Attention suivant les variations de la température, le message CBOR grandit plus au moins vite. Dans le cas précédent, il y avait une émission toutes les 90 secondes, or l'abonnement au réseau Sigfox limite le nombre d'émission à 140 messages par jours. Au bout de 3 heures le quota de message sera épuisé. Cette petite période d'émission permet de tester plus rapidement les solutions, mais il convient d'augmenter la période pour une utilisation régulière.
+\lgf{Attention suivant les variations de la température, le message CBOR grandit plus au moins vite. Dans le cas précédent, il y avait une émission toutes les 90 secondes, or l'abonnement au réseau Sigfox limite le nombre d'émission à 140 messages par jours. Au bout de 3 heures le quota de message sera épuisé. Cette petite période d'émission permet de tester plus rapidement les solutions, mais il convient d'augmenter la période pour une utilisation régulière.}
+\lge{Be careful, depending on the temperature variations, the CBOR message grows more or less quickly. In the previous case, there was an emission every 90 seconds, but the subscription to the Sigfox network limits the number of emission to 140 messages per day. At the end of 3 hours the quota of messages will be exhausted. This small period of emission allows to test more quickly the solutions, but it is advisable to increase the period for a regular use.}
 
 \subsection{requête GET depuis le serveur}\label{chap-sigfox-GET}
 
