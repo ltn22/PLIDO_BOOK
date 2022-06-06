@@ -355,69 +355,107 @@ https://backend.sigfox.com/api/v2/devices/1B28CF4/messages
 \lgf{Attention suivant les variations de la température, le message CBOR grandit plus au moins vite. Dans le cas précédent, il y avait une émission toutes les 90 secondes, or l'abonnement au réseau Sigfox limite le nombre d'émission à 140 messages par jours. Au bout de 3 heures le quota de message sera épuisé. Cette petite période d'émission permet de tester plus rapidement les solutions, mais il convient d'augmenter la période pour une utilisation régulière.}
 \lge{Be careful, depending on the temperature variations, the CBOR message grows more or less quickly. In the previous case, there was an emission every 90 seconds, but the subscription to the Sigfox network limits the number of emission to 140 messages per day. At the end of 3 hours the quota of messages will be exhausted. This small period of emission allows to test more quickly the solutions, but it is advisable to increase the period for a regular use.}
 
-\subsection{requête GET depuis le serveur}\label{chap-sigfox-GET}
+\lgf{\subsection{requête GET depuis le serveur}}
+\lge{\subsection{GET request from the server}}
+\label{chap-sigfox-GET}
 
-Côté ordinateur, la stratégie la plus simple à mettre en œuvre consiste à étendre le programme \pprog{device\_message.py}{plido-tp3} vu précédemment et d'interroger périodiquement le \textit{backend} de Sigfox pour voir si de nouvelles données sont arrivées. Cela donne le programme \pprog{display\_sigfox.py}{plido-tp3} suivant~:
+\lgf{Côté ordinateur, la stratégie la plus simple à mettre en œuvre consiste à étendre le programme \pprog{device\_message.py}{plido-tp3} vu précédemment et d'interroger périodiquement le \textit{backend} de Sigfox pour voir si de nouvelles données sont arrivées. Cela donne le programme \pprog{display\_sigfox.py}{plido-tp3} suivant~:}
+\lge{On the computer side, the simplest strategy to implement consists in extending the program \pprog{device\_message.py}{plido-tp3} seen previously and to periodically query the Sigfox \textit{backend} to see if new data arrived. This gives the following program \pprog{display\_sigfox.py}{plido-tp3}:}
+
 
 \pythonlst[firstline=1,lastline=14, firstnumber=1]{display\_sigfox.py}
 
-Les importations incluent les modules pour envoyer les données à Beebotte et pour interroger Sigfox. Ligne 14, la communication avec les serveur de Beebotte est établie en utilisant les secrets du module \texttt{config\_btt}.
+\lgf{Les importations incluent les modules pour envoyer les données à Beebotte et pour interroger Sigfox. Ligne 14, la communication avec les serveur de Beebotte est établie en utilisant les secrets du module \texttt{config\_btt}.}
+\lge{The imports include the modules to send data to Beebotte and to query Sigfox. Line 14, the communication with the Beebotte server is established using the secrets of the module \texttt{config\_btt}.}
+
 
 \pythonnxt[firstline=41,lastline=54, firstnumber=41]{display\_sigfox.py}
 
-la fonction \texttt{to\_bbt} n'a pas été modifiée, on passe donc à la récupération des données sur les serveurs de Sigfox. Le programme va interroger régulièrement le serveur de Sigfox pour récupérer les nouveaux messages. Comme Sigfox stocke l'ensemble des messages reçu, cela peut conduire à un trafic conséquent. Pour limiter le trafic, le programme n'affichera que les nouvelles données qui arrivent pendant son exécution. 
+\lgf{la fonction \texttt{to\_bbt} n'a pas été modifiée, on passe donc à la récupération des données sur les serveurs de Sigfox. Le programme va interroger régulièrement le serveur de Sigfox pour récupérer les nouveaux messages. Comme Sigfox stocke l'ensemble des messages reçu, cela peut conduire à un trafic conséquent. Pour limiter le trafic, le programme n'affichera que les nouvelles données qui arrivent pendant son exécution. }
+\lge{the function \texttt{to\_bbt} was not modified, one thus passes to the recovery of the data on the servers of Sigfox. The program will regularly query the Sigfox server to get the new messages. As Sigfox stores all the messages received, this can lead to a significant traffic. To limit the traffic, the program will display only the new data that arrive during its execution. }
 
-Le programme~:
+
+\lgf{Le programme~:}
+\lge{The program:}
 
 \begin{itemize}
-    \item ligne 41, construit l'URL pour la requête en incluant l'identificateur du LoPy~; 
-    \item ligne 42, initialise la variable \texttt{last\_epoch}. Elle contient l'epoch du dernier message reçu par Sigfox pour cet objet~;
-    \item ligne 45, une structure JSON est créée, elle contient la clé \texttt{limit} et la valeur \texttt{1}, pour indiquer à Sigfox que l'on souhaite recevoir en réponse que le dernier message reçu~;
-    \item lignes 46 à 51, la requête est envoyée avec le paramètre précédemment défini. Si le status n'est pas \texttt{200}, le programme s'arrête.
-    \item lignes 53 et 54, la variable \texttt{last\_epoch} reçoit l'instant d'arrivée du dernière message. 
+    \item 
+        \lgf{ligne 41, construit l'URL pour la requête en incluant l'identificateur du LoPy~; }
+        \lge{line 41, builds the URL for the query by including the LoPy identifier; }
+    \item  
+        \lgf{ligne 42, initialise la variable \texttt{last\_epoch}. Elle contient l'epoch du dernier message reçu par Sigfox pour cet objet~;}
+        \lge{line 42, initializes the variable \texttt{last_epoch}. It contains the epoch of the last message received by Sigfox for this object;}
+    \item  
+        \lgf{ligne 45, une structure JSON est créée, elle contient la clé \texttt{limit} et la valeur \texttt{1}, pour indiquer à Sigfox que l'on souhaite recevoir en réponse que le dernier message reçu~;}
+        \lge{line 45, a JSON structure is created, it contains the key \texttt{limit} and the value \texttt{1}, to indicate to Sigfox that we wish to receive in answer that the last received message;}
+    \item  
+        \lgf{lignes 46 à 51, la requête est envoyée avec le paramètre précédemment défini. Si le status n'est pas \texttt{200}, le programme s'arrête.}
+        \lge{lines 46 to 51, the request is sent with the previously defined parameter. If the status is not \texttt{200}, the program stops.}
+    \item  
+        \lgf{lignes 53 et 54, la variable \texttt{last\_epoch} reçoit l'instant d'arrivée du dernière message. }
+        \lge{lines 53 and 54, the variable \texttt{last\_epoch} receives the instant of arrival of the last message. }
 \end{itemize}
 
 \pythonnxt[firstline=56,lastline=57, firstnumber=56]{display\_sigfox.py}
 
-Un délais de 10 secondes est introduit entre deux requêtes, car Sigfox limite le nombres de requête pour éviter la saturation de ses serveurs.
+\lgf{Un délais de 10 secondes est introduit entre deux requêtes, car Sigfox limite le nombres de requête pour éviter la saturation de ses serveurs.}
+\lge{A delay of 10 seconds is introduced between two requests, because Sigfox limits the number of requests to avoid saturation of its servers.}
 
 
 \pythonnxt[firstline=59,lastline=73, firstnumber=59]{display\_sigfox.py}
 
-Le programme entre dans une boucle sans fin où il va interroger régulièrement le serveur Sigfox. Les interrogations sont identiques à la précédente, mais le paramètre contient un objet JSON avec la clé \texttt{since} et l'epoch. Si la réponse à la requête n'est pas \texttt{200: OK}, le programme s'arrête.
+\lgf{Le programme entre dans une boucle sans fin où il va interroger régulièrement le serveur Sigfox. Les interrogations sont identiques à la précédente, mais le paramètre contient un objet JSON avec la clé \texttt{since} et l'epoch. Si la réponse à la requête n'est pas \texttt{200: OK}, le programme s'arrête.}
+\lge{The program enters an endless loop where it will regularly query the Sigfox server. The queries are identical to the previous one, but the parameter contains a JSON object with the key \texttt{since} and the epoch. If the answer to the request is not \texttt{200: OK}, the program stops.}
+
 
 
 \pythonnxt[firstline=75,lastline=91, firstnumber=75]{display\_sigfox.py}
 
-La structure JSON reçue est désérialisée ligne 75 pour en faire un tableau de messages enrichis de paramètres ajoutés par Sigfox. Pour chacun de ces éléments qui correspondent aux nouveaux messages reçus, Le programme va faire avancer la variable \textt{last\_epoch} sur la plus grande valeur (lignes 78 et 79), puis ligne 87 va prendre les données indiquées par la clé \texttt{data} dans le dictionnaire. Ces données, correspondent au tableau CBOR envoyé par l'objet, codés en uen chaine de caractère hexadécimaux. La fonction \pfunction{binascii}{unhexilify} la convertie en sequence binaire dans une chaîne d'octet puis \pfunction{cbor2}{loads} transforme le tableau CBOR en un tableau Python.
+\lgf{La structure JSON reçue est désérialisée ligne 75 pour en faire un tableau de messages enrichis de paramètres ajoutés par Sigfox. Pour chacun de ces éléments qui correspondent aux nouveaux messages reçus, Le programme va faire avancer la variable \textt{last\_epoch} sur la plus grande valeur (lignes 78 et 79), puis ligne 87 va prendre les données indiquées par la clé \texttt{data} dans le dictionnaire. Ces données, correspondent au tableau CBOR envoyé par l'objet, codés en uen chaine de caractère hexadécimaux. La fonction \pfunction{binascii}{unhexilify} la convertie en sequence binaire dans une chaîne d'octet puis \pfunction{cbor2}{loads} transforme le tableau CBOR en un tableau Python.}
+\lge{The received JSON structure is deserialized line 75 to make an array of messages enriched with parameters added by Sigfox. For each of these elements which correspond to the new received messages, the program will advance the variable \textt{last\_epoch} on the greatest value (lines 78 and 79), then line 87 will take the data indicated by the key \texttt{data} in the dictionary. These data, correspond to the CBOR array sent by the object, coded in a hexadecimal character string. The function \pfunction{binascii}{unhexilify} converts it into a binary sequence in a byte string then \pfunction{cbor2}{loads} transforms the CBOR array into a Python array.}
 
-Ligne 91 et 92, la fonction \texttt{\Index{to\_btt}} (ligne 16 à 39 non représenté dans ce listing) est appelée. Elle est identique à celle qui avait été présentée au chapitre précédent. Mais comme la procédure est asynchrone, le programme traite les données quand il en fait la demande, pas quand le capteur émet des données, le timestamp doit être celui indiqué par Sigfox, il est passé dans le paramètre \texttt{epoch}.
+\lgf{Ligne 91 et 92, la fonction \texttt{\Index{to\_btt}} (ligne 16 à 39 non représenté dans ce listing) est appelée. Elle est identique à celle qui avait été présentée au chapitre précédent. Mais comme la procédure est asynchrone, le programme traite les données quand il en fait la demande, pas quand le capteur émet des données, le timestamp doit être celui indiqué par Sigfox, il est passé dans le paramètre \texttt{epoch}.}
+\lge{Line 91 and 92, the function \texttt{\Index{to\_btt}} (line 16 to 39 not represented in this listing) is called. It is identical to the one presented in the previous chapter. But as the procedure is asynchronous, the program treats the data when it makes the request, not when the sensor emits data, the timestamp must be that indicated by Sigfox, it is passed in the parameter \texttt{epoch}.}
+
 
 \pythonnxt[firstline=93,lastline=93, firstnumber=93]{display\_sigfox.py}
 
-Le programme attend 60 seconde avant de faire une nouvelle requête.
+\lgf{Le programme attend 60 seconde avant de faire une nouvelle requête.}
+\lge{The program waits 60 seconds before making a new request.}
 
 
-\subsection{requête POST vers le serveur}\label{chap-sigfox-POST}
+\lgf{\subsection{requête POST vers le serveur}}
+\lge{\subsection{POST request to the server}}
+\label{chap-sigfox-POST}
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/3y0U2E6x4kE}
 \end{wrapfigure}
 
-Nous avons dû modifier la logique du programme \pprog{display\_sigfox.py}{plido-tp3}. Au lieu d’attendre des données comme le faisait \texttt{display\_server.py} en Wi-Fi, il va chercher activement les données sur le \textit{backend}. Cela est imposé par les limitations de l’adressage IPv4 privé que vous avez certainement sur votre réseau local. En effet, il n’est pas possible d’être joint par l’extérieur, les connexions ne se font qu'à l’initiative de l’équipement qui a une adresse privée. Pour revenir au cas précédent où le \textit{backend} pourrait pousser des données, on peut soit faire tourner le programme sur une machine virtuelle dans le Cloud (ex : \ac{VPS} d’\acs{OVH}) ou configurer le \ac{NAT} de votre boîtier Internet pour autoriser des connexions entrantes sur un port particulier. C’est cette dernière option que nous allons détailler. Bien entendu, les caractéristiques des \ac{NAT} changent d’un opérateur à un autre ; nous ne pourrons pas détailler sa configuration.
+\lgf{Nous avons dû modifier la logique du programme \pprog{display\_sigfox.py}{plido-tp3}. Au lieu d’attendre des données comme le faisait \texttt{display\_server.py} en Wi-Fi, il va chercher activement les données sur le \textit{backend}. Cela est imposé par les limitations de l’adressage IPv4 privé que vous avez certainement sur votre réseau local. En effet, il n’est pas possible d’être joint par l’extérieur, les connexions ne se font qu'à l’initiative de l’équipement qui a une adresse privée. Pour revenir au cas précédent où le \textit{backend} pourrait pousser des données, on peut soit faire tourner le programme sur une machine virtuelle dans le Cloud (ex : \ac{VPS} d’\acs{OVH}) ou configurer le \ac{NAT} de votre boîtier Internet pour autoriser des connexions entrantes sur un port particulier. C’est cette dernière option que nous allons détailler. Bien entendu, les caractéristiques des \ac{NAT} changent d’un opérateur à un autre ; nous ne pourrons pas détailler sa configuration.}
+\lge{We had to change the logic of the program \pprog{display\_sigfox.py}{plido-tp3}. Instead of waiting for data as \texttt{display\_server.py} did in Wi-Fi, it will actively look for data on the \textit{backend}. This is imposed by the limitations of the private IPv4 addressing that you probably have on your local network. Indeed, it is not possible to be reached by the outside, the connections are only made at the initiative of the equipment which has a private address. To return to the previous case where the \textit{backend} could push data, one can either run the program on a virtual machine in the Cloud (e.g.: \ac{VPS} of \acs{OVH}) or configure the \ac{NAT} of your Internet box to authorize incoming connections on a particular port. It is this last option that we will detail. Of course, the characteristics of the NATs change from one operator to another; we will not be able to detail its configuration.}
 
-\subsubsection{Configuration du \textit{\Index{callback}}}
 
-Dans un premier temps, rendez-vous sur \url{https://backend.sigfox.com/device/list}, cliquez sur le nom de l’objet puis, dans le menu de gauche, sur \textit{Callback}, puis \textit{New}. Une page apparaît avec la possibilité de connecter l’objet à différentes plateformes. Nous choisissons \textit{Custom callback} car nous voulons garder notre indépendance.
-La figure~\vref{fig-sigfox-callback} montre le formulaire.
+\lgf{\subsubsection{Configuration du \textit{\Index{callback}}}}
+\lge{\subsubsection{\textit{\Index{callback} Configuration}}}
+
+\lgf{Dans un premier temps, rendez-vous sur \url{https://backend.sigfox.com/device/list}, cliquez sur le nom de l’objet puis, dans le menu de gauche, sur \textit{Callback}, puis \textit{New}. Une page apparaît avec la possibilité de connecter l’objet à différentes plateformes. Nous choisissons \textit{Custom callback} car nous voulons garder notre indépendance.
+La figure~\vref{fig-sigfox-callback} montre le formulaire.}
+\lge{First, go to \url{https://backend.sigfox.com/device/list}, click on the name of the object and then, in the left-hand menu, on \textit{Callback}, then \textit{New}. A page appears with the possibility of connecting the object to different platforms. We choose \textit{Custom callback} because we want to keep our independence.
+The figure~\vref{fig-sigfox-callback} shows the form.}
+
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/sigfox-callback.png} }
-\caption{Configuration d'un \textit{callback}.}
+\lgf{\caption{Configuration d'un \textit{callback}.}}
+\lge{\caption{\textit{callback} configuration.}}
 \label{fig-sigfox-callback}
 \end{figure}
 
-Ensuite, il faut déterminer l’adresse IP publique derrière votre \ac{NAT}\footnote{Un site comme \url{https://wtfismyip.com/} peut aider.}. L’URI de votre serveur sera quelque chose comme indiquée ci-dessous pour l'\textit{Url Pattern}, où \textit{aaa.bbb.ccc.ddd} représente l'adresse IP publique\footnote{Attention, certains opérateurs changent régulièrement l’adresse IP allouée au NAT. Il est donc préférable d’utiliser un DNS dynamique si vous voulez l’utiliser à long terme.}. 
+\lgf{Ensuite, il faut déterminer l’adresse IP publique derrière votre \ac{NAT}\footnote{Un site comme \url{https://wtfismyip.com/} peut aider.}. L’URI de votre serveur sera quelque chose comme indiquée ci-dessous pour l'\textit{Url Pattern}, où \textit{aaa.bbb.ccc.ddd} représente l'adresse IP publique\footnote{Attention, certains opérateurs changent régulièrement l’adresse IP allouée au NAT. Il est donc préférable d’utiliser un DNS dynamique si vous voulez l’utiliser à long terme.}.}
+\lge{Next, you need to determine the public IP address behind your \footnote{A site like \url{https://wtfismyip.com/} may help.}. The URI of your server will be something like shown below for the \textit{Url Pattern}, where \textit{aa.bbb.ccc.ddd} represents the public IP address{Attention, some operators regularly change the IP address allocated to NAT. It is therefore preferable to use a dynamic DNS if you want to use it in the long term}.}
+
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
 http://@\textit{aaa.bbb.ccc.ddd}@:9999/sigfox
@@ -426,60 +464,101 @@ http://@\textit{aaa.bbb.ccc.ddd}@:9999/sigfox
 
      \vspace{1em}
 
-Changez la méthode de \Index{GET} par un \Index{POST}, c’est quand même plus propre. Le GET étant un moyen de récupérer de l’information pas d’en transmettre si on veut rester compatible avec REST.
+\lgf{Changez la méthode de \Index{GET} par un \Index{POST}, c’est quand même plus propre. Le GET étant un moyen de récupérer de l’information pas d’en transmettre si on veut rester compatible avec REST.}
+\lge{Change the method of \Index{GET} by an \Index{POST}, it is still cleaner. The GET is a way to retrieve information, not to transmit it, if you want to remain compatible with REST.}
+
 
      \vspace{1em}
 
-Ce n’est pas fini. Il faut maintenant formater le contenu. Dans Content type, remplacez la valeur par \texttt{application/json} car c’est ce que l’on sait faire de mieux. Dans la fenêtre en dessous, nous allons définir notre format JSON avec deux clés : \textit{deviceId} et \texttt{data}, suivies de deux variables entre accolades que Sigfox remplacera par les vraies valeurs.
+\lgf{Ce n’est pas fini. Il faut maintenant formater le contenu. Dans Content type, remplacez la valeur par \texttt{application/json} car c’est ce que l’on sait faire de mieux. Dans la fenêtre en dessous, nous allons définir notre format JSON avec deux clés : \textit{deviceId} et \texttt{data}, suivies de deux variables entre accolades que Sigfox remplacera par les vraies valeurs.}
+\lge{It's not over yet. We now need to format the content. In Content type, replace the value by \texttt{application/json} because that's what we know best. In the window below, we will define our JSON format with two keys: \textit{deviceId} and \texttt{data}, followed by two variables in braces that Sigfox will replace with the real values.}
+
 
      \vspace{1em}
 
-Finalement, cliquez sur Ok. Maintenant, quand Sigfox recevra des données de l'objet, il enverra une requête POST à l'URI indiquée.
+\lgf{Finalement, cliquez sur Ok. Maintenant, quand Sigfox recevra des données de l'objet, il enverra une requête POST à l'URI indiquée.}
+\lge{Finally, click on Ok. Now, when Sigfox receives data from the object, it will send a POST request to the indicated URI.}
 
-\subsubsection{Configuration du NAT}
+\lgf{\subsubsection{Configuration du NAT}}
+\lge{\subsubsection{NAT configuration}}
 
-Il vous reste à configurer le NAT de votre routeur d’accès pour que les paquets à destination du port 9999 (valeur choisie dans l’URI) TCP soient envoyés à l’adresse privée de votre ordinateur. La démarche est généralement la même : configurer DHCP pour que votre ordinateur ait toujours la même adresse dans la maison puis configurer le NAT pour que les paquets adressés à un port soit envoyé à cet ordinateur.\footnote{Si vous ne pouvez pas le faire, vous pouvez casser votre tirelire pour vous acheter un \ac{VPS} avec une adresse IP publique pour quelques par mois. Dans ce cas, il faudra installer Python3 et les modules nécessaires (Beebotte, cbor2...)}
 
-\Index{Wireshark} peut vérifier que les requêtes traversent bien le NAT et arrive à votre ordinateur en regardant le trafic TCP sur le port 9999.
+\lgf{Il vous reste à configurer le NAT de votre routeur d’accès pour que les paquets à destination du port 9999 (valeur choisie dans l’URI) TCP soient envoyés à l’adresse privée de votre ordinateur. La démarche est généralement la même : configurer DHCP pour que votre ordinateur ait toujours la même adresse dans la maison puis configurer le NAT pour que les paquets adressés à un port soit envoyé à cet ordinateur.\footnote{Si vous ne pouvez pas le faire, vous pouvez casser votre tirelire pour vous acheter un \ac{VPS} avec une adresse IP publique pour quelques par mois. Dans ce cas, il faudra installer Python3 et les modules nécessaires (Beebotte, cbor2...)}}
+\lge{You still need to configure the NAT on your access router so that packets addressed to port 9999 (the value chosen in the URI) TCP are sent to the private address of your computer. The process is generally the same: configure DHCP so that your computer always has the same address in the house and then configure NAT so that packets addressed to a port are sent to that computer.\footnote{If you can't do that, you can break your piggy bank to buy a public IP address for a few per month. In this case, you will have to install Python3 and the necessary modules (Beebotte, cbor2...)}}
 
-\subsubsection{Traitement des requêtes POST}
 
-Les données contenues dans la requête POST venant du \textit{backend} de Sigfox seront transférer sur le lien \textit{\Index{loopback}} de l'ordinateur vers le port UDP 33033.
-Le programme \pprog{display\_server.py}{plido-tp3} attendant les données sur ce port pourra être utiliser pour transformer la série temporelle codée en CBOR en structure JSON attendue par Beebotte. De cette manière, nous banalisons le programme qui pourra traiter ces trois sources d’information~:
+\lgf{\Index{Wireshark} peut vérifier que les requêtes traversent bien le NAT et arrive à votre ordinateur en regardant le trafic TCP sur le port 9999.}
+\lge{\Index{Wireshark} can verify that requests are going through NAT and reaching your computer by looking at TCP traffic on port 9999.}
+
+\lgf{\subsubsection{Traitement des requêtes POST}}
+\lge{\subsubsection{POST request processing}}
+
+\lgf{Les données contenues dans la requête POST venant du \textit{backend} de Sigfox seront transférer sur le lien \textit{\Index{loopback}} de l'ordinateur vers le port UDP 33033.
+Le programme \pprog{display\_server.py}{plido-tp3} attendant les données sur ce port pourra être utiliser pour transformer la série temporelle codée en CBOR en structure JSON attendue par Beebotte. De cette manière, nous banalisons le programme qui pourra traiter ces trois sources d’information~:}
+\lge{The data contained in the POST request coming from the Sigfox \textit{backend} will be transferred on the \textit{Index{loopback}} link of the computer to the UDP port 33033.
+The program \pprog{display\_server.py}{plido-tp3} waiting for the data on this port will be able to be used to transform the time series coded in CBOR into JSON structure expected by Beebotte. In this way, we trivialize the program that will be able to process these three sources of information~:}
+
 \begin{itemize}
-    \item objet émulé par un programme Python,
-    \item LoPy avec Wi-Fi,
-    \item LoPy avec Sigfox,
-    \item et bientôt LoPy avec LoRaWAN.
+    \item 
+        \lgf{objet émulé par un programme Python,}
+        \lge{object emulated by a Python program,}
+    \item 
+        \lgf{LoPy avec Wi-Fi,}
+        \lge{LoPy with Wi-Fi,}
+    \item 
+        \lgf{LoPy avec Sigfox,}
+        \lge{LoPy with Sigfox,}
+    \item 
+        \lgf{et bientôt LoPy avec LoRaWAN.}
+        \lge{and soon LoPy with LoRaWAN.}
 \end{itemize}
 
      \vspace{1em}
 
- Le programme \pprog{generic\_relay.py}{plido-tp3} le fait pour Sigfox et différents serveurs LoRaWAN. Nous ne dévoilerons ici que les lignes liées au traitement de Sigfox.
+ \lgf{Le programme \pprog{generic\_relay.py}{plido-tp3} le fait pour Sigfox et différents serveurs LoRaWAN. Nous ne dévoilerons ici que les lignes liées au traitement de Sigfox.}
+ \lge{The program \pprog{generic\_relay.py}{plido-tp3} does it for Sigfox and various LoRaWAN servers. We will reveal here only the lines related to the treatment of Sigfox.}
+ 
  
  
  \pythonlst[firstline=54,lastline=68, firstnumber=54]{generic\_relay.py}
  
- On se rappelle du serveur \Index{Flask} que l'on avait vu au chapitre~\vref{chap-flask}, dans ce programme on retrouve les mêmes principes~:
+ \lgf{On se rappelle du serveur \Index{Flask} que l'on avait vu au chapitre~\vref{chap-flask}, dans ce programme on retrouve les mêmes principes~:}
+ \lge{We remember the server \Index{Flask} that we had seen in chapter~\vref{chap-flask}, in this program we find the same principles:}
+ 
  
  \begin{itemize}
-     \item ligne 54, le decorateur permet de lier la fonction \texttt{get\_from\_sigfox} au chemin d'URI \texttt{/sigfox} pour la methode POST.
-     \item ligne 57 désérialise le contenu du POST qui est contenu dans la variable \texttt{request}. Le paramètre \texttt{force} est là au cas où vous auriez oublié de mettre sur le \textit{backend} le format du contenu à \texttt{application/json}. Tout ce qu'il reçoit est considéré comme du JSON.
-     \item lignes 62 à 64, si le POST contient des données (clé \texttt{data} dans l'objet JSON, alors elles sont envoyées sur le lien \textit{loopback} via la fonction \texttt{forward\_data}
-     \item lignes 66 à 68, le POST est acquitté avec le status 200 pour indiquer que le traitement de la requête s'est bien déroulé.
+     \item 
+        \lgf{ligne 54, le decorateur permet de lier la fonction \texttt{get\_from\_sigfox} au chemin d'URI \texttt{/sigfox} pour la methode POST.}
+        \lge{line 54, the decorator allows to link the function \texttt{get\_from\_sigfox} to the URI path \texttt{/sigfox} for the POST method.}
+     \item  
+        \lgf{ligne 57 désérialise le contenu du POST qui est contenu dans la variable \texttt{request}. Le paramètre \texttt{force} est là au cas où vous auriez oublié de mettre sur le \textit{backend} le format du contenu à \texttt{application/json}. Tout ce qu'il reçoit est considéré comme du JSON.}
+        \lge{line 57 deserializes the content of the POST which is contained in the variable \texttt{request}. The \texttt{force} parameter is there in case you forgot to put on the \textit{backend} the format of the content to \texttt{application/json}. Everything it receives is considered as JSON.}
+     \item  
+        \lgf{lignes 62 à 64, si le POST contient des données (clé \texttt{data} dans l'objet JSON, alors elles sont envoyées sur le lien \textit{loopback} via la fonction \texttt{forward\_data}.}
+        \lge{lines 62 to 64, if the POST contains data (key \texttt{data} in the JSON object, then it is sent on the link \textit{loopback} via the function \texttt{forward\_data}.}
+     \item  
+        \lgf{lignes 66 à 68, le POST est acquitté avec le status 200 pour indiquer que le traitement de la requête s'est bien déroulé.}
+        \lge{lines 66 to 68, the POST is acknowledged with status 200 to indicate that the request has been processed successfully.}
  \end{itemize}
  
       \vspace{1em}
 
- A noter que la fonction \texttt{forward\_data} peut retourner une réponse qui sera envoyée au client HTTP. Pour Sigfox, cette possibilité n'est pas prise en compte car Sigfox n'autorise que 4 messages descendant par jour. Nous détaillerons son fonctionnement lorsque nous étudierons les réseaux LoRaWAN\footnote{Pour plus de détails sur l'envoi de messages descendant voir page~\pageref{chap—forward-data}.}.
+ \lgf{A noter que la fonction \texttt{forward\_data} peut retourner une réponse qui sera envoyée au client HTTP. Pour Sigfox, cette possibilité n'est pas prise en compte car Sigfox n'autorise que 4 messages descendant par jour. Nous détaillerons son fonctionnement lorsque nous étudierons les réseaux LoRaWAN\footnote{Pour plus de détails sur l'envoi de messages descendant voir page~\pageref{chap—forward-data}.}.}
+ \lge{Note that the function \texttt{forward\_data} can return a response that will be sent to the HTTP client. For Sigfox, this possibility is not taken into account because Sigfox authorizes only 4 downlink messages per day. We will detail its operation when we will study LoRaWAN networks. For more details on the sending of downlink messages see page~\pageref{chap-forward-data}.}
  
  \pythonnxt[firstline=192,lastline=217, firstnumber=192]{generic\_relay.py}
  
- La partie principale du programme analyse les arguments utilisés lors de son appel. Si l'option \texttt{-v} est utilisé, le programme affichera les messages relayés. D'autres options sont définies pour modifier les numéro de port. Ces dernières sont utiles si ces programmes sont lancés sur un même machine dans le cloud.
+ \lgf{La partie principale du programme analyse les arguments utilisés lors de son appel. Si l'option \texttt{-v} est utilisé, le programme affichera les messages relayés. D'autres options sont définies pour modifier les numéro de port. Ces dernières sont utiles si ces programmes sont lancés sur un même machine dans le cloud.}
+ \lge{The main part of the program analyzes the arguments used during its call. If the option \texttt{-v} is used, the program will display the relayed messages. Other options are defined to change the port numbers. These are useful if these programs are run on the same machine in the cloud.}
  
- \subsubsection{Exemple}
  
-L'exemple suivant trace le parcours d'une série temporelle depuis un LoPy jusuq'à son envoie au serveur Beebotte pour visualisation.
+ \lgf{\subsubsection{Exemple}}
+ \lge{\subsubsection{Example}}
+ 
+ 
+\lgf{L'exemple suivant trace le parcours d'une série temporelle depuis un LoPy jusuq'à son envoie au serveur Beebotte pour visualisation.}
+\lge{The following example traces the path of a time series from a LoPy to its sending to the Beebotte server for viewing.}
+
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 >>> Running sigfox_temperature.py
@@ -499,7 +578,9 @@ L'exemple suivant trace le parcours d'une série temporelle depuis un LoPy jusuq
 [1895, -4, -2, 1, -3, -1, 0, 0, 6, 2] 13
 \end{termc}
 
-Le LoPy collecte les mesures et construit sa série temporelle qui est envoyée quand la capacité de la trame est atteinte. Dans le cas de Sigfox, il s'agit de 12 octets, la dernière ligne montre que la capacité est dépassée, donc le dernier élément est retiré.
+\lgf{Le LoPy collecte les mesures et construit sa série temporelle qui est envoyée quand la capacité de la trame est atteinte. Dans le cas de Sigfox, il s'agit de 12 octets, la dernière ligne montre que la capacité est dépassée, donc le dernier élément est retiré.}
+\lge{The LoPy collects the measurements and builds its time series which is sent when the capacity of the frame is reached. In the case of Sigfox, it is 12 bytes, the last line shows that the capacity is exceeded, so the last element is removed.}
+
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@] 
  >python3.5 generic_relay.py -v
@@ -511,8 +592,8 @@ no DW
 185.110.98.2 - - [24/Dec/2021 10:14:26] "POST /sigfox HTTP/1.1" 200 -
 \end{termc}
 
-Le programme \pprog{generic\_relay.py}{plido-tp3} reçoit la requête POST du réseau Sigfox sur le chemin d'URI \texttt{/Sigfox}. Elle contient l'élément CBOR envoyé par le LoPy. Ces données sont envoyée sur le port 33033. Aucune réponse n'est reçue, la requête POST est simplement acquittée.
-
+\lgf{Le programme \pprog{generic\_relay.py}{plido-tp3} reçoit la requête POST du réseau Sigfox sur le chemin d'URI \texttt{/Sigfox}. Elle contient l'élément CBOR envoyé par le LoPy. Ces données sont envoyée sur le port 33033. Aucune réponse n'est reçue, la requête POST est simplement acquittée.}
+\lge{The program \pprog{generic\_relay.py}{plido-tp3} receives the POST request from the Sigfox network on the URI path \texttt{/Sigfox}. It contains the CBOR element sent by the LoPy. This data is sent on the port 33033. No response is received, the POST request is simply acknowledged.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@] 
  >python3 display_server.py
@@ -527,37 +608,55 @@ Le programme \pprog{generic\_relay.py}{plido-tp3} reçoit la requête POST du r�
  {'data': 18.92, 'resource': 'temperature', 'ts': 1640337266000.0}]
 \end{termc}
 
-Le programme \pprog{display\_server.py}{plido-tp3} traite la donnée CBOR reçue sur le port 33033 et la convertie dans le format JSON attendu par Beebotte.
+\lgf{Le programme \pprog{display\_server.py}{plido-tp3} traite la donnée CBOR reçue sur le port 33033 et la convertie dans le format JSON attendu par Beebotte.}
+\lge{The program \pprog{display_server.py}{plido-tp3} processes the CBOR data received on port 33033 and converts it into the JSON format expected by Beebotte.}
+
 
 \section{Conclusion}
 
-On a construit un prototype de capteur qui fonctionne sur Sigfox. À vous de l’améliorer. En particulier, il faut augmenter l’intervalle entre deux mesures qui a été fixé à 10 secondes pour ne pas avoir à faire des tests trop longs. Comme la taille d’un message est de 12 octets, CBOR va prendre 1 octet pour coder le tableau et la valeur de référence est codée sur 3 octets. Si les deltas sont petits, ils tiendront sur un octet. Il reste de la place pour 8 deltas. Donc, la période d’émission est de 90 secondes si les intervalles entre deux mesures restent à 10 secondes.
+\lgf{On a construit un prototype de capteur qui fonctionne sur Sigfox. À vous de l’améliorer. En particulier, il faut augmenter l’intervalle entre deux mesures qui a été fixé à 10 secondes pour ne pas avoir à faire des tests trop longs. Comme la taille d’un message est de 12 octets, CBOR va prendre 1 octet pour coder le tableau et la valeur de référence est codée sur 3 octets. Si les deltas sont petits, ils tiendront sur un octet. Il reste de la place pour 8 deltas. Donc, la période d’émission est de 90 secondes si les intervalles entre deux mesures restent à 10 secondes.}
+\lge{We have built a prototype sensor that works on Sigfox. It is up to you to improve it. In particular, you have to increase the interval between two measurements which has been fixed at 10 seconds to avoid having to make too long tests. As the size of a message is 12 bytes, CBOR will take 1 byte to encode the array and the reference value is encoded on 3 bytes. If the deltas are small, they will fit on one byte. There is still room for 8 deltas. So the transmission period is 90 seconds if the intervals between two measurements remain at 10 seconds.}
 
-Comme Sigfox n'autorise que 140 messages par jours, la durée de mesure ne sera que de 210 minutes par jours, soit 3 heures et demie. Il est donc préférable de prendre des intervalles plus grands. Vous pouvez calibrer votre LoPy et votre programme de réception pour pouvoir suivre la température sur une journée. N'oubliez pas de changer également cette période dans le programme  \pprog{display\_server.py}{plido-tp3}.
+
+\lgf{Comme Sigfox n'autorise que 140 messages par jours, la durée de mesure ne sera que de 210 minutes par jours, soit 3 heures et demie. Il est donc préférable de prendre des intervalles plus grands. Vous pouvez calibrer votre LoPy et votre programme de réception pour pouvoir suivre la température sur une journée. N'oubliez pas de changer également cette période dans le programme  \pprog{display\_server.py}{plido-tp3}.}
+\lge{As Sigfox allows only 140 messages per day, the measurement time will be only 210 minutes per day, or 3 hours and a half. It is therefore preferable to take larger intervals. You can calibrate your LoPy and your reception program to be able to track the temperature over a day. Do not forget to change also this period in the program \pprog{display\_server.py}{plido-tp3}.}
+
 
       \vspace{1em}
 
 
-Le programme \pprog{display\_server.py}{plido-tp3} permet de récolter des informations de plusieurs sources :
+\lgf{Le programme \pprog{display\_server.py}{plido-tp3} permet de récolter des informations de plusieurs sources~:}
+\lge{The program \pprog{display\_server.py}{plido-tp3} allows to collect information from several sources:}
 \begin{itemize}
-    \item un programme en local qui émule les mesures,
-    \item du réseau Wi-Fi,
-    \item par l'intermédiaire de \pprog{generic\_relay.py}{plido-tp3} provenant d'un réseau LPWAN.
+    \item 
+        \lgf{un programme en local qui émule les mesures,}
+        \lge{a local program that emulates the measures,}
+    \item 
+        \lgf{du réseau Wi-Fi,}
+        \lge{of the Wi-Fi network,}
+    \item 
+        \lgf{par l'intermédiaire de \pprog{generic\_relay.py}{plido-tp3} provenant d'un réseau LPWAN.}
+        \lge{via \pprog{generic\_relay.py}{plido-tp3} from an LPWAN network.}
 \end{itemize} 
 
       \vspace{1em}
 
 
-Nous avons notre convention de représentation de l'information basée sur CBOR pour définir une série temporelle. En revanche, nous avions été obligés de modifier le programme  \pprog{display\_server.py}{plido-tp3} quand nous étions passé d'une série temporelle représentant l'évolution de l'humidité à une autre traitant de la température et si la période change.
+\lgf{Nous avons notre convention de représentation de l'information basée sur CBOR pour définir une série temporelle. En revanche, nous avions été obligés de modifier le programme  \pprog{display\_server.py}{plido-tp3} quand nous étions passé d'une série temporelle représentant l'évolution de l'humidité à une autre traitant de la température et si la période change.}
+\lge{We have our convention of representing information based on CBOR to define a time series. On the other hand, we had to modify the program \pprog{display\_server.py}{plido-tp3} when we changed from a time series representing the evolution of humidity to another one dealing with temperature and if the period changes.}
 
       \vspace{1em}
 
-Nous avons vu la différence entre les requêtes GET et POST qui induisent des comportements différents. Si GET est plus universel et peut fonctionner derrière un NAT, il demande des interrogation régulières pour savoir si la ressource à changée on non. POST impose que le serveur soit accessible et ainsi l'expose, mais les résultats sont reçus \"instantanément\". 
+\lgf{Nous avons vu la différence entre les requêtes GET et POST qui induisent des comportements différents. Si GET est plus universel et peut fonctionner derrière un NAT, il demande des interrogation régulières pour savoir si la ressource à changée on non. POST impose que le serveur soit accessible et ainsi l'expose, mais les résultats sont reçus \"instantanément\". }
+\lge{We have seen the difference between GET and POST requests which induce different behaviors. If GET is more universal and can work behind a NAT, it requires regular queries to know if the resource has changed or not. POST requires the server to be accessible and thus exposes it, but the results are received "instantaneously". }
+
 
       \vspace{1em}
       
-La notion de client et de serveur est floue, il ne peut pas être attribuée à un programme ou à un équipement, par exemple, le programme \pprog{display\_server.py}{plido-tp3} est serveur pour Sigfox et client pour Beebotte. Le site de Sigfox est serveur, si l'on utilise une méthode GET pour obtenir les données et client s'il fait un POST.
+\lgf{La notion de client et de serveur est floue, il ne peut pas être attribuée à un programme ou à un équipement, par exemple, le programme \pprog{display\_server.py}{plido-tp3} est serveur pour Sigfox et client pour Beebotte. Le site de Sigfox est serveur, si l'on utilise une méthode GET pour obtenir les données et client s'il fait un POST.}
+\lge{The notion of client and server is vague, it cannot be attributed to a program or to an equipment, for example, the program \pprog{display\_server.py}{plido-tp3} is server for Sigfox and client for Beebotte. The Sigfox site is server, if we use a GET method to get the data and client if it makes a POST.}
       
       \vspace{1em}
 
-Pour revenir au paradigme de REST, nous avons, avec CBOR, défini le contenu de la ressource mais nous ne l'avons pas nommée. Le récepteur doit connaître le format (du CBOR contenant un série temporelle codée en différentiel) et ce qu'elle désigne.  C'est ce que nous allons voir dans la prochaine session avec le protocole \Index{CoAP} où nous pourrons définir, comme en HTTP, le nom de la ressource et son contenu.
+\lgf{Pour revenir au paradigme de REST, nous avons, avec CBOR, défini le contenu de la ressource mais nous ne l'avons pas nommée. Le récepteur doit connaître le format (du CBOR contenant un série temporelle codée en différentiel) et ce qu'elle désigne.  C'est ce que nous allons voir dans la prochaine session avec le protocole \Index{CoAP} où nous pourrons définir, comme en HTTP, le nom de la ressource et son contenu.}
+\lge{To return to the REST paradigm, with CBOR we have defined the content of the resource but we have not named it. The receiver needs to know the format (of the CBOR containing a differentially encoded time series) and what it is.  This is what we will see in the next session with the \Index{CoAP} protocol where we will be able to define, as in HTTP, the name of the resource and its content.}

@@ -8,32 +8,46 @@
 \end{wrapfigure}
 
 
-Avec \Index{Sigfox}, ce n’était que du bonheur ! Nous avions un environnement unique développé par un seul acteur. L’attachement d’un objet au réseau, la récupération des données s’en trouve grandement simplifiée.
+\lgf{Avec \Index{Sigfox}, ce n’était que du bonheur ! Nous avions un environnement unique développé par un seul acteur. L’attachement d’un objet au réseau, la récupération des données s’en trouve grandement simplifiée.}
+\lge{With \Index{Sigfox}, it was only happiness! We had a unique environment developed by a single actor. Attaching an object to the network, retrieving data was greatly simplified.}
 
-Avec \Index{LoRaWAN}, l'écosystème est plus complexe. Pour rappel, \Index{LoRa} est une modulation longue portée et LoRaWAN un protocole de niveau 2 qui a pour but de fédérer les acteurs (fabricants d’objets, utilisateurs d’objets, opérateur de réseaux) autour de la communication radio entre l’objet et le cœur de réseau appelé ici \ac{LNS} . Mais l’enregistrement des objets, le lien entre les applications et le LNS diffèrent d’un réseau à un autre.
+
+\lgf{Avec \Index{LoRaWAN}, l'écosystème est plus complexe. Pour rappel, \Index{LoRa} est une modulation longue portée et LoRaWAN un protocole de niveau 2 qui a pour but de fédérer les acteurs (fabricants d’objets, utilisateurs d’objets, opérateur de réseaux) autour de la communication radio entre l’objet et le cœur de réseau appelé ici \ac{LNS} . Mais l’enregistrement des objets, le lien entre les applications et le LNS diffèrent d’un réseau à un autre.}
+\lge{With \Index{LoRaWAN}, the ecosystem is more complex. As a reminder, \Index{LoRa} is a long range modulation and LoRaWAN is a level 2 protocol which aims to federate the actors (object manufacturers, object users, network operators) around the radio communication between the object and the network core called here \ac{LNS} . But the registration of objects, the link between applications and the LNS differ from one network to another.}
+
 
      \vspace{1em}
 
-Même si vous n’avez pas l’intention de mettre en œuvre le réseau Sigfox, nous vous recommandons de lire le chapitre précédent (ou à la rigueur de le survoler) car nous y ferons référence dans la suite du texte.
+\lgf{Même si vous n’avez pas l’intention de mettre en œuvre le réseau Sigfox, nous vous recommandons de lire le chapitre précédent (ou à la rigueur de le survoler) car nous y ferons référence dans la suite du texte.}
+\lge{Even if you do not intend to implement the Sigfox network, we recommend you to read the previous chapter (or at least to skim it) because we will refer to it in the following text.}
 
      \vspace{1em}
 
-LoRaWAN, comme Sigfox, opère dans la même bande de fréquences non licenciées. Il existe plusieurs opérateurs de réseaux LoRaWAN :
+\lgf{LoRaWAN, comme Sigfox, opère dans la même bande de fréquences non licenciées. Il existe plusieurs opérateurs de réseaux LoRaWAN~:}
+\lge{LoRaWAN, like Sigfox, operates in the same unlicensed frequency band. There are several LoRaWAN network operators:}
 
 \begin{itemize}
-    \item  \ac{TTN}\footnote{\url{https://www.thethingsnetwork.org/}} propose une approche communautaire. Chaque personne peut mettre à disposition des passerelles radio pour la communauté et inscrire des objets. TTN gère le cœur de réseau. Si cette approche est sympathique, la couverture va être très parcellaire et va dépendre de la densité de geeks dans une région. De plus, la couverture du réseau va dépendre de la position des antennes qui doivent être placées sur un point haut. Avoir une antenne sur son balcon n’implique pas une grande couverture de la zone. Si vous avez de la chance, vous pourrez peut-être bénéficier d’un accès via TTN. Nous verrons comment s’y connecter.
-    \item des opérateurs nationaux comme, en France, \Index{Orange} ou \Index{Bouygues Télécom}. Mais il faut généralement bourse délier pour connecter les objets et pour limiter l’usage du downlink ; l’envoi des messages vers les capteurs est facturé en supplément. En revanche, la couverture est supérieure.
-    \item les réseaux privés. Il est possible de faire tourner son propre LNS. Cela implique d’acheter des composants pour faire une passerelle radio. Mais il existe des mises en oeuvre ouvrete du LNS comme \Index{chirpstack}\footnote{\url{https://www.chirpstack.io/}}. 
-
+    \item  
+        \lgf{\ac{TTN}\footnote{\url{https://www.thethingsnetwork.org/}} propose une approche communautaire. Chaque personne peut mettre à disposition des passerelles radio pour la communauté et inscrire des objets. TTN gère le cœur de réseau. Si cette approche est sympathique, la couverture va être très parcellaire et va dépendre de la densité de geeks dans une région. De plus, la couverture du réseau va dépendre de la position des antennes qui doivent être placées sur un point haut. Avoir une antenne sur son balcon n’implique pas une grande couverture de la zone. Si vous avez de la chance, vous pourrez peut-être bénéficier d’un accès via TTN. Nous verrons comment s’y connecter.}
+        \lge{\ac{TTN}\footnote{\url{https://www.thethingsnetwork.org/}} proposes a community approach. Each person can provide radio gateways for the community and register objects. TTN manages the core network. If this approach is nice, the coverage will be very patchy and will depend on the density of geeks in a region. Furthermore the coverage of the network will depend on the position of the antennas which must be placed on a high point. Having an antenna on your balcony does not imply great coverage of the area. If you are lucky, you may be able to get access via TTN. We will see how to connect to it.}
+    \item   
+        \lgf{des opérateurs nationaux comme, en France, \Index{Orange} ou \Index{Bouygues Télécom}. Mais il faut généralement bourse délier pour connecter les objets et pour limiter l’usage du downlink ; l’envoi des messages vers les capteurs est facturé en supplément. En revanche, la couverture est supérieure.}
+        \lge{national operators such as, in France, \Index{Orange} or \Index{Bouygues Télécom}. But it is generally necessary to untie the purse to connect the objects and to limit the use of the downlink; the sending of messages to the sensors is charged extra. On the other hand, the coverage is superior.}
+    \item   
+        \lgf{les réseaux privés. Il est possible de faire tourner son propre LNS. Cela implique d’acheter des composants pour faire une passerelle radio. Mais il existe des mises en oeuvre ouvrete du LNS comme \Index{chirpstack}\footnote{\url{https://www.chirpstack.io/}}.} 
+        \lge{private networks. It is possible to run your own LNS. It implies to buy components to make a radio gateway. But there are open implementations of LNS like \Index{chirpstack}\footnote{url{https://www.chirpstack.io/}}.} 
 \end{itemize}
 
-\section{Information sur le LoPy}
+\lgf{\section{Information sur le LoPy}}
+\lge{\section{Information about LoPy}}
 
-Chaque objet va avoir un identifiant unique codé sur 64 bits appelé \textit{\Index{devEUI}}. Cette information est nécessaire pour faire entrer un équipement sur le réseau. Le programme \lprog{lorawan\_devEUI.py}{pycom} donne accès à cette valeur qui est unique pour chaque LoPy.
+\lgf{Chaque objet va avoir un identifiant unique codé sur 64 bits appelé \textit{\Index{devEUI}}. Cette information est nécessaire pour faire entrer un équipement sur le réseau. Le programme \lprog{lorawan\_devEUI.py}{pycom} donne accès à cette valeur qui est unique pour chaque LoPy.}
+\lge{Each object will have a unique identifier coded on 64 bits called \textit{Index{devEUI}}. This information is necessary to enter a device on the network. The program \lprog{lorawan\_devEUI.py}{pycom} gives access to this value which is unique for each LoPy.}
 
 \pycomlst{lorawan\_devEUI.py}\label{prog-devEUI}
 
-L’objet Python \pfunction{network}{LoRa} est importé du module \texttt{network} et une instance est créée ligne 5. La variable \texttt{mac} va stocker l’adresse MAC (autre nom du \textit{devEUI}) retournée par l’objet \texttt{lora} et l'afficher en hexadécimal, comme le montre l’exemple suivant~:
+\lgf{L’objet Python \pfunction{network}{LoRa} est importé du module \texttt{network} et une instance est créée ligne 5. La variable \texttt{mac} va stocker l’adresse MAC (autre nom du \textit{devEUI}) retournée par l’objet \texttt{lora} et l'afficher en hexadécimal, comme le montre l’exemple suivant~:}
+\lge{The Python object \pfunction{network}{LoRa} is imported from the module \texttt{network} and an instance is created line 5. The variable \texttt{mac} will store the MAC address (another name for the \textit{devEUI}) returned by the \texttt{lora} object and display it in hexadecimal, as shown in the following example:}
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 >>> Running lorawan_devEUI.py
@@ -43,17 +57,24 @@ L’objet Python \pfunction{network}{LoRa} est importé du module \texttt{networ
 devEUI:  b'70b3d54994c61237'
 \end{termc}
 
-On a le \textit{devEUI}. Il manque encore 3 informations :
+\lgf{On a le \textit{devEUI}. Il manque encore 3 informations :}
+\lge{We have the \textit{devEUI}. There are still 3 pieces of information missing:}
 
 \begin{itemize}
-    \item \textit{\Index{appEUI}} : c’est un identifiant sur 64 bits comme le \textit{devEUI} qui va servir à identifier l’application. On peut le mettre à 0 ;
-   \item \textit{\Index{AppKey}} : c’est une valeur sur 128 bits qui n’est connue que de l’objet et du LNS. Elle permet de dériver les clés de chiffrement utilisées par la suite ;
+    \item 
+        \lgf{\textit{\Index{appEUI}} : c’est un identifiant sur 64 bits comme le \textit{devEUI} qui va servir à identifier l’application. On peut le mettre à 0~;}
+        \lge{\textit{\Index{appEUI}}: it is an identifier on 64 bits like the \textit{devEUI} which will be used to identify the application. It can be set to 0;}
+   \item 
+        \lgf{\textit{\Index{AppKey}} : c’est une valeur sur 128 bits qui n’est connue que de l’objet et du LNS. Elle permet de dériver les clés de chiffrement utilisées par la suite ;}
+        \lge{\textit{\Index{AppKey}} : it is a value on 128 bits which is known only by the object and the LNS. It allows to derive the encryption keys used afterwards;}
 
 \end{itemize}
 
      \vspace{1em}
 
-Et sur le LNS, il faudra aussi configurer le connecteur~: il s’agit d’indiquer au LNS comment envoyer les données vers une application. Il peut s’agir de POST HTTP comme nous avons vu avec la configuration du \textit{\Index{backend}} avec Sigfox. Bien entendu, une fois ces grands principes établis, ça serait trop simple si tous les réseaux fonctionnaient de la même façon. Nous allons donc voir comment faire avec le réseau TTN. 
+\lgf{Et sur le LNS, il faudra aussi configurer le connecteur~: il s’agit d’indiquer au LNS comment envoyer les données vers une application. Il peut s’agir de POST HTTP comme nous avons vu avec la configuration du \textit{\Index{backend}} avec Sigfox. Bien entendu, une fois ces grands principes établis, ça serait trop simple si tous les réseaux fonctionnaient de la même façon. Nous allons donc voir comment faire avec le réseau TTN. }
+\lge{And on the LNS, it will also be necessary to configure the connector~: it is a question of indicating to the LNS how to send the data towards an application. It can be POST HTTP as we have seen with the configuration of the \textit{Index{backend}} with Sigfox. Of course, once these main principles are established, it would be too simple if all networks worked the same way. So we will see how to do with the TTN network. }
+
 
 \section{The Things Network}
 
@@ -62,47 +83,73 @@ Et sur le LNS, il faudra aussi configurer le connecteur~: il s’agit d’indiqu
 \Youtube{https://youtu.be/G69mjg80-mA}
 \end{wrapfigure}
 
+\lgf{The Things Network, ou TTN pour les intimes, est un réseau communautaire qui permet à tout un chacun de connecter soit une passerelle radio pour le bénéfice de la communauté, soit un objet. TTN se charge de faire tourner un LNS et de renvoyer les informations collectées à son propriétaire .On espère qu'un bon samaritain a déployé une antenne près de chez vous pour capter votre trafic. On n'a aucun moyen de savoir, si on n'essaye pas. }
+\lge{The Things Network, or TTN for short, is a community network that allows anyone to connect either a radio gateway for the benefit of the community, or an object. TTN takes care of running an LNS and sending the collected information back to its owner. We hope that a good samaritan has deployed an antenna near you to pick up your traffic. We have no way of knowing, if we don't try. }
 
-The Things Network, ou TTN pour les intimes, est un réseau communautaire qui permet à tout un chacun de connecter soit une passerelle radio pour le bénéfice de la communauté, soit un objet. TTN se charge de faire tourner un LNS et de renvoyer les informations collectées à son propriétaire .On espère qu'un bon samaritain a déployé une antenne près de chez vous pour capter votre trafic. On n'a aucun moyen de savoir, si on n'essaye pas. 
 
      \vspace{1em}
 
-La première étape consiste à se créer un compte, gratuit comme il se doit, sur le site de TTN~: \url{https://www.thethingsnetwork.org/}.
+\lgf{La première étape consiste à se créer un compte, gratuit comme il se doit, sur le site de TTN~: \url{https://www.thethingsnetwork.org/}.}
+\lge{The first step is to create an account, free as it should be, on the TTN~ website: \url{https://www.thethingsnetwork.org/}.}
 
      \vspace{1em}
 
 
-Une fois le formulaire de création de compte rempli et validé, vous disposez d’un accès au réseau TTN. 
-Votre identifiant apparaît en haut à droite de la page Web. 
+\lgf{Une fois le formulaire de création de compte rempli et validé, vous disposez d’un accès au réseau TTN. 
+Votre identifiant apparaît en haut à droite de la page Web. }
+\lge{Once the account creation form has been completed and validated, you will have access to the TTN network. 
+Your login appears in the top right corner of the web page. }
 
 \begin{itemize}
-    \item Cliquez sur votre nom,
-    \item sélectionnez Console,
-    \item puis votre zone géographique (cela n'a rien à voir avec le plan de fréquence. Il est préférable de choisir le serveur le plus proche pour optimiser les communications).
+    \item 
+        \lgf{Cliquez sur votre nom,}
+        \lge{Click on your name,}
+    \item 
+        \lgf{sélectionnez Console,}
+        \lge{choose Console,}
+    \item 
+        \lgf{puis votre zone géographique (cela n'a rien à voir avec le plan de fréquence. Il est préférable de choisir le serveur le plus proche pour optimiser les communications).}
+        \lge{then your geographical area (this has nothing to do with the frequency plan. It is better to choose the nearest server to optimize communications).}
 \end{itemize}
 
 
-On peut soit définir une application et y associer des objets, soit connecter une passerelle radio (\textit{Go To Gateways}). Par la suite, nous explorerons cette option si vous voulez installer votre propre passerelle radio. Nous allons nous intéresser à la création d'application en choisissant \textit{Go To Applications}. TTN vous invite à créer notre première application ; cliquez sur le lien \textit{+Add Application}.
+\lgf{On peut soit définir une application et y associer des objets, soit connecter une passerelle radio (\textit{Go To Gateways}). Par la suite, nous explorerons cette option si vous voulez installer votre propre passerelle radio. Nous allons nous intéresser à la création d'application en choisissant \textit{Go To Applications}. TTN vous invite à créer notre première application ; cliquez sur le lien \textit{+Add Application}.}
+\lge{You can either define an application and associate objects with it, or connect a radio gateway (\textit{Go To Gateways}). Later on, we will explore this option if you want to install your own radio gateway. We will focus on application creation by choosing \textit{Go To Applications}. TTN invites you to create our first application; click on the \textit{+Add Application} link.}
 
-\subsection*{Définir une application}
 
-Une application pour TTN va intégrer plusieurs objets LoRaWAN qui enverrons leur information à une application tournant sur un \ac{AS}. 
-Il faut remplir le formulaire (cf. figure~\vref{fig-ttn-app}) en indiquant :
+\lgf{\subsection*{Définir une application}}
+\lge{\subsection*{Define an application}}
+
+\lgf{Une application pour TTN va intégrer plusieurs objets LoRaWAN qui enverrons leur information à une application tournant sur un \ac{AS}. 
+Il faut remplir le formulaire (cf. figure~\vref{fig-ttn-app}) en indiquant~:}
+\lge{An application for TTN will integrate several LoRaWAN objects which will send their information to an application running on an AS. 
+The form (see figure~\vref{fig-ttn-app}) must be filled in by indicating:}
+
+
 \begin{itemize}
-    \item l'identifiant de l'application. Il s'agit d'un nom uniquement composé de lettres et de chiffres ainsi que du tiret. Il doit être unique pour TTN. Donc, faites preuve d'imagination car il doit être unique pour TTN. Ce nom se retrouvera dans les URI permettant de piloter l'application ;
-    \item le nom de l'application qui apparaîtra dans les menus. Il n'y a pas de contraintes ; il vaut mieux choisir quelque chose d'explicite ;
-    \item une description de l'application si nécessaire.
+    \item 
+        \lgf{l'identifiant de l'application. Il s'agit d'un nom uniquement composé de lettres et de chiffres ainsi que du tiret. Il doit être unique pour TTN. Donc, faites preuve d'imagination car il doit être unique pour TTN. Ce nom se retrouvera dans les URI permettant de piloter l'application ;}
+        \lge{the application identifier. It is a name composed only of letters and numbers and a dash. It must be unique for TTN. So be creative because it must be unique for TTN. This name will be found in the URIs allowing to drive the application;}
+    \item 
+        \lgf{le nom de l'application qui apparaîtra dans les menus. Il n'y a pas de contraintes ; il vaut mieux choisir quelque chose d'explicite ;}
+        \lge{the name of the application that will appear in the menus. There are no constraints; it is better to choose something explicit;}
+    \item 
+        \lgf{une description de l'application si nécessaire.}
+        \lge{a description of the application if necessary.}
 \end{itemize}
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=0.7\columnwidth]{Pictures/ttn-app.png} }
-\caption{Configuration d'une application.}
+\lgf{\caption{Configuration d'une application.}}
+\lge{\caption{Configuration of an application.}}
 \label{fig-ttn-app}
 \end{figure}
 
      \vspace{1em}
 
-Cliquez sur Create Application pour enregistrer cette application. Vous arrivez sur un page de contrôle de votre application.
+\lgf{Cliquez sur Create Application pour enregistrer cette application. Vous arrivez sur un page de contrôle de votre application.}
+\lge{Click on Create Application to register this application. You will be taken to a control page for your application.}
+
 
 \subsubsection*{Ajout d'un objet}
 
