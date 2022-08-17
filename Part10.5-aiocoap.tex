@@ -217,7 +217,8 @@ ACK  0x0001 EMPTY
 
          \vspace{1em}
 
-On n'obtient pas la réponse au GET, juste un acquittement. Pourtant, les log du serveur et l'analyse du réseau montrent bien que le serveur à répondu.
+\lgf{On n'obtient pas la réponse au GET, juste un acquittement. Pourtant, les log du serveur et l'analyse du réseau montrent bien que le serveur à répondu.}
+\lge{We don't get the response to the GET, just an acknowledgement. However, the server logs and the network analysis show that the server has responded.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@] 
 DEBUG:coap-server:Incoming message <aiocoap.Message at 0x7f3d997ace80: Type.CON GET (MID 1, empty token) remote 
@@ -228,7 +229,9 @@ DEBUG:coap-server:Sending message <aiocoap.Message at 0x7f3d99742748: Type.ACK E
 <UDP6EndpointAddress 192.168.1.79:52495 (locally 192.168.1.79%lo)>>
 \end{termc}
 
-Les trames qui ont circulé sur le réseau sont représentées figure~\vref{fig-get-time1}. Comme nous avons ajouté un délai de 5 secondes avant de répondre sur le serveur CoAP dans la méthode \texttt{render\_get}, le serveur acquitte la requête et cherche 5 secondes plus tard à envoyer une nouvelle requête confirmée. Mais le client, ayant fermé sa socket, ne peut plus la recevoir et retourne une erreur ICMP.
+\lgf{Les trames qui ont circulé sur le réseau sont représentées figure~\vref{fig-get-time1}. Comme nous avons ajouté un délai de 5 secondes avant de répondre sur le serveur CoAP dans la méthode \texttt{render\_get}, le serveur acquitte la requête et cherche 5 secondes plus tard à envoyer une nouvelle requête confirmée. Mais le client, ayant fermé sa socket, ne peut plus la recevoir et retourne une erreur ICMP.}
+\lge{The frames that have been circulating on the network are shown in figure~ref{fig-get-time1}. As we added a delay of 5 seconds before answering on the CoAP server in the method \texttt{render\_get}, the server acknowledges the request and tries 5 seconds later to send a new confirmed request. But the client, having closed its socket, cannot receive it anymore and returns an ICMP error.}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/get-time1.png}}
@@ -239,11 +242,15 @@ Les trames qui ont circulé sur le réseau sont représentées figure~\vref{fig-
          \vspace{1em}
 
 
-La solution est d'attendre un second message et de le décoder comme le montre le listing suivant qui donne le code du programme \lprog{coap\_get\_time2.py}{pycom} dans lequel vous n'aurez pas oublié de changer l'adresse IP du serveur.
+\lgf{La solution est d'attendre un second message et de le décoder comme le montre le listing suivant qui donne le code du programme \lprog{coap\_get\_time2.py}{pycom} dans lequel vous n'aurez pas oublié de changer l'adresse IP du serveur.}
+\lge{The solution is to wait for a second message and to decode it as shown in the following listing which gives the code of the program \lprog{coap\_get_time2.py}{pycom} in which you will not have forgotten to change the server IP address.}
+
 
 \pycomlst{coap\_get\_time2.py}
 
-Nous pouvons laisser éclater notre joie car nous avons la réponse :
+\lgf{Nous pouvons laisser éclater notre joie car nous avons la réponse :}
+\lge{We can let our joy explode because we have the answer:}
+
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 > python3 coap_get_time2.py
@@ -257,7 +264,9 @@ hex: b'323032312d30332d33302031343a3537'
 txt: b'2021-03-30 14:57'
 \end{termc}
 
-Mais notre joie est de courte durée car si on regarde plus attentivement la figure~\vref{fig-get-time2} le trafic sur le réseau, on voit que la réponse a été émise deux fois et que l'on retrouve ensuite une erreur ICMP. Cela est dû au fait que l'on n'acquitte pas le message venant du serveur. Le croyant perdu, il le retransmet et tombe sur une socket inexistante. 
+\lgf{Mais notre joie est de courte durée car si on regarde plus attentivement la figure~\vref{fig-get-time2} le trafic sur le réseau, on voit que la réponse a été émise deux fois et que l'on retrouve ensuite une erreur ICMP. Cela est dû au fait que l'on n'acquitte pas le message venant du serveur. Le croyant perdu, il le retransmet et tombe sur une socket inexistante.}
+\lge{But our joy is short-lived because if we look more closely at the figure~\vref{fig-get-time2} the traffic on the network, we see that the response was sent twice and that we then find an ICMP error. This is due to the fact that the message from the server is not acknowledged. Believing it to be lost, it retransmits it and finds a non-existent socket.}
+
 
 
 
@@ -269,11 +278,15 @@ Mais notre joie est de courte durée car si on regarde plus attentivement la fig
 
          \vspace{1em}
 
-Pour bien faire, nous devons fournir un acquittement au serveur avec ce code de client avec le programme \lprog{coap\_get\_time3.py}{pycom}.
+\lgf{Pour bien faire, nous devons fournir un acquittement au serveur avec ce code de client avec le programme \lprog{coap\_get\_time3.py}{pycom}.}
+\lge{To do well, we must provide an acknowledgement to the server with this client code with the program \lprog{coap\_get\_time3.py}{pycom}.}
+
 
 \pycomlst{coap\_get\_time3.py}
 
-Ici, l'exécution est parfaite :
+\lgf{Ici, l'exécution est parfaite :}
+\lge{Here, the execution is perfect:}
+
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 > python3 coap_get_time3.py
@@ -288,19 +301,27 @@ txt: b'2021-03-30 15:13'
 ACK  0x2709 EMPTY 
 \end{termc}
 
-\noindent si vous n'avez pas oublié de changer l'adresse IP du serveur, et l'utilisation du réseau est optimale (cf figure~\vref{fig-get-time3}).
+\noindent 
+\lgf{si vous n'avez pas oublié de changer l'adresse IP du serveur, et l'utilisation du réseau est optimale (cf figure~\vref{fig-get-time3}).}
+\lge{if you did not forget to change the IP address of the server, and the use of the network is optimal (cf figure~\vref{fig-get-time3}).}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/get-time3.png}}
-\caption{Échange dans les règles de l'art}
+\lgf{\caption{Échange dans les règles de l'art}}
+\lge{\caption{State of the art exchange}}
 \label{fig-get-time3}
 \end{figure}
 
-Enfin, on peut ajouter un token pour lier les deux transactions. Ici, il n'y a pas d’ambiguïté car nous ne demandons qu'une seule ressource. Mais si nous demandions plusieurs ressources simultanément, il faudrait pouvoir associer la réponse à la requête. Le programme \lprog{coap\_get\_time4.py}{pycom} ajoute lors de la création de l'en-tête un champ token.
+\lgf{Enfin, on peut ajouter un token pour lier les deux transactions. Ici, il n'y a pas d’ambiguïté car nous ne demandons qu'une seule ressource. Mais si nous demandions plusieurs ressources simultanément, il faudrait pouvoir associer la réponse à la requête. Le programme \lprog{coap\_get\_time4.py}{pycom} ajoute lors de la création de l'en-tête un champ token.}
+\lge{Finally, we can add a token to link the two transactions. Here, there is no ambiguity because we only request one resource. But if we were to request several resources simultaneously, we would have to be able to associate the response with the request. The program \lprog{coap\_get\_time4.py}{pycom} adds a token field when creating the header.}
+
 
 \pycomlst[firstline=9,lastline=12, firstnumber=9]{coap\_get\_time4.py}
 
-L'échange est le même mais le token est répété dans la réponse.
+\lgf{L'échange est le même mais le token est répété dans la réponse.}
+\lge{The exchange is the same but the token is repeated in the response.}
+
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 > python3 coap_get_time4.py
@@ -316,73 +337,135 @@ ACK  0x270A EMPTY
 \end{termc}
 
 \Question{NON}
-{Que se passe-t-il si vous utilisez une requête non confirmable pour demander la ressource /time (mettre l'argument \texttt{type=CoAP.NON} dans la construction de l'en-tête obligatoire).
+{
+\lgf{Que se passe-t-il si vous utilisez une requête non confirmable pour demander la ressource /time (mettre l'argument \texttt{type=CoAP.NON} dans la construction de l'en-tête obligatoire).}
+\lge{What happens if you use a non-confirmable request to ask for the /time resource (put the argument \texttt{type=CoAP.NON} in the mandatory header construction).}
+
  \begin{itemize}[label=$\circ$]
-   \item \Wrong{Ça plante le serveur.}
-   \item \Wrong{Le serveur répond par une requête Confirmable.}
-   \item \Wrong{ Le serveur retourne un RST car nous n'avons pas programmé ce cas.}
-   \item \Correct{Le serveur répond par une requête Non Confirmable.}
-   \item \Wrong{On passe en heure d'hiver.}
+   \item \Wrong{
+    \lgf{Ça plante le serveur.}
+    \lge{The server crashes.}
+    }
+   \item \Wrong{
+    \lgf{Le serveur répond par une requête Confirmable.}
+    \lge{The server responds with a Confirmable request.}
+    }
+   \item \Wrong{ 
+    \lgf{Le serveur retourne un RST car nous n'avons pas programmé ce cas.}
+    \lge{The server returns an RST because we have not programmed this case.}
+    }
+   \item \Correct{
+    \lgf{Le serveur répond par une requête Non Confirmable.}
+    \lge{The server responds with an Unconfirmable request.}
+    }
+   \item \Wrong{
+    \lgf{On passe en heure d'hiver.}
+    \lge{We switch to winter time.}
+    }
 \end{itemize}
 }
 {}
 
-\Question{Réponse immédiate et CON}{
-Modifiez le programme du serveur pour supprimer le délai de 5 secondes avant une réponse.
+\Question{\lgf{Réponse immédiate et CON}\lgf{Immediate response and CON}}{
+\lgf{Modifiez le programme du serveur pour supprimer le délai de 5 secondes avant une réponse.}
+\lge{Modify the server program to remove the 5 second delay before a response.}
 
-Que se passe-t-il quand le client envoie une requête CONfirmable ?
+
+\lgf{Que se passe-t-il quand le client envoie une requête CONfirmable ?}
+\lge{What happens when the client sends a CONfirmable request?}
+
 
  \begin{itemize}[label=$\circ$]
-   \item \Correct{Le serveur retourne la réponse dans l'acquittement.}
-   \item \Wrong{Le serveur retourne une requête NON confirmable.}
-   \item \Wrong{Le serveur attend quand même quelques secondes pour ne pas saturer le réseau.}
-   \item \Wrong{Le serveur enlève le token de la réponse..}
+   \item \Correct{
+    \lgf{Le serveur retourne la réponse dans l'acquittement.}
+    \lge{The server returns the answer in the acknowledgement.}
+    }
+   \item \Wrong{
+    \lgf{Le serveur retourne une requête NON confirmable.}
+    \lge{The server returns a NON confirmable request.}
+    }
+   \item \Wrong{
+    \lgf{Le serveur attend quand même quelques secondes pour ne pas saturer le réseau.}
+    \lge{The server still waits a few seconds to avoid saturating the network.}
+    }
+   \item \Wrong{
+    \lgf{Le serveur enlève le token de la réponse.}
+    \lge{The server removes the token from the response.}
+    }
 \end{itemize}
  }{}
  
- \Question{Réponse immédiate et NON}{
-Modifiez le programme du serveur pour supprimer le délai de 5 secondes avant une réponse.
+ \Question{\lgf{Réponse immédiate et NON}\lge{Immediate response and NON}}{
+\lgf{Modifiez le programme du serveur pour supprimer le délai de 5 secondes avant une réponse.}
+\lge{Modify the server program to remove the 5 second delay before a response.}
 
-Que se passe-t-il quand le client envoie une requête NON confirmable ?
+
+\lgf{Que se passe-t-il quand le client envoie une requête NON confirmable ?}
+\lge{What happens when the client sends a NON confirmable request?}
+
 
  \begin{itemize}[label=$\circ$]
-   \item \Wrong{Le serveur retourne la réponse dans l'acquittement.}
-   \item \Correct{Le serveur retourne une requête NON confirmable.}
-   \item \Wrong{Le serveur attend quand même quelques secondes pour ne pas saturer le réseau.}
-   \item \Wrong{Le serveur enlève le token de la réponse..}
+   \item \Wrong{
+        \lgf{Le serveur retourne la réponse dans l'acquittement.}
+        \lge{The server returns the answer in the acknowledgement.}
+        }
+   \item \Correct{
+        \lgf{Le serveur retourne une requête NON confirmable.}
+        \lge{The server returns a NON confirmable request.}
+        }
+   \item \Wrong{
+        \lgf{Le serveur attend quand même quelques secondes pour ne pas saturer le réseau.}
+        \lge{The server still waits a few seconds to avoid saturating the network.}
+        }
+   \item \Wrong{
+        \lgf{Le serveur enlève le token de la réponse.}
+        \lge{The server removes the token from the response.}
+        }
 \end{itemize}
  }{}
  
  
  \section{POST}
  
- \subsection {Ressource codée en ASCII}
+ \lgf{\subsection {Ressource codée en ASCII}}
+ \lge{\subsection {ASCII encoded resource}}
  
- Nous allons voir le traitement d’une requête POST avec \textit{aiocoap}. Nous aurions pu ajouter ce traitement à la classe \pfunction{aiocoap}{TimeResource} vue précédemment, mais nous avons préféré ajouter une nouvelle ressource pour le traitement des températures. 
+ 
+\lgf{Nous allons voir le traitement d’une requête POST avec \textit{aiocoap}. Nous aurions pu ajouter ce traitement à la classe \pfunction{aiocoap}{TimeResource} vue précédemment, mais nous avons préféré ajouter une nouvelle ressource pour le traitement des températures.}
+\lge{We will see the processing of a POST request with \textit{aiocoap}. We could have added this processing to the \pfunction{aiocoap}{TimeResource} class seen earlier, but we preferred to add a new resource for temperature processing.}
 
-Les lignes suivantes ont été ajoutées pour traiter le POST. Notez le nom de la méthode \texttt{render\_post}.
+
+\lgf{Les lignes suivantes ont été ajoutées pour traiter le POST. Notez le nom de la méthode \texttt{render\_post}.}
+\lge{The following lines have been added to handle the POST. Note the method name \texttt{render\_post}.}
 
 \pythonlst[firstline=34,lastline=39, firstnumber=34]{coap\_basic\_server2.py}
 
 
-La réponse à la requête est le code 2.04 (\texttt{aiocoap.CHANGED}) qui indique que la ressource été modifiée. 
+\lgf{La réponse à la requête est le code 2.04 (\texttt{aiocoap.CHANGED}) qui indique que la ressource été modifiée. }
+\lge{The response to the request is code 2.04 (\texttt{aiocoap.CHANGED}) which indicates that the resource was modified. }
 
-On lui associe une nouvelle classe dans l’arbre des ressources :
+\lgf{On lui associe une nouvelle classe dans l’arbre des ressources :}
+\lge{It is associated with a new class in the resource tree:}
 
 
 \pythonnxt[firstline=59,lastline=59, firstnumber=59]{coap\_basic\_server2.py}
 
-Le tout forme le programme \pprog{coap\_basic\_server2.py}{plido-tp4}.
+\lgf{Le tout forme le programme \pprog{coap\_basic\_server2.py}{plido-tp4}.}
+\lge{The whole forms the program \pprog{coap\_basic_server2.py}{plido-tp4}.}
+
 
          \vspace{1em}
 
-Coté client, le principe est le même que pour le GET. Dans le programme \lprog{coap\_post\_temp1.py}{pycom}, la méthode \pfunction{CoAP}{add\_payload} permet d’ajouter du contenu à la requête POST. Le programme émet sa requête et affiche le résultat. Nous allons également simplifier la gestion des réponses en utilisant la fonction \pfunction{CoAP}{send\_ack} du module \texttt{CoAP}. Cette fonction prend en argument une socket, un tuple de destination et le message CoAP à envoyer. Elle va le retransmettre au maximum 4 fois tant qu’elle n’a pas reçu l’acquittement correspondant.
+\lgf{Coté client, le principe est le même que pour le GET. Dans le programme \lprog{coap\_post\_temp1.py}{pycom}, la méthode \pfunction{CoAP}{add\_payload} permet d’ajouter du contenu à la requête POST. Le programme émet sa requête et affiche le résultat. Nous allons également simplifier la gestion des réponses en utilisant la fonction \pfunction{CoAP}{send\_ack} du module \texttt{CoAP}. Cette fonction prend en argument une socket, un tuple de destination et le message CoAP à envoyer. Elle va le retransmettre au maximum 4 fois tant qu’elle n’a pas reçu l’acquittement correspondant.}
+\lge{On the client side, the principle is the same as for the GET. In the program \lprog{coap\_post\_temp1.py}{pycom}, the method \pfunction{CoAP}{add\_payload} allows to add content to the POST request. The program sends its request and displays the result. We are also going to simplify the management of the responses by using the function \pfunction{CoAP}{send\_ack} of the module \texttt{CoAP}. This function takes as argument a socket, a destination tuple and the CoAP message to send. It will retransmit it at most 4 times until it has received the corresponding acknowledgement.}
 
 \pycomlst{coap\_post\_temp1.py} %[firstline=9,lastline=12, firstnumber=9]
 
-La figure~\vref{fig-duree-max} a montré un échange avec perte. Elles peuvent être simulées en arrêtant le programme serveur sur votre ordinateur.
+\lgf{La figure~\vref{fig-duree-max} a montré un échange avec perte. Elles peuvent être simulées en arrêtant le programme serveur sur votre ordinateur.}
+\lge{Figure~\vref{fig-duree-max} showed a lossy exchange. They can be simulated by stopping the server program on your computer.}
 
-Lancez le serveur \pprog{coap\_basic\_server2.py}{plido-tp4} et tapez ctrl-Z pour stopper son exécution, tout en laissant ouverte la socket.
+\lgf{Lancez le serveur \pprog{coap\_basic\_server2.py}{plido-tp4} et tapez ctrl-Z pour stopper son exécution, tout en laissant ouverte la socket.}
+\lge{Launch the server \pprog{coap\_basic_server2.py}{plido-tp4} and type ctrl-Z to stop its execution, while leaving the socket open.}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@] 
 > python3 ./coap_basic_server2.py 
@@ -391,7 +474,9 @@ Job 2, “python3 ./coap_basic_server2.py” has stopped
 >
 \end{termc}
 
-Lancez le client \lprog{coap\_port\_temp1.py}{pycom} (en n'oubliant pas de changer l'adresse IP du serveur).
+\lgf{Lancez le client \lprog{coap\_port\_temp1.py}{pycom} (en n'oubliant pas de changer l'adresse IP du serveur).}
+\lge{Launch the client \lprog{coap\_port\_temp1.py}{pycom} (don't forget to change the server IP address).}
+
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 > python3.9 coap_post_temp1.py 
@@ -405,9 +490,13 @@ timeout 2 1
 timeout 4 2
 \end{termc}
 
-On voit que le client ne reçoit pas l'acquittement, déclenche un temporisateur et retransmet le message. La durée du temporisateur double à chaque tentative\footnote{Le standard recommande d'ajouter un aléa lors de la transmission pour éviter que deux équipements se synchronisent et se perturbent toujours en même temps. Il n'est pas mis en œuvre dans cet exemple.}.
+\lgf{On voit que le client ne reçoit pas l'acquittement, déclenche un temporisateur et retransmet le message. La durée du temporisateur double à chaque tentative\footnote{Le standard recommande d'ajouter un aléa lors de la transmission pour éviter que deux équipements se synchronisent et se perturbent toujours en même temps. Il n'est pas mis en œuvre dans cet exemple.}.}
+\lge{We see that the client does not receive the acknowledgement, triggers a timer and retransmits the message. The duration of the timer doubles with each attempt\footnote{The standard recommends adding a randomness during the transmission to avoid that two equipments synchronize and disturb each other always at the same time. It is not implemented in this example}.}
 
-Réactivez le serveur coap en tapant \texttt{fg} (foregroung)
+
+\lgf{Réactivez le serveur coap en tapant \texttt{fg} (foregroung)}
+\lge{Reactivate the coap server by typing \texttt{fg} (foregroung)}
+
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@] 
 > fg
@@ -436,221 +525,405 @@ ee_pad=0, ee_info=0, ee_data=0)
 DEBUG:coap-server:Incoming error 111 from <UDP6EndpointAddress 192.168.1.79:37286 (locally 192.168.1.79%lo)>
 \end{termc}
 
-On peut observer plusieurs phénomènes :
+\lgf{On peut observer plusieurs phénomènes :}
+\lge{Several phenomena may be observed:}
+
 
 \begin{itemize}
-    \item le serveur avait gardé en mémoire les requêtes précédentes mais ne les avait pas traitées car le programme avait été stoppé. En le redémarrant, il va pouvoir les traiter. Il répond donc au client qui peut afficher la notification 2.04 ;
-    \item les autres requêtes sont vues comme des répétitions de la première puisque le champ Message ID est identique. Le serveur se contente de retourner une copie ;
-    \item le client ayant terminé sa transaction a fermé la socket conduisant à l'émission d'un message ICMP qui conduit à l'affichage du message de log d'erreur (Socket error received). 
+    \item 
+        \lgf{le serveur avait gardé en mémoire les requêtes précédentes mais ne les avait pas traitées car le programme avait été stoppé. En le redémarrant, il va pouvoir les traiter. Il répond donc au client qui peut afficher la notification 2.04 ;}
+        \lge{the server had kept in memory the previous requests but had not processed them because the program had been stopped. By restarting it, it will be able to process them. It then replies to the client, which can display the notification 2.04 ;}
+        
+    \item 
+        \lgf{les autres requêtes sont vues comme des répétitions de la première puisque le champ Message ID est identique. Le serveur se contente de retourner une copie ;}
+        \lge{the other requests are seen as repeats of the first one since the Message ID field is identical. The server simply returns a copy;}
+        
+    \item 
+        \lgf{le client ayant terminé sa transaction a fermé la socket conduisant à l'émission d'un message ICMP qui conduit à l'affichage du message de log d'erreur (Socket error received). }
+        \lge{the client having finished its transaction has closed the socket leading to the emission of an ICMP message which leads to the display of the error log message (Socket error received). }
+        
 \end{itemize}
 
          \vspace{1em}
 
 
-Ceci peut être vérifié sur la capture Wireshark (cf. figure~\vref{fig-post-ws}).
+\lgf{Ceci peut être vérifié sur la capture Wireshark (cf. figure~\vref{fig-post-ws}).}
+\lge{This can be verified on the Wireshark capture (see figure~\vref{fig-post-ws}).}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/coap-ws.png}}
-\caption{Trafic lié au POST}
+\lgf{\caption{Trafic lié au POST}}
+\lge{\caption{POST related traffic}}
+
 \label{fig-post-ws}
 \end{figure}
 
 
-\subsection{Ressource codée en CBOR}
+\lgf{\subsection{Ressource codée en CBOR}}
+\lge{\subsection{Resource coded in CBOR}}
 
-Le programme précédent, est correct mais nous avons utilisé le format ASCII de transfert par défaut (\textit{\Index{Content-format}} = 0). Il serait préférable de revenir au format JSON ou \Index{CBOR} que nous avions vu précédemment. Pour ce faire, nous devons ajouter dans l’en-tête de la requête l’option Content-format. Comme son code est 12, elle doit être placée après l’option Uri-path (cf. tableau~\vref{tab-CoAP-options}).
+\lgf{Le programme précédent, est correct mais nous avons utilisé le format ASCII de transfert par défaut (\textit{\Index{Content-format}} = 0). Il serait préférable de revenir au format JSON ou \Index{CBOR} que nous avions vu précédemment. Pour ce faire, nous devons ajouter dans l’en-tête de la requête l’option Content-format. Comme son code est 12, elle doit être placée après l’option Uri-path (cf. tableau~\vref{tab-CoAP-options}).}
+\lge{The previous program is correct but we used the default ASCII transfer format (\textit{\Index{Content-format}} = 0). It would be better to return to the JSON or \Index{CBOR} format that we had seen previously. To do this, we must add the Content-format option to the request header. As its code is 12, it must be placed after the Uri-path option (see table~\vref{tab-CoAP-options}).}
+
 
 \pycomlst{coap\_post\_temp2.py} %[firstline=9,lastline=12, firstnumber=9]
 
-Notez que ce programme,  pprog{coap\_post\_temp2.py}{pycom},  peut aussi bien s'exécuter sur votre ordinateur ou sur votre LoPy. Dans le premier cas, le module \texttt{cbor2} sera utilisé. Sur le LoPy, nous ferons appel au module \texttt{kpn\_senml}. Dans les deux cas, le contenu est transformé en CBOR grâce à la fonction \pfunction{cbor2}{dumps}.
+\lgf{Notez que ce programme,  pprog{coap\_post\_temp2.py}{pycom},  peut aussi bien s'exécuter sur votre ordinateur ou sur votre LoPy. Dans le premier cas, le module \texttt{cbor2} sera utilisé. Sur le LoPy, nous ferons appel au module \texttt{kpn\_senml}. Dans les deux cas, le contenu est transformé en CBOR grâce à la fonction \pfunction{cbor2}{dumps}.}
+\lge{Note that this program, pprog{coap\_post\_temp2.py}{pycom}, can be run on your computer or on your LoPy. In the first case, the module \texttt{cbor2} will be used. On the LoPy, we will use the module \texttt{kpn\_senml}. In both cases, the content is transformed into CBOR thanks to the function \pfunction{cbor2}{dumps}.}
+
 
          \vspace{1em}
 
-Du coté du serveur, la méthode\texttt{render\_post} doit connaître le format de la ressource. Pour ce faire, elle doit accéder aux options CoAP.
+\lgf{Du coté du serveur, la méthode\texttt{render\_post} doit connaître le format de la ressource. Pour ce faire, elle doit accéder aux options CoAP.}
+\lge{On the server side, the methodtexttt{render\_post} must know the format of the resource. To do this, it must access the CoAP options.}
+
 
 \pythonlst[firstline=34,lastline=50, firstnumber=34]{coap\_basic\_server3.py} %
 
-Dans le programme \pprog{coap\_basic\_server3.py}{plido-tp4}, la variable \texttt{ct} contient la valeur de l’option \Index{Content-format} si elle existe. De manière générale, \textit{aiocoap} permet d’accéder aux valeurs de toutes les options CoAP contenues dans la requête. La valeur \texttt{None} indique que l’option n’est pas présente dans l’en-tête. Dans ce cas, la variable \texttt{ct} contiendra la valeur par défaut indiquant un texte en ASCII.
+\lgf{Dans le programme \pprog{coap\_basic\_server3.py}{plido-tp4}, la variable \texttt{ct} contient la valeur de l’option \Index{Content-format} si elle existe. De manière générale, \textit{aiocoap} permet d’accéder aux valeurs de toutes les options CoAP contenues dans la requête. La valeur \texttt{None} indique que l’option n’est pas présente dans l’en-tête. Dans ce cas, la variable \texttt{ct} contiendra la valeur par défaut indiquant un texte en ASCII.}
+\lge{In the program \pprog{coap\_basic\_server3.py}{plido-tp4}, the variable \texttt{ct} contains the value of the option \Index{Content-format} if it exists. In general, \textit{aiocoap} allows access to the values of all CoAP options contained in the request. The value \texttt{None} indicates that the option is not present in the header. In this case, the variable \texttt{ct} will contain the default value indicating ASCII text.}
 
-Suivant le format de la donnée, le programme affichera le texte ou le CBOR transformé en chaîne de caractères avec la fonction \pfunction{cbor2}{loads}. Si le format n’est pas connu du programme, un code d’erreur est retourné au client.
+
+\lgf{Suivant le format de la donnée, le programme affichera le texte ou le CBOR transformé en chaîne de caractères avec la fonction \pfunction{cbor2}{loads}. Si le format n’est pas connu du programme, un code d’erreur est retourné au client.}
+\lge{Depending on the format of the data, the program will display the text or the CBOR transformed into a character string with the function \pfunction{cbor2}{loads}. If the format is not known to the program, an error code is returned to the client.}
+
 
          \vspace{1em}
 
-La figure~\vref{fig-post2-ws} montre l'échange lié au POST et détaille contenu de la requête.
+\lgf{La figure~\vref{fig-post2-ws} montre l'échange lié au POST et détaille contenu de la requête.}
+\lge{The figure~\vref{fig-post2-ws} shows the exchange related to the POST and details the content of the request.}
+
 
 \begin{figure}[tbp]
 \centerline{\includegraphics[width=1\columnwidth]{Pictures/aiocoap-ws.png}}
-\caption{Trafic complet lié au POST}
+\lgf{\caption{Trafic complet lié au POST}}
+\lge{\caption{Full POST traffic}}
 \label{fig-post2-ws}
 \end{figure}
 
-\Question{Réponse}
-{Que reçoit-on en réponse à la requête POST ?
+\Question{\lgf{Réponse}\lge{Response}}
+{
+\lgf{Que reçoit-on en réponse à la requête POST ?}
+\lge{What do we receive in response to the POST request?}
 
  \begin{itemize}[label=$\circ$]
-   \item \Wrong{un message ACK}
-   \item \Wrong{le statut 2.00.}
-   \item \Correct{le statut 2.04 CHANGED.}
-   \item \Wrong{rien.}
+   \item \Wrong{
+    \lgf{un message ACK}
+    \lge{an ACK message}
+    }
+   \item \Wrong{
+    \lgf{le statut 2.00 OK.}
+    \lge{status 2.00 OK.}
+    }
+   \item \Correct{
+    \lgf{le statut 2.04 CHANGED.}
+    \lge{status 2.04 CHANGED.}
+    }
+   \item \Wrong{
+    \lgf{rien.}
+    \lge{nothing.}
+    }
 \end{itemize}
  }
 {
-A chaque requête on reçoit une notification REST indiquant que la ressource a été modifiée. 
+\lgf{A chaque requête on reçoit une notification REST indiquant que la ressource a été modifiée. }
+\lge{At each request we receive a REST notification indicating that the resource has been modified. }
 }
 
-\Question{Réponse}
-{Modifiez le programme client pour indiquer un content-format JSON. Quelle notification obtenez-vous ?
-
+\Question{JSON}
+{
+\lgf{Modifiez le programme client pour indiquer un content-format JSON. Quelle notification obtenez-vous ?}
+\lge{Modify the client program to specify a JSON content-format. What notification do you get?}
 
  \begin{itemize}[label=$\circ$]
-   \item \Wrong{un message RST}
-   \item \Wrong{le statut 4.04 NOT FOUND.}
-   \item \Correct{le statut 2.15.}
-   \item \Wrong{le statut 5.00.}
+   \item \Wrong{
+    \lgf{un message RST}
+    \lge{an RST message}
+    }
+   \item \Wrong{
+    \lgf{le statut 4.04 NOT FOUND.}
+    \lge{le statut 4.04 NOT FOUND.}
+    }
+   \item \Correct{
+    \lgf{le statut 2.15.}
+    \lge{le statut 2.15.}
+    }
+   \item \Wrong{
+    \lgf{le statut 5.00.}
+    \lge{statut 5.00.}
+    }
 \end{itemize}
  }
 {
-Si vous avez 5.00 c'est qu'il y a une erreur dans votre programme coté serveur. La notification pour un format inconnu est 4.15 (Unsupported Content-Format)
+\lgf{Si vous avez 5.00 c'est qu'il y a une erreur dans votre programme coté serveur. La notification pour un format inconnu est 4.15 (Unsupported Content-Format)}
+\lgf{If you have 5.00 it means that there is an error in your server side program. The notification for an unknown format is 4.15 (Unsupported Content-Format)}
+
 }
 
 \subsection{No Response}
-Que l'on utilise le type CONfirmable ou NON confirmable, le serveur va envoyer une notification : 
+
+\lgf{Que l'on utilise le type CONfirmable ou NON confirmable, le serveur va envoyer une notification : }
+\lge{Whether you use the CONfirmable or NON-confirmable type, the server will send a notification : }
+
 \begin{itemize}
-\item 2.xx quand tout se passe bien, et
-\item 4.xx ou 5.xx quand le client ou le serveur a commis une erreur.
+\item 
+    \lgf{2.xx quand tout se passe bien, et}
+    \lge{2.xx when everything is going well, and}
+\item
+    \lgf{4.xx ou 5.xx quand le client ou le serveur a commis une erreur.}
+    \lge{4.xx or 5.xx when the client or server has made an error.}
 \end{itemize}
 
-Si un capteur veut utiliser CoAP sur un réseau LPWAN, à chaque POST qu'il va envoyer sur la voie montante (uplink), il va récupérer un acquittement dans la voie descendante (downlink). Or, on a vu que l'on devait ménager cette dernière qui pouvait être sujette à saturation ou à facturation. 
+\lgf{Si un capteur veut utiliser CoAP sur un réseau LPWAN, à chaque POST qu'il va envoyer sur la voie montante (uplink), il va récupérer un acquittement dans la voie descendante (downlink). Or, on a vu que l'on devait ménager cette dernière qui pouvait être sujette à saturation ou à facturation. }
+\lge{If a sensor wants to use CoAP on an LPWAN network, for each POST it sends on the uplink, it will get an acknowledgement in the downlink. However, we have seen that we must be careful with the downlink channel, which could be subject to saturation or billing. }
 
-L'option \Index{No response} définie dans le RFC 7967 permet à un client d'informer le serveur qu'il ne souhaite pas recevoir de notifications lors d'un POST ou d'un PUT.  La valeur de l'option est 258 et elle est suivie d'un octet contenant un bitmap qui va indiquer quel type de notification va être émis :
+\lgf{L'option \Index{No response} définie dans le RFC 7967 permet à un client d'informer le serveur qu'il ne souhaite pas recevoir de notifications lors d'un POST ou d'un PUT.  La valeur de l'option est 258 et elle est suivie d'un octet contenant un bitmap qui va indiquer quel type de notification va être émis :}
+\lge{The \Index{No response} option defined in RFC 7967 allows a client to inform the server that it does not wish to receive notifications during a POST or PUT.  The value of the option is 258 and it is followed by a byte containing a bitmap that will indicate what type of notification will be sent:}
+
 \begin{itemize}
-    \item si le deuxième bit à partir de la droite est mis à 1, le client ne veut pas recevoir les notifications de type 2.xx ;
-    \item si le quatrième bit à partir de la droite est mis à 1, le client ne veut pas recevoir les notifications de type 4.xx ;
-    \item si le cinquième bit à partir de la droite est mis à 1, le client ne veut pas recevoir les notifications de type 5.xx.
+    \item 
+        \lgf{si le deuxième bit à partir de la droite est mis à 1, le client ne veut pas recevoir les notifications de type 2.xx ;}
+        \lge{if the second bit from the right is set to 1, the client does not want to receive notifications of type 2.xx ;}
+        
+    \item 
+        \lgf{si le quatrième bit à partir de la droite est mis à 1, le client ne veut pas recevoir les notifications de type 4.xx ;}
+        \lge{if the fourth bit from the right is set to 1, the client does not want to receive notifications of type 4.xx ;}
+        
+    \item 
+        \lgf{si le cinquième bit à partir de la droite est mis à 1, le client ne veut pas recevoir les notifications de type 5.xx.}
+        \lge{if the fifth bit from the right is set to 1, the client does not want to receive notifications of type 5.xx.}
 \end{itemize}
 
-Par exemple, en mettant la valeur \texttt{0x02} dans cette option, le client ne reçoit pas les acquittements positifs mais uniquement les erreurs 4.xx et 5.xx. En mettant la valeur \texttt{0b00011010} (0x1a, 26), le serveur sera complètement silencieux.
+\lgf{Par exemple, en mettant la valeur \texttt{0x02} dans cette option, le client ne reçoit pas les acquittements positifs mais uniquement les erreurs 4.xx et 5.xx. En mettant la valeur \texttt{0b00011010} (0x1a, 26), le serveur sera complètement silencieux.}
+\lge{For example, by setting the value \texttt{0x02} in this option, the client does not receive positive acknowledgements but only errors 4.xx and 5.xx. By setting the value \texttt{0b00011010} (0x1a, 26), the server will be completely silent.}
 
-Le programme \pprog{coap\_post\_temp4.py}{pycom} ajoute cette option et le type du message CoAP a été fixé à NON confirmable. Cependant, le chemin d'URI n'est pas connu du serveur.  On voit que le serveur retourne un message d'erreur. Si en revanche le POST se déroule correctement, seul le client émet une donnée et le serveur reste silencieux.
+\lgf{Le programme \pprog{coap\_post\_temp4.py}{pycom} ajoute cette option et le type du message CoAP a été fixé à NON confirmable. Cependant, le chemin d'URI n'est pas connu du serveur.  On voit que le serveur retourne un message d'erreur. Si en revanche le POST se déroule correctement, seul le client émet une donnée et le serveur reste silencieux.}
+\lge{The program \pprog{coap\_post\_temp4.py}{pycom} adds this option and the type of the CoAP message has been set to NOT confirmable. However, the URI path is not known to the server.  We see that the server returns an error message. If, on the other hand, the POST is successful, only the client sends data and the server remains silent.}
+
 
 \pycomlst[firstline=15,lastline=21, firstnumber=15]{coap\_post\_temp4.py}
 
-\section{Chaîne complète de remonté de mesures}
+\lgf{\section{Chaîne complète de remonté de mesures}}
+\lge{\section{Complete chain of measurements}}
+
 
  \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/TFeeSEqGhPk}
 \end{wrapfigure}
 
 
-Voilà ! nous pouvons mettre les différents concepts ensemble pour construire une chaîne complète de remontée d'informations sur la température, l'humidité et la pression.
+\lgf{Voilà ! nous pouvons mettre les différents concepts ensemble pour construire une chaîne complète de remontée d'informations sur la température, l'humidité et la pression.}
+\lge{Voilà !  Now we can put the different concepts together to build a complete feedback chain for temperature, humidity and pressure.}
+
 
          \vspace{1em}
 
-Côté capteur, nous allons~:
+\lgf{Côté capteur, nous allons~:}
+\lge{On the sensor side, we will~:}
 
 \begin{itemize}
-    \item si le BME280 est présent, récupérer directement les données. Sinon, nous allons utiliser les mesures virtuelles. Nous allons également définir le protocole réseau : WiFi, Sigfox, LoRaWAN ;
-    \item si nous utilisons un réseau LoRaWAN, nous devons mettre en place un programme relais pour transmettre les données vers le serveur CoAP ;
+    \item 
+        \lgf{si le BME280 est présent, récupérer directement les données. Sinon, nous allons utiliser les mesures virtuelles. Nous allons également définir le protocole réseau : WiFi, Sigfox, LoRaWAN ;}
+        \lge{if the BME280 is present, retrieve the data directly. Otherwise, we will use virtual measurements. We will also define the network protocol: WiFi, Sigfox, LoRaWAN;}
+    \item 
+        \lgf{si nous utilisons un réseau LoRaWAN, nous devons mettre en place un programme relais pour transmettre les données vers le serveur CoAP ;}
+        \lge{if we use a LoRaWAN network, we have to set up a relay program to transmit the data to the CoAP server;}
 \end{itemize}
 
-Le serveur CoAP doit pouvoir envoyer les données au serveur Beebotte pour affichage.
+\lgf{Le serveur CoAP doit pouvoir envoyer les données au serveur Beebotte pour affichage.}
+\lge{The CoAP server must be able to send the data to the Beebotte server for display.}
 
          \vspace{1em}
 
-Le message CoAP va être configuré de la manière suivante :
+\lgf{Le message CoAP va être configuré de la manière suivante :}
+\lge{The CoAP message will be configured as follows:}
+
 \begin{itemize}
-\item type = NON pour éviter les acquittements des messages CoAP ;
-\item l'option No Response à 2 pour éviter les notifications REST positives. On garde sur la voie descendante les notifications d'erreurs pour permettre au capteur d'arrêter de transmettre ou d'augmenter sa période d'émission si le serveur n'est pas capable de traiter les données. Cela permettra de limiter l'usage du spectre et de préserver l'énergie des capteurs ;
-\item 3 chemins d'URI pour les 3 valeurs mesurées ;
-\item le codage en CBOR des séries temporelles.
+\item 
+    \lgf{type = NON pour éviter les acquittements des messages CoAP ;}
+    \lgf{type = NON to avoid acknowledgements of CoAP messages;}
+    
+\item 
+    \lgf{l'option No Response à 2 pour éviter les notifications REST positives. On garde sur la voie descendante les notifications d'erreurs pour permettre au capteur d'arrêter de transmettre ou d'augmenter sa période d'émission si le serveur n'est pas capable de traiter les données. Cela permettra de limiter l'usage du spectre et de préserver l'énergie des capteurs ;}
+    \lgf{the No Response option to 2 to avoid positive REST notifications. Error notifications are kept on the downstream channel to allow the sensor to stop transmitting or to increase its transmission period if the server is not able to process the data. This will limit the use of the spectrum and preserve the energy of the sensors;}
+    
+\item 
+    \lgf{3 chemins d'URI pour les 3 valeurs mesurées ;}
+    \lgf{3 URI paths for the 3 measured values;}
+    
+\item  
+    \lgf{le codage en CBOR des séries temporelles.}
+    \lgf{CBOR coding of time series.}
 \end{itemize}
 
          \vspace{1em}
 
-Il reste un point à traiter car avec la limitation à 12 octets des trames \Index{Sigfox}, il est impossible de transmettre des données si on utilise CoAP. En effet, l'en-tête CoAP va contenir :
+\lgf{Il reste un point à traiter car avec la limitation à 12 octets des trames \Index{Sigfox}, il est impossible de transmettre des données si on utilise CoAP. En effet, l'en-tête CoAP va contenir :}
+\lge{There is still a point to be dealt with because with the 12 bytes limitation of the frames \Index{Sigfox}, it is impossible to transmit data if one uses CoAP. Indeed, the CoAP header will contain:}
+
 \begin{itemize}
-\item 4 octets pour l'en-tête obligatoire ;
-\item 0 octets de Token ;
-\item 2 octets au minimum pour l'option URI-path si on réduit à un caractère le chemin ; par exemple \texttt{T}, \texttt{H}, \texttt{P} pour représenter la température, l'humidité et la pression ;
-\item 2 octets pour l'option \Index{Content-format} indispensable pour indiquer que l'on transporte du CBOR ;
-\item 3 octets pour l'option \Index{No-response}, également indispensable pour indiquer que l'on ne veut surtout pas d'acquittement (Sigfox les limitant à 4 par jour).
+\item 
+    \lgf{4 octets pour l'en-tête obligatoire ;}
+    \lge{4 bytes for the mandatory header ;}
+\item  
+    \lgf{0 octets de Token ;}
+    \lge{0 Token bytes ;}
+\item  
+    \lgf{2 octets au minimum pour l'option URI-path si on réduit à un caractère le chemin ; par exemple \texttt{T}, \texttt{H}, \texttt{P} pour représenter la température, l'humidité et la pression ;}
+    \lge{2 bytes minimum for the URI-path option if the path is reduced to one character; for example \texttt{T}, \texttt{H}, \texttt{P} to represent temperature, humidity and pressure;}
+\item  
+    \lgf{2 octets pour l'option \Index{Content-format} indispensable pour indiquer que l'on transporte du CBOR ;}
+    \lge{2 bytes for the option \Index{Content-format} necessary to indicate that one carries CBOR;}
+\item  
+    \lgf{3 octets pour l'option \Index{No-response}, également indispensable pour indiquer que l'on ne veut surtout pas d'acquittement (Sigfox les limitant à 4 par jour).}
+    \lge{3 bytes for the option \Index{No-response}, also essential to indicate that we do not want any acknowledgement (Sigfox limiting them to 4 per day).}
 \end{itemize}
-Soit, au total 11 octets. Il n'en reste plus qu'un. Si la température dépasse les 23 °C, l'information ne sera pas transportable.
+
+\lgf{Soit, au total 11 octets. Il n'en reste plus qu'un. Si la température dépasse les 23 °C, l'information ne sera pas transportable.}
+\lge{That is, a total of 11 bytes. There is only one left. If the temperature exceeds 23°C, the information will not be transportable.}
+
 
 \section{SCHC}
 
-\acl{SCHC}, défini dans le \rfc{8724}, donne l'acronyme SCHC que l'on prononce Chic. SCHC propose un mécanisme de compression générique des en-têtes. SCHC se base sur un contexte commun à l'émetteur et au récepteur qui va permettre d'éliminer les informations connues dans le message et de ne transmettre que les données qui ne peuvent pas être prédéterminées.
+\lgf{\acl{SCHC}, défini dans le \rfc{8724}, donne l'acronyme SCHC que l'on prononce Chic. SCHC propose un mécanisme de compression générique des en-têtes. SCHC se base sur un contexte commun à l'émetteur et au récepteur qui va permettre d'éliminer les informations connues dans le message et de ne transmettre que les données qui ne peuvent pas être prédéterminées.}
+\lge{\acl{SCHC}, defined in the \rfc{8724}, gives the acronym SCHC which we pronounce Chic. SCHC proposes a generic compression mechanism for headers. SCHC is based on a context common to the sender and the receiver which will make it possible to eliminate the known information in the message and to transmit only the data which cannot be predetermined.}
+
 
          \vspace{1em}
 
-Nous allons mettre en œuvre une version simplifiée. Dans le message CoAP, nous avons besoin du champ Message ID qui va servir à éliminer les doublons qui pourraient apparaître dans le réseau. Les serveurs CoAP gardent en mémoire les informations concernant les Messages ID pendant 5 minutes. Donc, la numérotation des messages doit permettre des périodes plus longues avant de réutiliser les mêmes valeurs. Nous allons également transporter 3 types de ressources : \texttt{/temperature}, \texttt{/humidity} et \texttt{/pressure}.
+\lgf{Nous allons mettre en œuvre une version simplifiée. Dans le message CoAP, nous avons besoin du champ Message ID qui va servir à éliminer les doublons qui pourraient apparaître dans le réseau. Les serveurs CoAP gardent en mémoire les informations concernant les Messages ID pendant 5 minutes. Donc, la numérotation des messages doit permettre des périodes plus longues avant de réutiliser les mêmes valeurs. Nous allons également transporter 3 types de ressources : \texttt{/temperature}, \texttt{/humidity} et \texttt{/pressure}.}
+\lge{We will implement a simplified version. In the CoAP message, we need the Message ID field that will be used to eliminate duplicates that might appear in the network. The CoAP servers keep the information about the Message IDs in memory for 5 minutes. Therefore, the message numbering must allow for longer periods before reusing the same values. We will also carry 3 types of resources: \texttt{/temperature}, \texttt{/humidity} and \texttt{/pressure}.}
+
 
          \vspace{1em}
 
-On peut donc construire manuellement un en-tête SCHC avec les champs suivants :
+\lgf{On peut donc construire manuellement un en-tête SCHC avec les champs suivants :}
+\lge{We can therefore manually build a SCHC header with the following fields:}
+
 \begin{itemize}
-\item 2 bits pour numéroter les règles de compression. Dans notre cas, nous n'utiliserons que la règle 00 ;
-\item 4 bits pour numéroter les messages ID, ce qui donne 15 valeurs possibles de 1 à 15. Au pire, il faudrait émettre plus de 3 trames par minutes pour que le serveur CoAP traite deux trames différentes comme des doublons ;
-\item 2 bits pour désigner les chemins d'URI ; 3 seront utilisés.
+\item 
+    \lgf{2 bits pour numéroter les règles de compression. Dans notre cas, nous n'utiliserons que la règle 00 ;}
+    \lge{2 bits to number the compression rules. In our case, we will only use rule 00 ;}
+    
+\item 
+    \lgf{4 bits pour numéroter les messages ID, ce qui donne 15 valeurs possibles de 1 à 15. Au pire, il faudrait émettre plus de 3 trames par minutes pour que le serveur CoAP traite deux trames différentes comme des doublons ;}
+    \lge{4 bits to number the ID messages, which gives 15 possible values from 1 to 15. In the worst case, more than 3 frames per minute would have to be transmitted for the CoAP server to treat two different frames as duplicates;}
+    
+\item 
+    \lgf{2 bits pour désigner les chemins d'URI ; 3 seront utilisés.}
+    \lge{2 bits to designate URI paths; 3 will be used.}
+    
 \end{itemize}
 
          \vspace{1em}
 
-Cela fait appel à plusieurs techniques de compression définies par SCHC :
+\lgf{Cela fait appel à plusieurs techniques de compression définies par SCHC :}
+\lge{This involves several compression techniques defined by SCHC:}
+
 \begin{itemize}
-\item \textit{\Index{not\_sent}}~: la valeur d'un champ n'est pas envoyée sur le réseau car elle se trouve dans les règles. Cela s'appliquera à la plupart des champs ;
-\item \textit{\Index{Least Significant Bit}} : on n'envoie que les bits de poids faible. Cela s'applique au champ Message ID duquel on ne va transmettre que les 4 bits de poids faible ;
-\item \textit{\Index{Matching\_sent}} : au lieu d'envoyer la valeur, on va envoyer un index sur un tableau commun. Cela s'applique à Uri-path où l'on enverra 00 pour l'élément temperature, 01 pour l'élément pressure, et 10 pour élément humidity. 
+\item 
+    \lgf{\textit{\Index{not\_sent}}~: la valeur d'un champ n'est pas envoyée sur le réseau car elle se trouve dans les règles. Cela s'appliquera à la plupart des champs ;}
+    \lge{\textit{\Index{not\_sent}}~: the value of a field is not sent on the network because it is in the rules. This will apply to most fields;}
+    
+    
+\item 
+    \lgf{\textit{\Index{Least Significant Bit}} : on n'envoie que les bits de poids faible. Cela s'applique au champ Message ID duquel on ne va transmettre que les 4 bits de poids faible ;}
+    \lge{\textit{\Index{Least Significant Bit}} : only the least significant bits are sent. This applies to the Message ID field, for which only the 4 least significant bits will be transmitted;}
+    
+\item 
+    \lgf{\textit{\Index{Matching\_sent}} : au lieu d'envoyer la valeur, on va envoyer un index sur un tableau commun. Cela s'applique à Uri-path où l'on enverra 00 pour l'élément temperature, 01 pour l'élément pressure, et 10 pour élément humidity. }
+    \lge{\textit{\Index{Matching\_sent}} : instead of sending the value, we will send an index on a common array. This applies to Uri-path where we will send 00 for the temperature element, 01 for the pressure element, and 10 for the humidity element. }
+    
 \end{itemize}
 
          \vspace{1em}
 
-\subsection{Emission côté client}
+\lgf{\subsection{Emission côté client}}
+\lge{\subsection{Client-side transmission}}
 
-La compression très simplifiée que nous allons effectuer se fera au moment de l'envoi des données pour Sigfox dans le programme \lprog{coap\_full\_sensor.py}{pycom}.
+\lgf{La compression très simplifiée que nous allons effectuer se fera au moment de l'envoi des données pour Sigfox dans le programme \lprog{coap\_full\_sensor.py}{pycom}.}
+\lge{The very simplified compression that we will carry out will be done at the time of the sending of the data for Sigfox in the program \lprog{coap\_full\_sensor.py}{pycom}.}
+
 
 \pycomlst[firstline=174,lastline=198, firstnumber=174]{coap\_full\_sensor.py}
 
-Dans le cas de Sigfox, on prend l'index en cherchant l'élément dans le tableau (ligne 183). On construit ensuite l'octet SCHC en ajoutant un numéro de règle (ligne 185) et les 4 bits de poids faible du champ Message ID qui va donc varier de 1 à 15 (ligne 186). Puis, l'on concatène les données CBOR a envoyer (ligne 193).
+\lgf{Dans le cas de Sigfox, on prend l'index en cherchant l'élément dans le tableau (ligne 183). On construit ensuite l'octet SCHC en ajoutant un numéro de règle (ligne 185) et les 4 bits de poids faible du champ Message ID qui va donc varier de 1 à 15 (ligne 186). Puis, l'on concatène les données CBOR a envoyer (ligne 193).}
+\lge{In the case of Sigfox, one takes the index by seeking the element in the table (line 183). One builds then the byte SCHC by adding a number of rule (line 185) and the 4 bits of low weight of the field Message ID which will thus vary from 1 to 15 (line 186). Then, one concatenates the CBOR data to be sent (line 193).}
+
 
          \vspace{1em}
 
-Pour les autres technologies de transmission, l'en-tête CoAP est construite avec les fonctions du module CoAP.py.
+\lgf{Pour les autres technologies de transmission, l'en-tête CoAP est construite avec les fonctions du module CoAP.py.}
+\lge{For other transmission technologies, the CoAP header is built with the functions of the CoAP.py module.}
+
 
 \pycomnxt[firstline=200,lastline=208, firstnumber=200]{coap\_full\_sensor.py}
 
-L'envoi de la trame se fait avec la fonction \texttt{send\_ack}. Comme le message est de type NON, cette fonction n'attend pas de réponse après l'émission des données.
+\lgf{L'envoi de la trame se fait avec la fonction \texttt{send\_ack}. Comme le message est de type NON, cette fonction n'attend pas de réponse après l'émission des données.}
+\lge{The sending of the frame is done with the function \texttt{send\_ack}. As the message is of type NO, this function does not wait for a response after the data is sent.}
 
-\subsection{Réception côté serveur}
 
-Si les données émises par \lprog{coap\_full\_sensor.py}{pycom} passent par un réseau LPWAN, le programme \pprog{generic\_coap\_relay.py}{plido-tp4} va servir d'intermédiaire pour les envoyer au serveur CoAP. Le programme est presque identique à celui que nous avions utilisé pour transmettre dans la session précédente. Les seules différences sont~:
+\lgf{\subsection{Réception côté serveur}}
+\lge{\subsection{Server side reception}}
+
+
+\lgf{Si les données émises par \lprog{coap\_full\_sensor.py}{pycom} passent par un réseau LPWAN, le programme \pprog{generic\_coap\_relay.py}{plido-tp4} va servir d'intermédiaire pour les envoyer au serveur CoAP. Le programme est presque identique à celui que nous avions utilisé pour transmettre dans la session précédente. Les seules différences sont~:}
+\lge{If the data sent by \lprog{coap\_full\_sensor.py}{pycom} passes through an LPWAN network, the program \lprog{generic\_coap\_relay.py}{plido-tp4} will act as an intermediary to send it to the CoAP server. The program is almost identical to the one we used to transmit in the previous session. The only differences are~:}
+
 \begin{itemize}
-    \item les numéros de ports utilisés : 5683 au lieu de 33033~;
-    \item l'ajout de la décompression SCHC pour les données venant de Sigfox.
+    \item 
+        \lgf{les numéros de ports utilisés : 5683 au lieu de 33033~;}
+        \lge{the port numbers used: 5683 instead of 33033~;}
+        
+    \item 
+        \lgf{l'ajout de la décompression SCHC pour les données venant de Sigfox.}
+        \lge{the addition of SCHC decompression for data coming from Sigfox.}
+        
 \end{itemize}
 
 \pythonlst[firstline=69,lastline=89, firstnumber=69]{generic\_coap\_relay.py}
 
-Pour reconstruire l'en-tête CoAP, SCHC se base sur des règles pour rendre le traitement indépendant des champs employés par le protocole. Mais ici, pour faire plus simple, nous utilisons le module Message d'\Index{aoicoap} pour reconstituer le message CoAP.
+\lgf{Pour reconstruire l'en-tête CoAP, SCHC se base sur des règles pour rendre le traitement indépendant des champs employés par le protocole. Mais ici, pour faire plus simple, nous utilisons le module Message d'\Index{aoicoap} pour reconstituer le message CoAP.}
+\lge{To reconstruct the CoAP header, SCHC relies on rules to make the processing independent of the fields used by the protocol. But here, to make it simpler, we use the Message module of \Index{aoicoap} to reconstruct the CoAP message.}
 
-Dans un premier temps, on extrait du premier octet la valeur du champ message ID et l'index des URI (ligne 72 à 74) puis, à partir de ces valeurs et de celles connues à l'avance, le message CoAP est reconstitué.
+
+\lgf{Dans un premier temps, on extrait du premier octet la valeur du champ message ID et l'index des URI (ligne 72 à 74) puis, à partir de ces valeurs et de celles connues à l'avance, le message CoAP est reconstitué.}
+\lge{Initially, one extracts from the first byte the value of the field message ID and the index of the URI (line 72 to 74) then, starting from these values and those known in advance, the CoAP message is reconstituted.}
+
 
          \vspace{1em}
 
-Dans tous les cas, la fonction \texttt{forward\_data} est utilisée. Elle retourne la réponse du serveur CoAP qui est renvoyée au réseau LPWAN suivant les principes que nous avions vus lors de la session précédente. Nous ne l'avons pas mis en œuvre pour Sigfox pour éviter une erreur vu que 4 messages par jours sont autorisés.
+\lgf{Dans tous les cas, la fonction \texttt{forward\_data} est utilisée. Elle retourne la réponse du serveur CoAP qui est renvoyée au réseau LPWAN suivant les principes que nous avions vus lors de la session précédente. Nous ne l'avons pas mis en œuvre pour Sigfox pour éviter une erreur vu que 4 messages par jours sont autorisés.}
+\lge{In all cases, the function \texttt{forward\_data} is used. It returns the answer of the CoAP server which is sent back to the LPWAN network according to the principles we had seen during the previous session. We did not implement it for Sigfox to avoid an error since 4 messages per day are allowed.}
 
-\subsection{serveur CoAP}
 
-Finalement, le programme \pprog{coap\_server.py}{plido-tp4} a été étendu à différents chemins d'URI pour traiter les différentes ressources que vont nous envoyer les capteurs. Et dans le traitement de la ressource, l'appel a la fonction to_bbt a été ajouté.
+\lgf{\subsection{serveur CoAP}}
+\lge{\subsection{CoAP server}}
+
+
+\lgf{Finalement, le programme \pprog{coap\_server.py}{plido-tp4} a été étendu à différents chemins d'URI pour traiter les différentes ressources que vont nous envoyer les capteurs. Et dans le traitement de la ressource, l'appel a la fonction \texttt{to\_bbt} a été ajouté.}
+\lge{Finally, the program \pprog{coap\_server.py}{plido-tp4} has been extended to different URI paths to process the different resources that the sensors will send us. And in the treatment of the resource, the call to the function \texttt{to\_bbt} was added.}
+
 
 \section {Pistes d'améliorations}
 
-Vous pouvez étendre cet ensemble de programmes. Voici quelques pistes d'amélioration :
+\lgf{Vous pouvez étendre cet ensemble de programmes. Voici quelques pistes d'amélioration :}
+\lge{You can extend this set of programs. Here are some ways to improve:}
+
 
 \begin{itemize}
 
-\item les capteurs envoient également leur mémoire disponible. Cela peut être utile pour détecter une fuite dans la mémoire ; par exemple quand une structure n'est jamais libérée. La structure CBOR est bien envoyée mais ni \texttt{coap\_server.py} ni Beebotte n'ont été configurés pour afficher ces valeurs. Vous pouvez donc l'intégrer dans la chaîne de traitement ;
-\item le POST de la mémoire conduit à l'émission d'un message en downlink pour indiquer l'erreur 4.04. C'est une conséquence de l'utilisation de l'option CoAP \Index{no\_response} qui ne bloque que les notifications de type 2.xx. Vous pouvez modifier le module CoAP.py pour que la réponse soit traitée. Par exemple, en limitant à un envoi par jour de cette ressource ;
-\item en plus de la mémoire, il peut être intéressant d'envoyer le niveau de la batterie. La page \href{https://forum.pycom.io/topic/1690/correct-formula-for-batt-monitoring-on-expansion-board}{Correct formula for BATT monitoring on expansion board | Pycom user forum}\footnote{https://forum.pycom.io/topic/1690/correct-formula-for-batt-monitoring-on-expansion-board} donne des indications pour récupérer le niveau de la batterie ;
-\item finalement, nous n'avons pas réglé tous les problèmes d'interopérabilité. Si, par exemple, vous voulez envoyer toutes les heures un relevé de la mémoire libre et toutes les minutes la température, vous devez également modifier le programme \texttt{coap\_server.py}. Si ces paramètres sont transmis de manière optimale par le serveur, le programme \texttt{coap\_serveur} peut devenir complètement indépendant de la valeur mesurée.
+\item 
+    \lgf{les capteurs envoient également leur mémoire disponible. Cela peut être utile pour détecter une fuite dans la mémoire ; par exemple quand une structure n'est jamais libérée. La structure CBOR est bien envoyée mais ni \texttt{coap\_server.py} ni Beebotte n'ont été configurés pour afficher ces valeurs. Vous pouvez donc l'intégrer dans la chaîne de traitement ;}
+    \lge{sensors also send their available memory. This can be useful to detect a memory leak; for example when a structure is never released. The CBOR structure is sent but neither \texttt{coap\_server.py} nor Beebotte have been configured to display these values. You can therefore integrate it into the processing chain;}
+\item 
+    \lgf{le POST de la mémoire conduit à l'émission d'un message en downlink pour indiquer l'erreur 4.04. C'est une conséquence de l'utilisation de l'option CoAP \Index{no\_response} qui ne bloque que les notifications de type 2.xx. Vous pouvez modifier le module CoAP.py pour que la réponse soit traitée. Par exemple, en limitant à un envoi par jour de cette ressource ;}
+    \lge{the POST from memory leads to a downlink message to indicate error 4.04. This is a consequence of using the CoAP option \Index{no\_response} which only blocks notifications of type 2.xx. You can modify the CoAP.py module so that the response is processed. For example, by limiting this resource to one submission per day;}
+\item 
+    \lgf{en plus de la mémoire, il peut être intéressant d'envoyer le niveau de la batterie. La page \href{https://forum.pycom.io/topic/1690/correct-formula-for-batt-monitoring-on-expansion-board}{Correct formula for BATT monitoring on expansion board | Pycom user forum}\footnote{https://forum.pycom.io/topic/1690/correct-formula-for-batt-monitoring-on-expansion-board} donne des indications pour récupérer le niveau de la batterie ;}
+    \lge{In addition to the memory, it may be interesting to send the battery level. The page \href{https://forum.pycom.io/topic/1690/correct-formula-for-batt-monitoring-on-expansion-board}{Correct formula for BATT monitoring on expansion board | Pycom user forum}\footnote{https://forum.pycom.io/topic/1690/correct-formula-for-batt-monitoring-on-expansion-board} gives indications to recover the battery level;}
+\item 
+    \lgf{finalement, nous n'avons pas réglé tous les problèmes d'interopérabilité. Si, par exemple, vous voulez envoyer toutes les heures un relevé de la mémoire libre et toutes les minutes la température, vous devez également modifier le programme \texttt{coap\_server.py}. Si ces paramètres sont transmis de manière optimale par le serveur, le programme \texttt{coap\_serveur} peut devenir complètement indépendant de la valeur mesurée.}
+    \lge{Finally, we did not solve all the interoperability problems. If, for example, you want to send every hour a reading of the free memory and every minute the temperature, you must also modify the program \texttt{coap\_server.py}. If these parameters are transmitted optimally by the server, the program \texttt{coap\_server} can become completely independent of the measured value.}
 \end{itemize}
