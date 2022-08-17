@@ -1,32 +1,46 @@
 \cleardoublepage
 \chapter{CoAP}
 
-Les principes \ac{REST} avec leur représentation de l'information par des ressources pointées par des identifiants globalement unique est une des clés du succès de l'Internet et de la composition de services distribués. Même si ce n'est pas l'unique solution, il est indispensable que les informations provenant d'objets contraints puissent s'intégrer dans cette toile d'araignée mondiale. \acs{CoAP}, pour \acl{CoAP}, permet cette intégration à un meilleur coût en termes d'empreinte mémoire ou protocolaire que ne le permettrait le protocole \ac{HTTP}.
+\lgf{Les principes \ac{REST} avec leur représentation de l'information par des ressources pointées par des identifiants globalement unique est une des clés du succès de l'Internet et de la composition de services distribués. Même si ce n'est pas l'unique solution, il est indispensable que les informations provenant d'objets contraints puissent s'intégrer dans cette toile d'araignée mondiale. \acs{CoAP}, pour \acl{CoAP}, permet cette intégration à un meilleur coût en termes d'empreinte mémoire ou protocolaire que ne le permettrait le protocole \ac{HTTP}.}
+\lge{The \ac{REST} principles with their representation of information by resources pointed by globally unique identifiers is one of the keys to the success of the Internet and the composition of distributed services. Even if it is not the only solution, it is essential that information from constrained objects can be integrated into this global web. \acs{CoAP}, for \acl{CoAP}, allows this integration at a better cost in terms of memory or protocol footprint than the \ac{HTTP} protocol would allow.}
+
 
 \section{Introduction}
 
-Dans les chapitres précédents, nous avons vu que \ac{CBOR} permettait d’envoyer des données structurées de manière efficace, que le récepteur pouvait faire la différence entre un entier ou une chaîne de caractères et également savoir combien d’éléments composaient un dictionnaire ou un tableau. En plus d’un gain de place par rapport à \ac{JSON}, la complexité pour sérialiser ou désérialiser était limitée, conduisant à des implémentations peu gourmandes en mémoire.
+\lgf{Dans les chapitres précédents, nous avons vu que \ac{CBOR} permettait d’envoyer des données structurées de manière efficace, que le récepteur pouvait faire la différence entre un entier ou une chaîne de caractères et également savoir combien d’éléments composaient un dictionnaire ou un tableau. En plus d’un gain de place par rapport à \ac{JSON}, la complexité pour sérialiser ou désérialiser était limitée, conduisant à des implémentations peu gourmandes en mémoire.}
+\lge{In the previous chapters, we saw that \ac{CBOR} allowed to send structured data in an efficient way, that the receiver could make the difference between an integer or a string and also know how many elements composed a dictionary or an array. In addition to saving space compared to JSON, the complexity of serializing or deserializing was limited, leading to memory-efficient implementations.}
+
 
          \vspace{1em}
 
 
-Mais CBOR n’est pas suffisant pour une bonne interopérabilité. Quand un récepteur reçoit les données, il faut qu'il sache qu’il s’agit d’un codage CBOR et pas d'une autre structure. De plus, il faut que le récepteur sache quoi faire de ces données. Dans les exercices, nous avons transmis des séries temporelles correspondant à des relevés de température. Mais si nous voulions également transmettre l’humidité et la pression, comment le récepteur ferait la différence ?
+\lgf{Mais CBOR n’est pas suffisant pour une bonne interopérabilité. Quand un récepteur reçoit les données, il faut qu'il sache qu’il s’agit d’un codage CBOR et pas d'une autre structure. De plus, il faut que le récepteur sache quoi faire de ces données. Dans les exercices, nous avons transmis des séries temporelles correspondant à des relevés de température. Mais si nous voulions également transmettre l’humidité et la pression, comment le récepteur ferait la différence ?}
+\lge{But CBOR is not enough for good interoperability. When a receiver receives the data, it must know that it is a CBOR encoding and not some other structure. In addition, the receiver must know what to do with the data. In the exercises, we transmitted time series corresponding to temperature readings. But if we also wanted to transmit humidity and pressure, how would the receiver know the difference?}
 
          \vspace{1em}
 
-Nous avons une solution pour répondre à ces questions : l’utilisation de ressources.
+\lgf{Nous avons une solution pour répondre à ces questions : l’utilisation de ressources.}
+\lge{We have a solution to answer these questions: the use of resources.}
+
 
          \vspace{1em}
 
-Nous avons vu qu’avec le paradigme REST, les ressources étaient nommées. Donc, pour distinguer les différentes séries temporelles, il suffit d’utiliser un nom (ou un URI) différent. Les ressources contiennent également des méta-informations et il est donc possible de transporter le format de codage pour indiquer qu’il s’agit de \ac{CBOR}, de \ac{JSON}, de \ac{CSV}...
+\lgf{Nous avons vu qu’avec le paradigme REST, les ressources étaient nommées. Donc, pour distinguer les différentes séries temporelles, il suffit d’utiliser un nom (ou un URI) différent. Les ressources contiennent également des méta-informations et il est donc possible de transporter le format de codage pour indiquer qu’il s’agit de \ac{CBOR}, de \ac{JSON}, de \ac{CSV}...}
+\lge{We have seen that with the REST paradigm, resources are named. So, to distinguish between different time series, it is sufficient to use a different name (or URI). The resources also contain meta-information and it is therefore possible to transport the encoding format to indicate that they are \ac{CBOR}, \ac{JSON}, \ac{CSV}...}
+
 
          \vspace{1em}
 
-Malgré son universalité, ce modèle pose un problème pour les objets contraints :
+\lgf{Malgré son universalité, ce modèle pose un problème pour les objets contraints :}
+\lge{Despite its universality, this model poses a problem for constrained objects:}
 
-\begin{itemize}
-\item HTTP utilise TCP pour fiabiliser les communications entre le client et le serveur. Or, TCP est gourmand en ressources. Il faut de la mémoire pour stocker les paquets non acquittés ou hors séquence, un grand nombre d’heuristiques doivent être mises en œuvre pour améliorer ses performances ;
-la souplesse pour créer des en-têtes peut s'avérer être un désavantage pour un objet contraint. Ainsi, la requête \ac{HTTP} vers le serveur \texttt{www.arduino.cc} peut avoir cette forme~:
+
+
+\lgf{HTTP utilise TCP pour fiabiliser les communications entre le client et le serveur. Or, TCP est gourmand en ressources. Il faut de la mémoire pour stocker les paquets non acquittés ou hors séquence, un grand nombre d’heuristiques doivent être mises en œuvre pour améliorer ses performances ;
+la souplesse pour créer des en-têtes peut s'avérer être un désavantage pour un objet contraint. Ainsi, la requête \ac{HTTP} vers le serveur \texttt{www.arduino.cc} peut avoir cette forme~:}
+\lge{HTTP uses TCP to ensure reliable communications between the client and the server. However, TCP is resource-intensive. It requires memory to store unacknowledged or out-of-sequence packets, and a large number of heuristics must be implemented to improve its performance;
+the flexibility to create headers can be a disadvantage for a constrained object. Thus, the request \ac{HTTP} to the server \texttt{www.arduino.cc} may have this form:}
+
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\tiny, escapechar=@]
 GET / HTTP/1.1\r \n
 Host: www.arduino.cc\r\n
@@ -37,31 +51,36 @@ Accept−Encoding:gzip,deflate\r\n
 Connection: keep-alive\r\n
 \r \n
 \end{termc}
-\end{itemize}
 
 
-En dessous de la première ligne qui demande la ressource à la racine (généralement \texttt{index.html}), on trouve un certain nombre de lignes sous le format :
+\lgf{En dessous de la première ligne qui demande la ressource à la racine (généralement \texttt{index.html}), on trouve un certain nombre de lignes sous le format :}
+\lge{Below the first line that requests the resource from the root (usually \texttt{index.html}), there are a number of lines in the format : }
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\tiny, escapechar=@]
-Nom du champ : valeur du champ\r\n
+@\lgf{Nom du champ : valeur du champ\r\n}\lge{Field name: Field value\r\n}@
 \end{termc}
 
-\noindent qui vont indiquer au serveur le nom du serveur que l’on veut atteindre, la description du navigateur et les formats que celui-ci peut accepter. 
 
+\noindent 
+\lgf{qui vont indiquer au serveur le nom du serveur que l’on veut atteindre, la description du navigateur et les formats que celui-ci peut accepter. }
+\lge{which will tell the server the name of the server you want to reach, the description of the browser and the formats it can accept. }
 
          \vspace{1em}
-         
-         
 
-Le but de CoAP est de définir un protocole beaucoup plus strict qui sera donc plus facile à mettre en œuvre mais qui pourra interopérer avec HTTP afin de préserver les principes définis par l’architecture REST et profiter du nommage des ressources pour que les ressources contraintes participent à la grande toile d'araignée mondiale.
+\lgf{Le but de CoAP est de définir un protocole beaucoup plus strict qui sera donc plus facile à mettre en œuvre mais qui pourra interopérer avec HTTP afin de préserver les principes définis par l’architecture REST et profiter du nommage des ressources pour que les ressources contraintes participent à la grande toile d'araignée mondiale.}
+\lge{The goal of CoAP is to define a much stricter protocol that will be easier to implement but that will be able to interoperate with HTTP in order to preserve the principles defined by the REST architecture and to take advantage of the naming of resources so that the constrained resources participate in the great global spider web.}
 
-\section{Format d'une en-tête CoAP}
+
+\lgf{\section{Format d'une en-tête CoAP}}
+\lge{\section{Format of a CoAP header}}
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/MqBAJ-qwbnU}
 \end{wrapfigure}
 
-L’en-tête des messages CoAP est de taille variable mais très structurée, comme le montre la figure~\vref{fig-CoAP-msg}.
+\lgf{L’en-tête des messages CoAP est de taille variable mais très structurée, comme le montre la figure~\vref{fig-CoAP-msg}.}
+\lge{The header of CoAP messages is variable in size but highly structured, as shown in Figure~\vref{fig-CoAP-msg}.}
+
 
 
 \begin{figure}
@@ -109,89 +128,145 @@ L’en-tête des messages CoAP est de taille variable mais très structurée, co
 
 	
 	\end{tikzpicture}
-\caption{Format d'un message CoAP} 
+\lgf{\caption{Format d'un message CoAP} }
+\lge{\caption{Format of a CoAP message} }
+
 \label{fig-CoAP-msg} 
 \end{figure} 	
 
 
-Le premier mot de 32 bits est présent dans tous les messages CoAP :
+\lgf{Le premier mot de 32 bits est présent dans tous les messages CoAP :}
+\lge{The first 32-bit word is present in all CoAP messages:}
+
 
 \begin{itemize}
-    \item le champ \texttt{Ver}, sur 2 bits, contient le numéro de version du protocole, qui vaut \texttt{01} dans la version actuelle~;
-    \item le champ \texttt{T} pour \textit{\Index{Type}}, également sur 2 bits, indique la nature du message (\texttt{00} : \Index{CON}firmable, \texttt{01} : \Index{NON} confirmable, \texttt{10} : Acquittement\index{ACK}, \texttt{11} : Reset\index{RST})~;
-    \item le champ \texttt{\Index{TKL}}, sur 4 bits, donne la longueur en octets du champ token démarrant au deuxième mot de 32 bits. Si la valeur est 0, ce champ est absent. Les valeurs de 1 à 8 indiquent la longueur. Les valeurs de 9 à 15 ne sont pas autorisées~;
-    \item le champ \texttt{\Index{Code}}, sur 1 octet, permet un codage assez subtil de la nature de la requête ou de la réponse (cf. chapitre suivant)~;
-    \item le champ Message ID, sur 2 octets, identifie les requêtes.
+    \item 
+        \lgf{le champ \texttt{Ver}, sur 2 bits, contient le numéro de version du protocole, qui vaut \texttt{01} dans la version actuelle~;}
+        \lge{the field \texttt{Ver}, on 2 bits, contains the version number of the protocol, which is \texttt{01} in the current version~;}
+    \item  
+        \lgf{le champ \texttt{T} pour \textit{\Index{Type}}, également sur 2 bits, indique la nature du message (\texttt{00} : \Index{CON}firmable, \texttt{01} : \Index{NON} confirmable, \texttt{10} : Acquittement\index{ACK}, \texttt{11} : Reset\index{RST})~;}
+        \lge{the field \texttt{T} for \textit{\Index{Type}}, also on 2 bits, indicates the nature of the message (\texttt{00} : \Index{CON}firmable, \texttt{01}: \Index{NON} confirmable, \texttt{10} : Acknowledgementindex{ACK}, \texttt{11} : Resetindex{RST});}
+    \item  
+        \lgf{le champ \texttt{\Index{TKL}}, sur 4 bits, donne la longueur en octets du champ token démarrant au deuxième mot de 32 bits. Si la valeur est 0, ce champ est absent. Les valeurs de 1 à 8 indiquent la longueur. Les valeurs de 9 à 15 ne sont pas autorisées~;}
+        \lge{the field \texttt{Index{TKL}}, on 4 bits, gives the length in bytes of the token field starting at the second word of 32 bits. If the value is 0, this field is absent. The values from 1 to 8 indicate the length. Values from 9 to 15 are not allowed;}
+    \item  
+        \lgf{le champ \texttt{\Index{Code}}, sur 1 octet, permet un codage assez subtil de la nature de la requête ou de la réponse (cf. chapitre suivant)~;}
+        \lge{the field \texttt{Index{Code}}, on 1 byte, allows a rather subtle coding of the nature of the request or the answer (cf. next chapter);}
+    \item  
+        \lgf{le champ Message ID, sur 2 octets, identifie les requêtes.}
+        \lgf{the Message ID field, on 2 bytes, identifies the requests.}
 \end{itemize}
 
-\subsection{Codage de \texttt{code}}
+\lgf{\subsection{Codage de \texttt{code}}}
+\lge{\subsection{Coding of \texttt{code}}}
 
-Dans beaucoup de protocoles applicatifs comme FTP ou HTTP, le serveur renvoie un code sur 3 caractères indiquant si la requête s'est exécutée correctement ou non. Les codes commençant par le chiffre :
+
+\lgf{Dans beaucoup de protocoles applicatifs comme FTP ou HTTP, le serveur renvoie un code sur 3 caractères indiquant si la requête s'est exécutée correctement ou non. Les codes commençant par le chiffre :}
+\lge{In many application protocols such as FTP or HTTP, the server returns a 3-character code indicating whether the request was executed correctly or not. Codes starting with the number:}
+
 \begin{itemize}
-\item 1 informent que la requête est en train d’être traitée normalement. Ce type de notification n’est pas pris en compte avec CoAP ;
-\item 2 indiquent que la requête a été acceptée et traitée correctement ;
-\item 3 permettent d’indiquer une indirection ;
-\item 4 font référence à une erreur du coté client, due à une mauvaise syntaxe ou une requête qui ne peut être traitée. Ainsi la célèbre erreur 404 indique que le client a demandé une page qui n’existe pas sur le serveur ;
-\item 5 désignent une erreur du coté du serveur.
+\item 
+    \lgf{1 informent que la requête est en train d’être traitée normalement. Ce type de notification n’est pas pris en compte avec CoAP ;}
+    \lge{1 informs that the request is being processed normally. This type of notification is not taken into account with CoAP ;}
+\item  
+    \lgf{2 indiquent que la requête a été acceptée et traitée correctement ;}
+    \lge{2 indicates that the request has been accepted and processed correctly;}
+\item  
+    \lgf{3 permettent d’indiquer une indirection ;}
+    \lge{3 is used to indicate an indirection;}
+\item  
+    \lgf{4 font référence à une erreur du coté client, due à une mauvaise syntaxe ou une requête qui ne peut être traitée. Ainsi la célèbre erreur 404 indique que le client a demandé une page qui n’existe pas sur le serveur ;}
+    \lge{4 refers to an error on the client side, due to bad syntax or a request that cannot be processed. Thus the famous 404 error indicates that the client has requested a page that does not exist on the server;}
+\item  
+    \lgf{5 désignent une erreur du côté du serveur.}
+    \lge{5 indicates an error on the server's side.}
 \end{itemize}
 
          \vspace{1em}
 
-Le site web de l'\ac{IANA}\footnote{\url{http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml#http-status-codes-1}} donne les erreurs que l’on retrouve dans le protocole HTTP. Comme indiqué précédemment, le chiffre de gauche varie entre 1 et 5 tandis que les deux chiffres de droite, précisant la raison de la notification, varient généralement entre 0 et 31.
+\lgf{Le site web de l'\ac{IANA}\footnote{\url{http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml#http-status-codes-1}} donne les erreurs que l’on retrouve dans le protocole HTTP. Comme indiqué précédemment, le chiffre de gauche varie entre 1 et 5 tandis que les deux chiffres de droite, précisant la raison de la notification, varient généralement entre 0 et 31.}
+\lge{The web site of the \footnote{\url{http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml#http-status-codes-1}} gives the errors found in the HTTP protocol. As previously mentioned, the left-hand number varies between 1 and 5 while the two right-hand numbers, specifying the reason for the notification, generally vary between 0 and 31.}
+
 
          \vspace{1em}
 
-Pour permettre une représentation plus compacte, CoAP va coder cette chaîne de caractères dans un octet. Les trois bits de gauche désignent la nature du code et les 5 à droite donneront la raison. 
+\lgf{Pour permettre une représentation plus compacte, CoAP va coder cette chaîne de caractères dans un octet. Les trois bits de gauche désignent la nature du code et les 5 à droite donneront la raison. }
+\lge{To allow a more compact representation, CoAP will encode this string in a byte. The three bits on the left indicate the nature of the code and the 5 on the right will give the reason. }
+
 
          \vspace{1em}
 
-Ainsi le code d’erreur HTTP \texttt{415} (\textit{Unsupported Media Type}) se note en CoAP \texttt{4.15}, s’écrit en binaire \texttt{100.01111} et en décimal 143. Cette notation concerne les réponses aux requêtes mais elle laisse de la place pour coder également les requêtes. En effet, le code avec les trois premiers bits à 0 n’est pas utilisé pour coder les notifications. 
+\lgf{Ainsi le code d’erreur HTTP \texttt{415} (\textit{Unsupported Media Type}) se note en CoAP \texttt{4.15}, s’écrit en binaire \texttt{100.01111} et en décimal 143. Cette notation concerne les réponses aux requêtes mais elle laisse de la place pour coder également les requêtes. En effet, le code avec les trois premiers bits à 0 n’est pas utilisé pour coder les notifications. }
+\lge{Thus the HTTP error code \texttt{415} (\textit{Unsupported Media Type}) is noted in CoAP \texttt{4.15}, written in binary \texttt{100.01111} and in decimal 143. This notation concerns the answers to the requests but it leaves room to code the requests as well. Indeed, the code with the first three bits at 0 is not used to code the notifications. }
+
 
          \vspace{1em}
 
 
-Plusieurs requêtes compatibles avec l’architecture REST peuvent être codées : 
+\lgf{Plusieurs requêtes compatibles avec l’architecture REST peuvent être codées : }
+\lge{Several requests compatible with the REST architecture can be coded: }
+
 \begin{itemize}
-    \item \Index{GET}, codé \texttt{0x01}, retrouve le contenu d’une ressource présente sur le serveur et désignée par un URI~;
-    \item \Index{POST}, codé \texttt{0x02}, stocke une valeur sur une ressource existante présente sur le serveur~;
-    \item \Index{PUT}, codé \texttt{0x03}, crée une ressource sur le serveur et lui affecte une valeur ;
-    \item \Index{DELETE}, codé \texttt{0x04}, supprime une ressource sur le serveur.
+    \item 
+        \lgf{\Index{GET}, codé \texttt{0x01}, retrouve le contenu d’une ressource présente sur le serveur et désignée par un URI~;}
+        \lge{\Index{GET}, coded \texttt{0x01}, retrieves the content of a resource present on the server and designated by a URI~;}
+    \item  
+        \lgf{\Index{POST}, codé \texttt{0x02}, stocke une valeur sur une ressource existante présente sur le serveur~;}
+        \lge{\Index{POST}, coded \texttt{0x02}, stores a value on an existing resource present on the server~;}
+    \item  
+        \lgf{\Index{PUT}, codé \texttt{0x03}, crée une ressource sur le serveur et lui affecte une valeur ;}
+        \lge{\Index{PUT}, coded \texttt{0x03}, creates a resource on the server and assigns it a value ;}
+    \item  
+        \lgf{\Index{DELETE}, codé \texttt{0x04}, supprime une ressource sur le serveur.}
+        \lge{\Index{DELETE}, coded \texttt{0x04}, deletes a resource on the server.}
 
 \end{itemize}
 
-Notez que la valeur 0x00 peut être utilisée dans certains cas.
+\lgf{Notez que la valeur 0x00 peut être utilisée dans certains cas.}
+\lge{Note that the value 0x00 can be used in some cases.}
 
-\subsection{Utilisation du champ \texttt{Message ID}}
+
+\lgf{\subsection{Utilisation du champ \texttt{Message ID}}}
+\lge{\subsection{Use of the field \texttt{Message ID}}}
+
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/BbMt49T9EV4}
 \end{wrapfigure}
 
 
-Le champ \texttt{\Index{Message ID}} sur 2 octets sert à identifier les messages CoAP afin de détecter les duplicatas. Cette valeur est recopiée dans les acquittements pour permettre de savoir quel message est acquitté. Ils ne doivent pas être réutilisés pendant une période fixée.
-
-
+\lgf{Le champ \texttt{\Index{Message ID}} sur 2 octets sert à identifier les messages CoAP afin de détecter les duplicatas. Cette valeur est recopiée dans les acquittements pour permettre de savoir quel message est acquitté. Ils ne doivent pas être réutilisés pendant une période fixée.}
+\lge{The field \texttt{Index{Message ID}} on 2 bytes is used to identify the CoAP messages in order to detect the duplicates. This value is recopied in the acknowledgements to make it possible to know which message is acknowledged. They must not be reused during a fixed period.}
 
          \vspace{1em}
 
 
- Le protocole CoAP repose sur la couche UDP pour des raisons de simplicité de mise en œuvre. Il peut être parfois nécessaire de fiabiliser le transfert des données. Pour se faire, CoAP dispose d'une sous-couche implantant un protocole très simple. Chaque message contient un champ \texttt{message ID} et trois types de trames sont disponibles~:
+\lgf{Le protocole CoAP repose sur la couche UDP pour des raisons de simplicité de mise en œuvre. Il peut être parfois nécessaire de fiabiliser le transfert des données. Pour se faire, CoAP dispose d'une sous-couche implantant un protocole très simple. Chaque message contient un champ \texttt{message ID} et trois types de trames sont disponibles~:}
+\lge{The CoAP protocol is based on the UDP layer for reasons of simplicity of implementation. It may sometimes be necessary to make data transfer more reliable. To do this, CoAP has a sub-layer implementing a very simple protocol. Each message contains a text field and three types of frames are available:}
 
 \begin{itemize}
-\item les messages de type \texttt{CON} pour \textit{confirmable} indiquent qu'ils doivent être acquitté par le récepteur.
-\item les message de type \texttt{ACK} contiennent cet acquittement, le champ \texttt{message ID} du message à acquitter est recopié dans ce message. Ce message peut également contenir des données.
-\item les message de type \texttt{NON} pour \textit{non confirmable} sont de purs datagrammes, ils ne seront pas acquittés par le récepteur, leur perte ne sera pas détectée  par le protocole CoAP.  Par contre, le champ \texttt{message ID} permet de détecter des messages dupliqués.
+\item 
+    \lgf{les messages de type \texttt{CON} pour \textit{confirmable} indiquent qu'ils doivent être acquitté par le récepteur.}
+    \lge{messages of type \texttt{CON} for \textit{confirmable} indicate that they must be acknowledged by the receiver.}
+\item 
+    \lgf{les message de type \texttt{ACK} contiennent cet acquittement, le champ \texttt{message ID} du message à acquitter est recopié dans ce message. Ce message peut également contenir des données.}
+    \lge{messages of type \texttt{ACK} contain this acknowledgement, the field \texttt{message ID} of the message to be acknowledged is copied in this message. This message can also contain data.}
+\item 
+    \lgf{les message de type \texttt{NON} pour \textit{non confirmable} sont de purs datagrammes, ils ne seront pas acquittés par le récepteur, leur perte ne sera pas détectée  par le protocole CoAP.  Par contre, le champ \texttt{message ID} permet de détecter des messages dupliqués.}
+    \lge{messages of type \texttt{NON} for \textit{non confirmable} are pure datagrams, they will not be acknowledged by the receiver, their loss will not be detected by the CoAP protocol.  On the other hand, the field \texttt{message ID} makes it possible to detect duplicated messages.}
+    
 \end{itemize}
 
          \vspace{1em}
 
-La notion d'émetteur/récepteur est dissociée des rôles de client ou de serveur définit par REST. Un client REST peut être émettre des trames \Index{CON}, \Index{NON} ou \Index{ACK}, de même pour un serveur.
+\lgf{La notion d'émetteur/récepteur est dissociée des rôles de client ou de serveur définit par REST. Un client REST peut être émettre des trames \Index{CON}, \Index{NON} ou \Index{ACK}, de même pour un serveur.}
+\lge{The notion of sender/receiver is dissociated from the roles of client or server defined by REST. A REST client can be a sender of \Index{CON}, \Index{NON} or \Index{ACK} frames, as can a server.}
+
 
          \vspace{1em}
 
-Un message de type \texttt{RST} s'ajoute aux trois types précédents, il peut être émis par exemple quand un des n\oe{}uds a perdu sont contexte suite à un redémarrage et ne sait plus traiter les réponses qu'il reçoit.
-
-
+\lgf{Un message de type \texttt{RST} s'ajoute aux trois types précédents, il peut être émis par exemple quand un des n\oe{}uds a perdu sont contexte suite à un redémarrage et ne sait plus traiter les réponses qu'il reçoit.}
+\lge{A message of type \texttt{RST} is added to the three preceding types, it can be emitted for example when one of the nodes lost its context following a restart and does not know how to treat the answers which it receives.}
 
 \begin{figure}
 \centering
@@ -233,22 +308,29 @@ Un message de type \texttt{RST} s'ajoute aux trois types précédents, il peut �
 
          \vspace{1em}
 
-La figure~\vref{fig-CoAP-CON} montre des échanges fiabilisés avec le protocole CoAP. Les messages de type \texttt{CON} impliquent un acquittement en retour. L'émetteur arme un temporisateur et à son expiration ré-émet le message. Si il reçoit un message d'acquittement contenant la même valeur dans le champ \texttt{Message ID}, le message est acquitté. Ce cas est illustré avec le \texttt{Message ID} valant \texttt{0x1234}.
-
-Si par contre, à l'expiration du temporisateurs, l'acquittement n'est pas arrivé, le message initial, gardé en mémoire est retransmis. Le \rfc{7252} suggère un temporisateur initial de 2 secondes dont la valeur double à chaque retransmission, et 4 transmissions d'un même message sont possibles. Ces valeurs peuvent être changées pour s'adapter au contexte. Les durées de temporisation incluent un aléa, pour éviter une synchronisation entre plusieurs émetteurs pouvant favoriser des collisions de trame.
-
-         \vspace{1em}
-
-La valeur du champ \texttt{Message ID} n'a de sens que pour un échange, si par exemple un récepteur reçoit les valeurs \texttt{0x1234} et \texttt{0x1236}, il ne doit pas en déduire que le message \texttt{0x1235} s'est perdu. Plusieurs transmission peuvent également se dérouler en parallèle~; un émetteur n'a pas besoin d'attendre un acquittement pour envoyer la trame suivante. 
-
-         \vspace{1em}
+\lgf{La figure~\vref{fig-CoAP-CON} montre des échanges fiabilisés avec le protocole CoAP. Les messages de type \texttt{CON} impliquent un acquittement en retour. L'émetteur arme un temporisateur et à son expiration ré-émet le message. Si il reçoit un message d'acquittement contenant la même valeur dans le champ \texttt{Message ID}, le message est acquitté. Ce cas est illustré avec le \texttt{Message ID} valant \texttt{0x1234}.}
+\lge{Figure~\vref{fig-CoAP-CON} shows reliable exchanges with the CoAP protocol. Messages of type \texttt{CON} imply an acknowledgement in return. The sender arms a timer and at its expiration re-transmits the message. If it receives an acknowledgement message containing the same value in the \texttt{Message ID} field, the message is acknowledged. This case is illustrated with the \texttt{Message ID} being worth \texttt{0x1234}.}
 
 
-Les messages non confirmés (type \texttt{\Index{NON}}) utilisent également un champ \texttt{message ID} différent à chaque nouveau message. Il permet de détecter des duplications qui pourraient survenir dans les couches protocolaire inférieures lors du transport du message.
+\lgf{Si par contre, à l'expiration du temporisateurs, l'acquittement n'est pas arrivé, le message initial, gardé en mémoire est retransmis. Le \rfc{7252} suggère un temporisateur initial de 2 secondes dont la valeur double à chaque retransmission, et 4 transmissions d'un même message sont possibles. Ces valeurs peuvent être changées pour s'adapter au contexte. Les durées de temporisation incluent un aléa, pour éviter une synchronisation entre plusieurs émetteurs pouvant favoriser des collisions de trame.}
+\lge{If on the other hand, at the expiration of the timer, the acknowledgement has not arrived, the initial message, kept in memory, is retransmitted. The \rfc{7252} suggests an initial timer of 2 seconds whose value doubles at each retransmission, and 4 transmissions of the same message are possible. These values can be changed to fit the context. The timer durations include a randomness, to avoid synchronization between several transmitters that could lead to frame collisions.}
+
+
 
          \vspace{1em}
 
-Pour rejeter les doublons \footnote{dus aux duplications des couches inférieures, aux pertes des messages d'acquittement forçant une réémission (cas des messages ID \texttt{0x1235} de la figurer~\vref{fig-CoAP-CON}) ou à des temporisateurs mal dimensionnés déclenchant une réémission avant la réception de l'acquittement.}, le récepteur doit garder une copie des Message ID émis par une source. Un simple calcul permet de définir la période de rétention des valeurs.
+\lgf{La valeur du champ \texttt{Message ID} n'a de sens que pour un échange, si par exemple un récepteur reçoit les valeurs \texttt{0x1234} et \texttt{0x1236}, il ne doit pas en déduire que le message \texttt{0x1235} s'est perdu. Plusieurs transmission peuvent également se dérouler en parallèle~; un émetteur n'a pas besoin d'attendre un acquittement pour envoyer la trame suivante. }
+\lge{The value of the field \texttt{Message ID} only has meaning for an exchange, if for example a receiver receives the values \texttt{0x1234} and \texttt{0x1236}, it should not deduce that the message \texttt{0x1235} has been lost. Several transmissions can also take place in parallel; a sender does not have to wait for an acknowledgement before sending the next frame. }
+         \vspace{1em}
+
+\lgf{Les messages non confirmés (type \texttt{\Index{NON}}) utilisent également un champ \texttt{message ID} différent à chaque nouveau message. Il permet de détecter des duplications qui pourraient survenir dans les couches protocolaire inférieures lors du transport du message.}
+\lge{Unconfirmed messages (type \texttt{Index{NON}}) also use a different \texttt{message ID} field for each new message. It allows to detect duplications which could occur in the lower protocol layers during the transport of the message.}
+
+         \vspace{1em}
+
+\lgf{Pour rejeter les doublons \footnote{dus aux duplications des couches inférieures, aux pertes des messages d'acquittement forçant une réémission (cas des messages ID \texttt{0x1235} de la figurer~\vref{fig-CoAP-CON}) ou à des temporisateurs mal dimensionnés déclenchant une réémission avant la réception de l'acquittement.}, le récepteur doit garder une copie des Message ID émis par une source. Un simple calcul permet de définir la période de rétention des valeurs.}
+\lge{To reject the duplicates due to duplications of the lower layers, to the losses of the acknowledgment messages forcing a re-transmission (case of the ID messages \texttt{0x1235} of the figurer~ref{fig-CoAP-CON}) or to badly dimensioned timers triggering a re-transmission before the reception of the acknowledgment), the receiver must keep a copy of the ID messages emitted by a source. A simple calculation allows to define the retention period of the values.}
+
 
          \vspace{1em}
 
@@ -265,25 +347,37 @@ Pour rejeter les doublons \footnote{dus aux duplications des couches inférieure
  
 \end{tabular}
 \end{center}
-\caption{Valeurs par défaut proposées par le \rfc{7252}}
+\lgf{\caption{Valeurs par défaut proposées par le \rfc{7252}}}
+\lge{\caption{Default values proposed by the \rfc{7252}}}
+
 \label{tab-data-rate}
 \end{table}
 
-Un peu d’algèbre élémentaire permet de calculer cette durée. La figure~\vref{fig-duree-max} montre le calcul du pire cas. Il s'obtient quand toutes les messages CON se perdent et sont retransmis et que seul le dernier est acquitté. Comme la durée de déclenchement du temporisateur est doublée à chaque tentative, le temps passé dans cette étape est $$(1 + 2 + 4 + ...) \times ACK\_TIMEOUT$$ ou $$ 2^{MAX\_RETRANSMIT}-1 \times ACK\_TIMEOUT$$
+\lgf{Un peu d’algèbre élémentaire permet de calculer cette durée. La figure~\vref{fig-duree-max} montre le calcul du pire cas. Il s'obtient quand toutes les messages CON se perdent et sont retransmis et que seul le dernier est acquitté. Comme la durée de déclenchement du temporisateur est doublée à chaque tentative, le temps passé dans cette étape est }
+\lge{A little elementary algebra allows to calculate this duration. The figure~\vref{fig-duree-max} shows the worst case calculation. It is obtained when all CON messages are lost and retransmitted and only the last one is acknowledged. As the timer duration is doubled at each attempt, the time spent in this step is }
+$$(1 + 2 + 4 + ...) \times ACK\_TIMEOUT$$ 
+
+\noident\lgf{ou}\lge{or}
+
+$$ 2^{MAX\_RETRANSMIT}-1 \times ACK\_TIMEOUT$$
 
 
-Pour éviter les synchronisations entre les noeuds, la valeur du temporisateur est multiplé par un facteur $ACK\_RANDOM\_FACTOR$ compris entre $1$ et $1.5$. Comme on se place dans le cas le plus défavorable, on prend la valeur maximale.
+\lgf{Pour éviter les synchronisations entre les noeuds, la valeur du temporisateur est multiplé par un facteur $ACK\_RANDOM\_FACTOR$ compris entre $1$ et $1.5$. Comme on se place dans le cas le plus défavorable, on prend la valeur maximale.}
+\lge{To avoid synchronization between the nodes, the value of the timer is multiplied by a factor $ACK\_RANDOM\_FACTOR$ between $1$ and $1.5$. As we are in the worst case, we take the maximum value.}
 
-On en déduit la valeur d'attente maximale avant une transmission correcte $MAX\_TRANSMIT\_SPAN$ qui est de 45 secondes.
+\lgf{On en déduit la valeur d'attente maximale avant une transmission correcte $MAX\_TRANSMIT\_SPAN$ qui est de 45 secondes.}
+\lge{We deduce the maximum waiting value before a correct transmission $MAX\_TRANSMIT\_SPAN$ which is 45 seconds.}
 
          \vspace{1em}
 
-
-Une fois le message transmis, il doit arriver à destination. Le \rfc{7252} prend une valeurs très importante de 100s pour la latence entre l'objet et le serveur\footnote{Le schéma figure~\vref{fig-duree-max} n'est pas à l'échelle.} et 2s pour le temps de traitement. Le temps d'aller retour ou \ac{RTT} maximal est de 202s.
+\lgf{Une fois le message transmis, il doit arriver à destination. Le \rfc{7252} prend une valeurs très importante de 100s pour la latence entre l'objet et le serveur\footnote{Le schéma figure~\vref{fig-duree-max} n'est pas à l'échelle.} et 2s pour le temps de traitement. Le temps d'aller retour ou \ac{RTT} maximal est de 202s.}
+\lge{Once the message is transmitted, it must arrive at its destination. The \rfc{7252} takes a very important value of 100s for the latency between the object and the serverfootnote{The figure~vref{fig-duree-max} is not to scale} and 2s for the processing time. The maximum round trip time or RTTT is 202s.}
 
          \vspace{1em}
 
-Pour les messages \Index{CON}firmés, le temps maximal $EXCHANGE\_LIFETIME$ est donc de 245s. Pour les message \Index{NON} confirmé, on peut supposer qu'un message sera transmis plusieurs fois pour s'assurer qu'il a été correctement reçu par le destinataire. On retrouve le même calcul sans la partie acquittement, d'où une durée de 145s.
+\lgf{Pour les messages \Index{CON}firmés, le temps maximal $EXCHANGE\_LIFETIME$ est donc de 245s. Pour les message \Index{NON} confirmé, on peut supposer qu'un message sera transmis plusieurs fois pour s'assurer qu'il a été correctement reçu par le destinataire. On retrouve le même calcul sans la partie acquittement, d'où une durée de 145s.}
+\lge{For confirmed \Index{CON} messages, the maximum $EXCHANGE_LIFETIME$ is therefore 245s. For the confirmed \Index{NON} messages, we can suppose that a message will be transmitted several times to make sure that it was correctly received by the recipient. We find the same calculation without the acknowledgement part, hence a duration of 145s.}
+
 
 
 \begin{table}
@@ -298,7 +392,8 @@ Pour les messages \Index{CON}firmés, le temps maximal $EXCHANGE\_LIFETIME$ est 
 
 \end{tabular}
 \end{center}
-\caption{Valeurs déduites à partir des paramètres par défaut proposées par le \rfc{7252}}
+\lgf{\caption{Valeurs déduites à partir des paramètres par défaut proposées par le \rfc{7252}}}
+\lge{\caption{Values deduced from the default parameters proposed by the \rfc{7252}}}
 \label{tab-data-rate}
 \end{table}
 
@@ -404,24 +499,31 @@ Pour les messages \Index{CON}firmés, le temps maximal $EXCHANGE\_LIFETIME$ est 
     
 
 	\end{tikzpicture}
-\caption{Échanges fiabilisés avec CoAP} 
+\lgf{\caption{Échanges fiabilisés avec CoAP} }
+\lge{\caption{Reliable exchanges with CoAP} }
+
 \label{fig-duree-max} 
 \end{figure} 	
 
          \vspace{1em}
 
-Le standard prévoit que, par défaut, la durée d’activité d’un Message ID est d’environ 5 minutes (247 s) pour les messages confirmés, et 2,5 minutes (145 s) pour les messages non confirmés.
-Avoir cette notion en tête peut vous éviter des heures de débogage. Supposons qu'un client commence toujours par numéroter ses messages à 1. Le récepteur va donc garder les valeurs des messages ID pendant 5 minutes. Si vous redémarrez l'objet, il va émettre de nouveaux messages, mais avec les mêmes valeurs de Messages ID qui seront acquittés, mais pas traités ignorés par le récepteur.
+\lgf{Le standard prévoit que, par défaut, la durée d’activité d’un Message ID est d’environ 5 minutes (247 s) pour les messages confirmés, et 2,5 minutes (145 s) pour les messages non confirmés.
+Avoir cette notion en tête peut vous éviter des heures de débogage. Supposons qu'un client commence toujours par numéroter ses messages à 1. Le récepteur va donc garder les valeurs des messages ID pendant 5 minutes. Si vous redémarrez l'objet, il va émettre de nouveaux messages, mais avec les mêmes valeurs de Messages ID qui seront acquittés, mais pas traités ignorés par le récepteur.}
+\lge{The standard is that, by default, the activity time of a Message ID is about 5 minutes (247 s) for confirmed messages, and 2.5 minutes (145 s) for unconfirmed messages.
+Keeping this in mind can save you hours of debugging. Let's assume that a client always starts by numbering its messages at 1. The receiver will then keep the message ID values for 5 minutes. If you restart the object, it will send new messages, but with the same Message ID values that will be acknowledged, but not processed ignored by the receiver.}
 
 
-
-\subsection{Les \Index{Token}s}\label{chap-token}
+\lgf{\subsection{Les \Index{Token}}}
+\lge{\subsection{\Index{Token}}}
+\label{chap-token}
 
 \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/whg3BsUkxkE}
 \end{wrapfigure}
 
-CoAP utilise le protocole UDP pour communiquer. Contrairement à TCP, il n’y a pas de notion d’établissement de connexion. Il est donc difficile de faire le lien entre les établissements et les réponses, surtout si elles ne sont pas immédiates. La figure suivante illustre ce phénomène. Une requête GET est envoyée par un client à un serveur.
+\lgf{CoAP utilise le protocole UDP pour communiquer. Contrairement à TCP, il n’y a pas de notion d’établissement de connexion. Il est donc difficile de faire le lien entre les établissements et les réponses, surtout si elles ne sont pas immédiates. La figure suivante illustre ce phénomène. Une requête GET est envoyée par un client à un serveur.}
+\lge{CoAP uses the UDP protocol to communicate. Unlike TCP, there is no notion of connection establishment. It is therefore difficult to make the link between establishments and responses, especially if they are not immediate. The following figure illustrates this phenomenon. A GET request is sent by a client to a server.}
+
 
 \begin{figure}
 \centering
@@ -452,20 +554,29 @@ CoAP utilise le protocole UDP pour communiquer. Contrairement à TCP, il n’y 
 
          \vspace{1em}
 
-La réponse ne peut pas être immédiate (par exemple il faut lire une valeur sur un capteur qui demande d’être activé). Le message d'acquittement ne peut pas être différé sinon, le client ne voyant pas sa requête acquittée, la retransmettrait. Le serveur acquitte avec un message Ack vide (cf. figure~\vref{fig-CoAP-Token}). Quand le serveur peut envoyer la ressource, il le fait à son tour dans un message de type CON qui sera à son tour acquitté. Vous pouvez remarquer que les valeurs du champ Message ID sont complètement décorrélées. Pour faire le lien entre la requête et la réponse, un token fourni par le client est recopié par le serveur. C'est pour cela que l'on peut considérer une valeur de Token comme une "connexion" entre le client et le serveur.
+\lgf{La réponse ne peut pas être immédiate (par exemple il faut lire une valeur sur un capteur qui demande d’être activé). Le message d'acquittement ne peut pas être différé sinon, le client ne voyant pas sa requête acquittée, la retransmettrait. Le serveur acquitte avec un message Ack vide (cf. figure~\vref{fig-CoAP-Token}). Quand le serveur peut envoyer la ressource, il le fait à son tour dans un message de type CON qui sera à son tour acquitté. Vous pouvez remarquer que les valeurs du champ Message ID sont complètement décorrélées. Pour faire le lien entre la requête et la réponse, un token fourni par le client est recopié par le serveur. C'est pour cela que l'on peut considérer une valeur de Token comme une "connexion" entre le client et le serveur.}
+\lge{The response cannot be immediate (for example, a value must be read from a sensor that requires activation). The acknowledgement message cannot be delayed, otherwise the client, not seeing its request acknowledged, would retransmit it. The server acknowledges with an empty Ack message (see figure~\vref{fig-CoAP-Token}). When the server can send the resource, it does so in turn in a CON message, which will in turn be acknowledged. You may notice that the values of the Message ID field are completely uncorrelated. To make the link between the request and the response, a token provided by the client is copied by the server. This is why we can consider a token value as a "connection" between the client and the server.}
+
 
          \vspace{1em}
 
-Le Token est une séquence binaire facultative dont la taille est comprise entre 0 (pas de token) et 8 octets. La longueur est indiquée au début de l’en-tête dans le champ Token Length (\texttt{\Index{TKL}}) et la valeur suit immédiatement l'en-tête obligatoire avant les options.
+\lgf{Le Token est une séquence binaire facultative dont la taille est comprise entre 0 (pas de token) et 8 octets. La longueur est indiquée au début de l’en-tête dans le champ Token Length (\texttt{\Index{TKL}}) et la valeur suit immédiatement l'en-tête obligatoire avant les options.}
+\lge{The Token is an optional binary sequence whose size is between 0 (no token) and 8 bytes. The length is specified at the beginning of the header in the Token Length field (\texttt{\Index{TKL}}) and the value immediately follows the mandatory header before the options.}
 
          \vspace{1em}
+         
+\lgf{On voit bien sur cet exemple, figure~\vref{fig-CoAP-Token} la décorélation entre la machine protocolaire de bas niveau basée sur les \texttt{Message ID} et la machine protocolaire REST. Le client envoie un message CON contenant sa requête et reçoit la réponse dans un message ACK. Dans cet exemple, il y a aussi deux niveau d'acquittement au niveau des messages et avec les notifications REST.}
+\lge{We can see on this example, figure~ref{fig-CoAP-Token} the decorrelation between the low level protocol machine based on the \texttt{Message ID} and the REST protocol machine. The client sends a CON message containing its request and receives the response in an ACK message. In this example, there are also two levels of acknowledgement at the message level and with REST notifications.}
 
-On voit bien sur cet exemple, figure~\vref{fig-CoAP-Token} la décorélation entre la machine protocolaire de bas niveau basée sur les \texttt{Message ID} et la machine protocolaire REST. Le client envoie un message CON contenant sa requête et reçoit la réponse dans un message ACK. Dans cet exemple, il y a aussi deux niveau d'acquittement au niveau des messages et avec les notifications REST.
 
 
-\subsection{Les options CoAP}
+\lgf{\subsection{Les options CoAP}}
+\lge{\subsection{The CoAP options}}
 
-Le champ \texttt{Option} va contenir des \Index{option}s qui vont soit servir à améliorer le protocole de transfert des données entre le client et le serveur, soit servir à coder les en-têtes des requêtes et des réponses en garantissant une certaine compatibilité avec les en-têtes HTTP.
+
+\lgf{Le champ \texttt{Option} va contenir des \Index{option}s qui vont soit servir à améliorer le protocole de transfert des données entre le client et le serveur, soit servir à coder les en-têtes des requêtes et des réponses en garantissant une certaine compatibilité avec les en-têtes HTTP.}
+\lge{The field \texttt{Option} will contain \Index{option}s that will either be used to improve the data transfer protocol between the client and the server, or will be used to encode the request and response headers by guaranteeing a certain compatibility with HTTP headers.}
+
 
          \vspace{1em}
 \begin{figure}
@@ -508,100 +619,301 @@ Le champ \texttt{Option} va contenir des \Index{option}s qui vont soit servir à
 \caption{Format des options} 
 \label{fig-CoAP-opt} 
 \end{figure} 	
-La structure utilisée (cf. figure~\vref{fig-CoAP-opt}) est dite \ac{TLV} ou Type Longueur Valeur. Chaque champ contient au moins ces deux informations~:
+
+\lgf{La structure utilisée (cf. figure~\vref{fig-CoAP-opt}) est dite \ac{TLV} ou Type Longueur Valeur. Chaque champ contient au moins ces deux informations~:}
+\lge{The structure used (see figure~\vref{fig-CoAP-opt}) is called \ac{TLV} or Type Length Value. Each field contains at least these two pieces of information:}
+
 \begin{itemize}
-    \item Type indiquant la nature de l’option ;
-    \item Longueur indiquant la taille des données en octets. Si ce dernier n’est pas nul, les données vont se trouver après. 
+    \item 
+        \lgf{Type indiquant la nature de l’option ;}
+        \lge{Type indicating the nature of the option;}
+    \item 
+        \lgf{Longueur indiquant la taille des données en octets. Si ce dernier n’est pas nul, les données vont se trouver après.}
+        \lge{Length indicating the size of the data in bytes. If the latter is not null, the data will be after.}
 \end{itemize}
 
-CoAP complique un peu la chose en optant pour un codage différentiel de la valeur de l’option. Ainsi, si l’on doit envoyer une option de type 5 puis deux de type 6, le codage contiendra $\Delta$T = 5, $\Delta$T = 1, $\Delta$T = 0.
+\lgf{CoAP complique un peu la chose en optant pour un codage différentiel de la valeur de l’option. Ainsi, si l’on doit envoyer une option de type 5 puis deux de type 6, le codage contiendra $\Delta$T = 5, $\Delta$T = 1, $\Delta$T = 0.}
+\lge{CoAP complicates things a little by opting for a differential coding of the option value. Thus, if one must send an option of type 5 then two of type 6, the coding will contain $\Delta$T = 5, $\Delta$T = 1, $\Delta$T = 0.}
 
          \vspace{1em}
 
-Mais comme le champ $\Delta$T ne fait que 4 bits, on ne peut pas aller bien loin pour coder ces valeurs. Un mécanisme d'échappement est mis en place pour les différences supérieures à 13. Dans ce cas, la valeur 13 est mise dans le champ ∆T et l'octet suivant code la différence moins 13.
+\lgf{Mais comme le champ $\Delta$T ne fait que 4 bits, on ne peut pas aller bien loin pour coder ces valeurs. Un mécanisme d'échappement est mis en place pour les différences supérieures à 13. Dans ce cas, la valeur 13 est mise dans le champ ∆T et l'octet suivant code la différence moins 13.}
+\lge{But as the $\Delta$T field is only 4 bits long, we can't go very far to encode these values. An escape mechanism is implemented for differences greater than 13. In this case, the value 13 is put in the ∆T field and the next byte encodes the difference minus 13.}
 
-Par exemple, si l'on doit coder deux options de valeurs 5 et 20, la différence est de 15. La première option est codée normalement avec le $\Delta$T à 5. Pour la seconde option, le $\Delta$T est mis à 13 et l'octet suivant prendra la valeur 2.
+\lgf{Par exemple, si l'on doit coder deux options de valeurs 5 et 20, la différence est de 15. La première option est codée normalement avec le $\Delta$T à 5. Pour la seconde option, le $\Delta$T est mis à 13 et l'octet suivant prendra la valeur 2.}
+\lge{PFor example, if you have to code two options with values of 5 and 20, the difference is 15. The first option is coded normally with the $\Delta$T at 5. For the second option, the $\Delta$T is set to 13 and the next byte will take the value 2.}
 
-Notez que la valeur 14 mise dans le champ $\Delta$T indique que la différence nécessite deux octets pour être codée. Les principales options utilisés dans CoAP se retrouvent listés dans le tableau~\vref{tab-CoAP-options}. Celles apparaissant sur fond bleu, seront traitées plus en détail dans cet ouvrage.
+
+\lgf{Notez que la valeur 14 mise dans le champ $\Delta$T indique que la différence nécessite deux octets pour être codée. Les principales options utilisés dans CoAP se retrouvent listés dans le tableau~\vref{tab-CoAP-options}. Celles apparaissant sur fond bleu, seront traitées plus en détail dans cet ouvrage.}
+\lge{Note that the value 14 put in the $\Delta$T field indicates that the difference requires two bytes to be encoded. The main options used in CoAP are listed in the table~\vref{tab-CoAP-options}. Those with a blue background will be discussed in more detail in this book.}
+
 
          \vspace{1em}
 
-Pour la longueur on retrouve le même principe : les longueurs inférieures à 13 sont codées directement ; si elles sont supérieures ou égale à 13, la valeur moins 13 est codée dans un octet supplémentaire. Une valeur de 14 indique que deux octets sont utilisés pour coder la longueur moins 269.
+\lgf{Pour la longueur on retrouve le même principe : les longueurs inférieures à 13 sont codées directement ; si elles sont supérieures ou égale à 13, la valeur moins 13 est codée dans un octet supplémentaire. Une valeur de 14 indique que deux octets sont utilisés pour coder la longueur moins 269.}
+\lge{For the length one finds the same principle: the lengths lower than 13 are coded directly; if they are higher or equal to 13, the value minus 13 is coded in an additional byte. A value of 14 indicates that two bytes are used to code the length minus 269.}
 
-La figure~\vref{fig-CoAP-opt} illustre le codage d’une option dans l’en-tête d’un message CoAP.
+
+\lgf{La figure~\vref{fig-CoAP-opt} illustre le codage d’une option dans l’en-tête d’un message CoAP.}
+\lge{Figure~\vref{fig-CoAP-opt} illustrates the coding of an option in the header of a CoAP message.}
+
 
          \vspace{1em}
 
-Il se peut qu’il y ait des données après les options. Dans ce cas, un séparateur avec la valeur \texttt{0xFF} est inséré. Il ne peut pas être confondu avec le codage d’une option puisque les champs $\Delta$T et Longueur n'évoluent qu'entre 0 et 14.
+\lgf{Il se peut qu’il y ait des données après les options. Dans ce cas, un séparateur avec la valeur \texttt{0xFF} est inséré. Il ne peut pas être confondu avec le codage d’une option puisque les champs $\Delta$T et Longueur n'évoluent qu'entre 0 et 14.}
+\lge{It is possible that there is data after the options. In this case, a separator with the value \texttt{0xFF} is inserted. It cannot be confused with the encoding of an option since the $\Delta$T and Length fields only change between 0 and 14.}
 
-S’il n’y a pas de données à transmettre (par exemple dans le cas d’une requête GET), le message CoAP se termine après les options.
 
-\subsection{Options CoAP}
+\lgf{S’il n’y a pas de données à transmettre (par exemple dans le cas d’une requête GET), le message CoAP se termine après les options.}
+\lge{If there is no data to be transmitted (for example in the case of a GET request), the CoAP message ends after the options.}
 
-Le premier bit servant a coder le type décrit, quand il est positionné à 1, si ce type doit être connu du récepteur (critique). Dans ce cas, si un destinataire reçoit une option de ce type est qu'il ne la connaît pas, il doit produire un message d'erreur. Dans la cas contraire cette option est ignorée du récepteur qui poursuit le traitement des options suivantes. Ainsi les options paires sont facultatives et les impaires critiques.   
+
+\lgf{\subsection{Options CoAP}}
+\lge{\subsection{CoAP options}}
+
+
+\lgf{Le premier bit servant a coder le type décrit, quand il est positionné à 1, si ce type doit être connu du récepteur (critique). Dans ce cas, si un destinataire reçoit une option de ce type est qu'il ne la connaît pas, il doit produire un message d'erreur. Dans la cas contraire cette option est ignorée du récepteur qui poursuit le traitement des options suivantes. Ainsi les options paires sont facultatives et les impaires critiques.   }
+\lge{The first bit used to encode the type describes, when set to 1, whether this type must be known by the receiver (critical). In this case, if a receiver receives an option of this type and does not know it, it must produce an error message. Otherwise, this option is ignored by the receiver who continues to process the following options. Thus, even-numbered options are optional and odd-numbered options are critical.}
+
 
 \begin{table}[!ht] 
 \centering 
 \begin{tabular}{|l|l|l|l|p{1cm}|p{6cm}|}
 \hline
- \rowcolor{purple!10} \textbf{Valeur} & \textbf{Nom}& \textbf{Type} &\textbf{Nature} & \textbf{répété} & \textbf{Commentaire} \\\hline\hline
-0 	&Reservé          & & & & \tiny{}	\\\hline
-1 	&\Index{If-Match}         & opaque & critique & oui & \small{Utilisé pour indiquer a serveur de n'effectuer la requête que sous certaines conditions.}	\\\hline
-3 	&\Index{Uri-Host}         & string & critique  & & \small{Contient le nom du serveur d'une URI (nom, adresse IPv4 ou IPv6). Généralement, il n'est pas nécessaire de le préciser puisque les messages CoAP sont envoyés à cette adresse.  }	\\\hline
-4 	&\Index{ETag}             & opaque    & facultative & oui & \small{Utilisé pour gérer la mise en cache des ressources}	\\\hline
-5 	&\Index{If-None-Match}    & vide  & critique & & \small{Utilisé pour indiquer à un serveur de n'effectuer la requête que sous certaines conditions.}	\\\hline
- \rowcolor{blue!10} 6 	&\Index{Observe}          & entier& facultative & & \small{Permet à un serveur d'envoyer une requête aux changement d'état d'une ressource. Dans la réponse la valeur doit toujours augmenter. }	\\\hline
-7 	&\Index{Uri-Port}         & entier & critique & & \small{Contient le numéro du port UDP sur lequel CoAP est lancé. Généralement ce champ n'est pas nécessaire vu que le serveur CoAP attend déjà des messages sur ce port.}	\\\hline
-8 	&\Index{Location-Path}    & string & facultative &oui &\small{Utilisé en réponse à une requête POST pour indiquer un segment du chemin de la ressource.}	\\\hline
- \rowcolor{blue!10} 11 	&\Index{Uri-Path}         & string & critique & oui& \small{Contient un des segments de l'URI}	\\\hline
- \rowcolor{blue!10} 12 	&\Index{Content-Format}   & entier & facultative & & \small{Définit le format dans lequel sont codées des données}	\\\hline
-14 	&\Index{Max-Age}          & entier & facultative & & \small{Durée pendant laquelle la ressource peut être mise en cache.}	\\\hline
- \rowcolor{blue!10} 15 	&\Index{Uri-Query}        & string & critique & oui& \small{Contient les segments d'interrogation que l'on retrouve dans les URI.}	\\\hline
- \rowcolor{blue!10} 17 	&\Index{Accept}           & entier & critique & & \small{Indique les formats que le client peut accepter.}	\\\hline
-20 	&\Index{Location-Query}   & string & facultative & oui& \small{Utilisé en réponse à une requête POST pour indiquer le chemin de la ressource.}	\\\hline
-35 	&\Index{Proxy-Uri}        & string & critique & & \small{Contient une URI qui doit être prise en compte par le proxy.}	\\\hline
-39 	&\Index{Proxy-Scheme}     & string & critique & & \small{Indique le protocole.}	\\\hline
-60 	&\Index{Size1}            & entier & facultative & & \small{Indique la taille de la ressource.}	\\\hline
- \rowcolor{blue!10} 258 	&\Index{No-Response}            & entier & facultative & & \small{	Limite les notifications REST}	\\\hline
+ \rowcolor{purple!10} \textbf{\lgf{Valeur}\lge{Value}} & \textbf{\lgf{Nom}\lge{Name}}& \textbf{Type} &\textbf{Nature} & \textbf{\lgf{répété}\lge{repeated}} & \textbf{\lgf{Commentaire}\lge{Comment}} \\\hline\hline
+0 	&
+\lgf{Reservé}\lge{reserved} &
+&
+&
+& \tiny{}	\\\hline
+
+1 &\Index{If-Match}         & 
+opaque & 
+\lgf{critique}\lge{critical} & 
+\lgf{oui}\lge{yes} & 
+\small{
+\lgf{Utilisé pour indiquer a serveur de n'effectuer la requête que sous certaines conditions.}
+\lge{Used to indicate to the server to make the request only under certain conditions.}
+}	\\\hline
+
+3 	&
+\Index{Uri-Host}         & 
+string & 
+\lgf{critique}\lge{critical}  &
+&
+\small{
+\lgf{Contient le nom du serveur d'une URI (nom, adresse IPv4 ou IPv6). Généralement, il n'est pas nécessaire de le préciser puisque les messages CoAP sont envoyés à cette adresse.}
+\lge{Contains the server name of a URI (name, IPv4 or IPv6 address). Generally, it is not necessary to specify this since CoAP messages are sent to this address.}  
+}	\\\hline
+
+4 	&
+\Index{ETag}             & 
+opaque    & 
+\lgf{facultative}\lge{optional} & 
+\lgf{oui}\lge{yes} &
+\small{
+\lgf{Utilisé pour gérer la mise en cache des ressources}
+\lge{Used to manage resource caching}
+}	\\\hline
+
+5 	&
+\Index{If-None-Match}    &
+\lgf{vide}\lge{empty}  & 
+\lgf{critique}\lge{critical} & 
+& 
+\small{
+\lgf{Utilisé pour indiquer à un serveur de n'effectuer la requête que sous certaines conditions.}
+\lge{Used to tell a server to make the request only under certain conditions.}
+}	\\\hline
+
+ \rowcolor{blue!10} 
+ 6 	&
+ \Index{Observe}          & 
+ \lgf{entier}\lge{integer}& 
+ \lgf{facultative}\lge{optional} & 
+ & 
+ \small{
+ \lgf{Permet à un serveur d'envoyer une requête aux changement d'état d'une ressource. Dans la réponse la valeur doit toujours augmenter. }
+ \lge{Allows a server to send a request to the state changes of a resource. In the response the value must always increase.}
+ }	\\\hline
+ 
+7 	&
+\Index{Uri-Port}         &
+\lgf{entier}\lge{integer} & 
+\lgf{critique}\lge{critical} & 
+&
+\small{
+\lgf{Contient le numéro du port UDP sur lequel CoAP est lancé. Généralement ce champ n'est pas nécessaire vu que le serveur CoAP attend déjà des messages sur ce port.}
+\lge{Contains the number of the UDP port on which CoAP is launched. Usually this field is not needed as the CoAP server is already expecting messages on this port.}
+}	\\\hline
+
+8 	&
+\Index{Location-Path}    & 
+string & 
+\lgf{facultative}\lge{optional} &
+\lgf{oui}\lge{yes} &
+\small{
+\lgf{Utilisé en réponse à une requête POST pour indiquer un segment du chemin de la ressource.}
+\lge{Used in response to a POST request to specify a segment of the resource path.}
+}	\\\hline
+
+ \rowcolor{blue!10} 
+ 11 	&
+ \Index{Uri-Path}         & 
+ string & 
+ \lgf{critique}\lge{critical} & 
+ \lgf{oui}\lge{yes}& 
+ \small{
+ \lgf{Contient un des segments de l'URI}
+ \lge{Contains one of the segments of the URI}
+ } \\\hline
+ 
+ \rowcolor{blue!10} 
+ 12 	&
+ \Index{Content-Format}   &
+ \lgf{entier}\lge{integer} & 
+ \lgf{facultative}\lge{optional} & 
+ & \small{
+ \lgf{Définit le format dans lequel sont codées des données}
+ \lge{Defines the format in which data is encoded}
+ }\\\hline
+ 
+14 	&
+\Index{Max-Age}          & 
+\lgf{entier}\lge{integer} & 
+\lgf{facultative}\lge{optional} &
+& \small{
+\lgf{Durée pendant laquelle la ressource peut être mise en cache.}
+\lge{The length of time the resource can be cached.}
+}	\\\hline
+
+ \rowcolor{blue!10} 
+ 15 	&
+ \Index{Uri-Query}        & 
+ string & 
+ \lgf{critique}\lge{critical} & 
+ \lgf{oui}\lge{yes}& 
+ \small{
+ \lgf{Contient les segments d'interrogation que l'on retrouve dans les URI.}
+ \lgf{Contains the query segments found in URIs.}
+ }\\\hline
+ 
+ \rowcolor{blue!10} 
+ 17 	&
+ \Index{Accept}           & 
+ \lgf{entier}\lge{integer} & 
+ \lgf{critique}\lge{critical} & 
+ & 
+ \small{
+ \lgf{Indique les formats que le client peut accepter.}
+ \lge{Indicates the formats that the client can accept.}
+ }	\\\hline
+ 
+20 	&
+\Index{Location-Query}   & 
+string & 
+\lgf{facultative}\lge{optional} & 
+\lgf{oui}\lge{yes}& 
+\small{
+\lgf{Utilisé en réponse à une requête POST pour indiquer le chemin de la ressource.}
+\lge{Used in response to a POST request to indicate the path to the resource.}
+}	\\\hline
+
+35 	&
+\Index{Proxy-Uri}        & 
+string & 
+\lgf{critique}\lge{critical} & 
+& 
+\small{
+\lgf{Contient une URI qui doit être prise en compte par le proxy.}
+\lge{Contains a URI that must be taken into account by the proxy.}
+}	\\\hline
+
+39 	&
+\Index{Proxy-Scheme}     & 
+string & 
+\lgf{critique}\lge{critical} & 
+& 
+\small{
+\lgf{Indique le schema d'encodage.}
+\lge{Indicates the encoding scheme.}
+}	\\\hline
+
+60 	&
+\Index{Size1}            & 
+\lgf{entier}\lge{integer} & 
+\lgf{facultative}\lge{optional} &
+& 
+\small{
+\lgf{Indique la taille de la ressource.}
+\lge{Indicates the size of the resource.}
+}\\\hline
+
+ \rowcolor{blue!10} 
+ 258 	&
+ \Index{No-Response}            & 
+ \lgf{entier}\lge{integer} & 
+ \lgf{facultative}\lge{optional} &
+ & 
+ \small{
+ \lgf{Limite les notifications REST}
+ \lge{Limite les notifications REST}
+ }\\\hline
 \end{tabular}
 	
-\caption{Types du protocole CoAP} 
+\lgf{\caption{Certaines options du protocole CoAP}}
+\lge{\caption{Some options of the CoAP protocol}}
 \label{tab-CoAP-options} 
 \end{table} 
 
-\subsection{Représentation des URI}
+\lgf{\subsection{Représentation des URI}}
+\lge{\subsection{URI representation}}
+
+
 
  \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/k8ml9PEy5t0}
 \end{wrapfigure}
 
-On comprend mieux la signification de certaines options données dans le tableau précédent quand la syntaxe d’un URI est connue. (voir \rfc{2396}) . On a déjà vu que la syntaxe générale est :
+\lgf{On comprend mieux la signification de certaines options données dans le tableau précédent quand la syntaxe d’un URI est connue. (voir \rfc{2396}) . On a déjà vu que la syntaxe générale est :}
+\lge{The meaning of some of the options given in the previous table is better understood when the syntax of a URI is known (see \rfc{2396}). We have already seen that the general syntax is:}
+
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
 <scheme>:<scheme-specific-part>
 \end{termc}
 
-\noindent où \textit{scheme} va définir le schéma de notation. De manière générale, le schéma va indiquer comment est structuré la suite de l'URI. Quand l'URI est aussi un localisateur (donc un URL), le schéma fait référence au protocole qui pourra être utilisé pour retrouver la ressource comme http ou https voire coap. Après le schéma, on trouve deux zones, l'autorité qui va indiquer qui est responsable de nommer les ressources. Dans le cas d'un URL, il peut s’écrire de la manière suivante :
+\noindent 
+\lgf{où \textit{scheme} va définir le schéma de notation. De manière générale, le schéma va indiquer comment est structuré la suite de l'URI. Quand l'URI est aussi un localisateur (donc un URL), le schéma fait référence au protocole qui pourra être utilisé pour retrouver la ressource comme http ou https voire coap. Après le schéma, on trouve deux zones, l'autorité qui va indiquer qui est responsable de nommer les ressources. Dans le cas d'un URL, il peut s’écrire de la manière suivante :}
+\lge{where \textit{scheme} will define the notation scheme. In general, the schema will indicate how the rest of the URI is structured. When the URI is also a locator (thus a URL), the schema refers to the protocol that can be used to find the resource, such as http or https or even coap. After the schema, there are two zones, the authority that will indicate who is responsible for naming the resources. In the case of a URL, it can be written as follows:}
+
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
 <scheme>://@\textit{userinfo@}@host@\textit{:port}@/path?query
 \end{termc}
 
-\noindent où les champs en italique \textit{userinfo@} et \textit{:port} sont facultatifs. Ils contiennent respectivement le nom de l’utilisateur et le numéro de port sur lequel tourne le service.
+\noindent 
+\lgf{où les champs en italique \textit{userinfo@} et \textit{:port} sont facultatifs. Ils contiennent respectivement le nom de l’utilisateur et le numéro de port sur lequel tourne le service.}
+\lge{where the italicized fields \textit{userinfo@} and \textit{:port} are optional. They contain respectively the name of the user and the port number on which the service runs.}
 
          \vspace{1em}
 
-\texttt{path} va être composé d’une série de segments séparés par des caractères\texttt{/} qui identifient la ressource sur le serveur. L’URI peut se terminer par des questions, c’est-à-dire une chaîne de caractères qui sera interprétée par le serveur précédemment désigné. Une question, c'est-à-dire des paramètres fournis pour construire la ressource, peut contenir plusieurs parties séparées par le caractère \texttt{&}.
+\lgf{\texttt{path} va être composé d’une série de segments séparés par des caractères\texttt{/} qui identifient la ressource sur le serveur. L’URI peut se terminer par des questions, c’est-à-dire une chaîne de caractères qui sera interprétée par le serveur précédemment désigné. Une question, c'est-à-dire des paramètres fournis pour construire la ressource, peut contenir plusieurs parties séparées par le caractère \texttt{&}.}
+\lge{\The URI will be composed of a series of segments separated by characters that identify the resource on the server. The URI can end with questions, i.e. a string of characters that will be interpreted by the previously designated server. A question, i.e. parameters provided to build the resource, can contain several parts separated by the character \texttt{&}.}
+
 
          \vspace{1em}
 
-Ceci peut être vérifié par le programme de désassemblage. L’URI~:
+\lgf{Ceci peut être vérifié par le programme de désassemblage. L’URI~:}
+\lge{This can be verified by the disassembly program. THE URI~:}
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, escapechar=@]
 coap://192.168.1.52/capteur1/temperature?max value&date=20131206
 \end{termc}
 
-\noindent utilise le schéma de nommage de coap. Le serveur est \texttt{192.168.1.52}, le chemin (\textit{path}) est composé de deux segments, suivi par deux questions. Le serveur reçoit la requête suivante : 
+\noindent 
+\lgf{utilise le schéma de nommage de coap. Le serveur est \texttt{192.168.1.52}, le chemin (\textit{path}) est composé de deux segments, suivi par deux questions. Le serveur reçoit la requête suivante :}
+\lge{uses the coap naming scheme. The server is \texttt{192.168.1.52}, the path (\textit{path}) is composed of two segments, followed by two questions. The server receives the following request: }
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, , escapechar=#]
 Received packet of size 50
@@ -620,18 +932,26 @@ Option = 15 (+0) length = 13
 Uri-Query date=20131206
 \end{termc}
 
+\lgf{Le listing précédent montre ce que reçoit le serveur. L'URI n'est pas complète, car la partie qui a servie a le localiser n'est pas indispensable. Seules les parties "chemin" et "question" sont indiquées. Le schéma coap: n’est pas précisé ; de même que Uri-Host et Uri-Port car le serveur connaît son adresse IP et le numéro de port sur lequel s’exécute le serveur CoAP.}
+\lge{The previous listing shows what the server receives. The URI is not complete, because the part that was used to locate it is not necessary. Only the parts "path" and "question" are indicated. The coap: scheme is not specified; neither is Uri-Host and Uri-Port because the server knows its IP address and the port number on which the CoAP server is running.}
 
-Le listing précédent montre ce que reçoit le serveur. L'URI n'est pas complète, car la partie qui a servie a le localiser n'est pas indispensable. Seules les parties "chemin" et "question" sont indiquées. Le schéma coap: n’est pas précisé ; de même que Uri-Host et Uri-Port car le serveur connaît son adresse IP et le numéro de port sur lequel s’exécute le serveur CoAP.
 
-Ils pourraient être utiles en cas de virtualisation du serveur, c’est-à-dire si plusieurs instances de CoAP tournaient, soit à des noms différents, soit sur des numéros de port différents. Si cette possibilité existe, pour l’instant, la faible capacité des ressources ne pousse pas vers une virtualisation.
+\lgf{Ils pourraient être utiles en cas de virtualisation du serveur, c’est-à-dire si plusieurs instances de CoAP tournaient, soit à des noms différents, soit sur des numéros de port différents. Si cette possibilité existe, pour l’instant, la faible capacité des ressources ne pousse pas vers une virtualisation.}
+\lge{They could be useful in case of server virtualization, i.e. if several CoAP instances were running, either under different names or on different port numbers. While this possibility exists, for the time being the low capacity of the resources does not push towards virtualization.}
+
 
          \vspace{1em}
 
-Si on reprend la partie optionnelle, la première option qui commence par l'octet \texttt{0xB8}. \texttt{0xb} (=11) indique qu'il s'agit d'une option \Index{Uri-path} (comme c'est la première option, le delta se confond avec la valeur de l'option) et de longueur 8 octets qui correspondent à la valeur \texttt{capteur1}. La seconde option débute par \texttt{0x0B}. Le delta est nul. On reste sur une option Uri-path de longueur de 11 octets. La troisième option s'ouvre avec l'octet \texttt{0x49}. L'incrément étant de 4, le numéro de l'option passe à 15 soit \Index{Uri-query} avec une valeur sur 9 octets. L'option suivante démarre par \texttt{0x0D}. On reste sur une option Uri-query mais la longueur \texttt{0xD} informe que l'octet suivant contient la longueur. La valeur vaut étrangement \texttt{0x00} car elle est diminuée de 13 pour respecter le codage défini par CoAP. la longueur est donc de 13 octets.
+\lgf{Si on reprend la partie optionnelle, la première option qui commence par l'octet \texttt{0xB8}. \texttt{0xb} (=11) indique qu'il s'agit d'une option \Index{Uri-path} (comme c'est la première option, le delta se confond avec la valeur de l'option) et de longueur 8 octets qui correspondent à la valeur \texttt{capteur1}. La seconde option débute par \texttt{0x0B}. Le delta est nul. On reste sur une option Uri-path de longueur de 11 octets. La troisième option s'ouvre avec l'octet \texttt{0x49}. L'incrément étant de 4, le numéro de l'option passe à 15 soit \Index{Uri-query} avec une valeur sur 9 octets. L'option suivante démarre par \texttt{0x0D}. On reste sur une option Uri-query mais la longueur \texttt{0xD} informe que l'octet suivant contient la longueur. La valeur vaut étrangement \texttt{0x00} car elle est diminuée de 13 pour respecter le codage défini par CoAP. la longueur est donc de 13 octets.}
+\lge{If we go back to the optional part, the first option that starts with the byte \texttt{0xB8}. \texttt{0xb} (=11) indicates that it is an option \Index{Uri-path} (as it is the first option, the delta is confused with the value of the option) and of length 8 bytes which correspond to the value \texttt{sensor1}. The second option begins with \texttt{0x0B}. The delta is null. One remains on a Uri-path option of length 11 bytes. The third option opens with the byte \texttt{0x49}. The increment being of 4, the number of the option passes to 15 that is \Index{Uri-query} with a value on 9 bytes. The next option starts with \texttt{0x0D}. One remains on a Uri-query option but the length \texttt{0xD} informs that the following byte contains the length. The value is strangely worth \texttt{0x00} because it is decreased by 13 to respect the coding defined by CoAP. the length is thus 13 bytes.}
 
-\subsubsection*{Questions sur les URI}
 
-Soit le message CoAP suivant :
+\lgf{\subsubsection*{Questions sur les URI}}
+\lge{\subsubsection*{Questions on URIs}}
+
+
+\lgf{Soit le message CoAP suivant :}
+\lge{Let the following CoAP message be:}
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\small, , escapechar=#]
 40020001b474656d700573656e7331436d6178ff32332e30
@@ -639,23 +959,28 @@ Soit le message CoAP suivant :
 
 \Question{Code ?}
 {
-Que représente ce message ?
+\lgf{Que représente ce message ?}
+\lge{What does this message represent?}
+
 \begin{itemize}[label=$\circ$]
-   \item \Wrong{Une requête GET}
-   \item \Correct{Une requête POST}
-   \item \Wrong{Une requête PUT}
-   \item \Wrong{Une requête DELETE}
-   \item \Wrong{Une notification positive}
+   \item \Wrong{\lgf{Une requête GET}\lge{A GET request}}
+   \item \Correct{\lgf{Une requête POST}\lge{A POST request}}
+   \item \Wrong{\lgf{Une requête PUT}\lge{A PUT request}}
+   \item \Wrong{\lgf{Une requête DELETE}\lge{A DELETE request}}
+   \item \Wrong{\lgf{Une notification positive}\lge{A positive notification}}
  \end{itemize}
 }
-{ Le champ code (deuxième octets de l'en-tête CoAP) vaut 0x02, ou 0.02 donc il s'agit d'une requête et d'un POST.
+{ 
+\lgf{Le champ code (deuxième octets de l'en-tête CoAP) vaut 0x02, ou 0.02 donc il s'agit d'une requête et d'un POST.}
+\lge{The code field (second byte of the CoAP header) is 0x02, or 0.02 so it is a request and a POST.}
 }
 
 \Question{Token or not Token?}
 {
-Quelle est la valeur du champ token ?
+\lgf{Quelle est la valeur du champ token ?}
+\lge{What is the value of the token field?}
 \begin{itemize}[label=$\circ$]
-   \item \Correct{Vide}
+   \item \Correct{\lgf{Vide}\lge{Empty}}
    \item \Wrong{\texttt{0xb4}}
    \item \Wrong{\texttt{0xb474}}
    \item \Wrong{\texttt{0xb47465}}
@@ -663,11 +988,15 @@ Quelle est la valeur du champ token ?
  \end{itemize}
 }
 {
-Le premier octet \texttt{0x40} s'écrit en binaire \texttt{0b01\_00\_0000}, soit la version (1), le type (CON) et la taille du champ Token (0), il n'y a donc pas de Token après l'en-tête obligatoire, il y aura directement les options ou le séparateur \texttt{0xFF} pour indiquer des données.}
+\lgf{Le premier octet \texttt{0x40} s'écrit en binaire \texttt{0b01\_00\_0000}, soit la version (1), le type (CON) et la taille du champ Token (0), il n'y a donc pas de Token après l'en-tête obligatoire, il y aura directement les options ou le séparateur \texttt{0xFF} pour indiquer des données.}
+\lge{The first byte \texttt{0x40} is written in binary \texttt{0b01\_00\_0000}, that is to say the version (1), the type (CON) and the size of the Token field (0), so there is no Token after the obligatory header, there will be directly the options or the separator \texttt{0xFF} to indicate the data}
+}
 
-\Question{chemin d'URI}
+\Question{\lgf{chemin d'URI}\lge{URI path}}
 {
-Quel élément de l'URI contient ce message ?
+\lgf{Quels éléments de l'URI contient ce message ?}
+\lge{What elements of the URI does this message contain?}
+
 \begin{itemize}[label=$\circ$]
    \item \Wrong{Aucun}
    \item \Wrong{\texttt{/temp}}
@@ -678,29 +1007,45 @@ Quel élément de l'URI contient ce message ?
     \end{itemize}
    }
    {
-   La séquence des Tyle/Longueur est \texttt{0xb4} Uri-path avec 4 octets de données (temp), \texttt{0x05} toujours Uri-path avec 5 octets de données (sens1) et \texttt{0x43} donc un type 11+4=15 soit Uri-Query avec 3  octets de données (max). \texttt{0xff} indique la fin des options
+   \lgf{La séquence des Type/Longueur est \texttt{0xb4} Uri-path avec 4 octets de données (temp), \texttt{0x05} toujours Uri-path avec 5 octets de données (sens1) et \texttt{0x43} donc un type 11+4=15 soit Uri-Query avec 3  octets de données (max). \texttt{0xff} indique la fin des options.}
+   \lge{The sequence of Type/Length is \texttt{0xb4} Uri-path with 4 bytes of data (temp), \texttt{0x05} always Uri-path with 5 bytes of data (sense1) and \texttt{0x43} thus a type 11+4=15 that is to say Uri-Query with 3 bytes of data (max). \texttt{0xff} indicates the end of the options.}
    }
  
- \subsection{Représentation des données}
+ \lgf{\subsection{Représentation des données}}
+ 
 
-Pour que le client puisse interpréter les données, il faut qu’il puisse comprendre comment elles sont représentées. 
+\lgf{Pour que le client puisse interpréter les données, il faut qu’il puisse comprendre comment elles sont représentées. 
 Cela peut dépendre de la police de caractères. Ainsi, une lettre accentuée ne sera pas représentée de la même manière suivant le type de code. Il en va de même pour la représentation. Le plus simple consiste à envoyer en ASCII la valeur demandée, par exemple la chaîne de caractères \texttt{18} indique 18 degrés. 
-Il faut donc indiquer le type de codage/sérialisation utilisé pour décrire le contenu de la ressource. Là où HTTP utiliserait un nom, c'est-à-dire une chaîne de caractères, CoAP va utiliser une valeur numérique.
+Il faut donc indiquer le type de codage/sérialisation utilisé pour décrire le contenu de la ressource. Là où HTTP utiliserait un nom, c'est-à-dire une chaîne de caractères, CoAP va utiliser une valeur numérique.}
+\lge{In order for the client to interpret the data, they must be able to understand how it is represented. 
+This may depend on the font. For example, an accented letter will not be represented in the same way depending on the type of code. The same goes for the representation. The simplest way is to send the requested value in ASCII, for example the string \texttt{18} indicates 18 degrees. 
+It is therefore necessary to indicate the type of encoding/serialization used to describe the content of the resource. Where HTTP would use a name, i.e. a character string, CoAP will use a numerical value.}
 
-Le tableau précédent donne un extrait des valeurs utilisées pour représenter les formats\footnote{La liste complète peut être trouvée sur le site de l'IANA \url{https://www.iana.org/assignments/core-parameters/core-parameters.xhtml\#content-formats}.}.
+\lgf{Le tableau précédent donne un extrait des valeurs utilisées pour représenter les formats\footnote{La liste complète peut être trouvée sur le site de l'IANA \url{https://www.iana.org/assignments/core-parameters/core-parameters.xhtml\#content-formats}.}.}
+\lge{The previous table gives an extract of the values used to represent the formatsfootnote{The complete list can be found on the IANA site \url{https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats}.}.}
+
 
          \vspace{1em}
 
-Deux options CoAP utilisent ces codes :
+\lgf{Deux options CoAP utilisent ces codes :}
+\lge{Two CoAP options use these codes:}
+
 \begin{itemize}
-    \item \Index{Content-format} (12) indiquant comment la ressource est codée ;
-    \item \Index{Accept} (17) indiquant dans une requête le format dans lequel la réponse doit être codée.
+    \item 
+        \lgf{\Index{Content-format} (12) indiquant comment la ressource est codée ;}
+        \lge{\Index{Content-format} (12) indicating how the resource is encoded;}
+    \item 
+        \lgf{\Index{Accept} (17) indiquant dans une requête le format dans lequel la réponse doit être codée.}
+        \lge{\Index{Accept} (17) indicating in a request the format in which the response should be encoded.}
 \end{itemize}
          \vspace{1em}
 
-Il existe beaucoup de valeurs pour le content-format, elles permettent de spécifier de manière très économique le type de ressource et par conséquent le traitement à effectuer.
+\lgf{Il existe beaucoup de valeurs pour le content-format, elles permettent de spécifier de manière très économique le type de ressource et par conséquent le traitement à effectuer.}
+\lge{There are many values for the content-format, they allow to specify in a very economical way the type of resource and consequently the processing to be done.}
 
-Chaque protocole utilisant CoAP aura tendance à définir de nouveaux codes. Le tableau~\vref{tab-CoAP-MIME} illustre ce phénomène pour \Index{SenML}. La valeur va servir à la fois pour indiquer la structure de données et le format de codage.
+\lgf{Chaque protocole utilisant CoAP aura tendance à définir de nouveaux codes. Le tableau~\vref{tab-CoAP-MIME} illustre ce phénomène pour \Index{SenML}. La valeur va servir à la fois pour indiquer la structure de données et le format de codage.}
+\lge{Each protocol using CoAP will tend to define new codes. The table~\vref{tab-CoAP-MIME} illustrates this phenomenon for \Index{SenML}. The value will be used to indicate both the data structure and the encoding format.}
+
       
 \begin{table}[!ht] 
 \centering 
@@ -726,11 +1071,14 @@ Chaque protocole utilisant CoAP aura tendance à définir de nouveaux codes. Le 
 \end{table} 
 
 \Question{ASCII}
-{Vous avez la ressource suivante :
+{
+\lgf{Vous avez la ressource suivante :}
+\lge{You have the following resource:}
 
 \texttt{temperature = 20C}
 
-Quelle valeur l'option CoAP Content-type utiliser pour une réponse en CoAP ?
+\lgf{Quelle valeur l'option CoAP Content-type utiliser pour une réponse en CoAP ?}
+\lge{What value should the CoAP Content-type option use for a CoAP response?}
 
 \begin{itemize}[label=$\circ$]
    \item \Wrong{text/plain}
@@ -738,14 +1086,27 @@ Quelle valeur l'option CoAP Content-type utiliser pour une réponse en CoAP ?
    \item \Wrong{50}
 \end{itemize}
 }
-{L'entier 0 qui correspond à un codage utilisant les caractères ASCII}
+{
+\lgf{L'entier 0 qui correspond à un codage utilisant les caractères ASCII}
+\lge{The integer 0 which corresponds to an encoding using the ASCII characters}
+}
 
-\Question{SenML}{
-Vous voulez recevoir une ressource dans le format SenML; CBOR. Quelle valeur doit transporter l'option Accept dans la requête ?}
-{\texttt{112}, comme le montre le tableau~\vref{tab-CoAP-MIME}}
+\Question{SenML}
+{
+\lgf{Vous voulez recevoir une ressource dans le format SenML; CBOR. Quelle valeur doit transporter l'option Accept dans la requête ?}
+\lge{You want to receive a resource in the SenML; CBOR format. What value should the Accept option in the request carry?}
+}
+{
+\lgf{\texttt{112}, comme le montre le tableau~\vref{tab-CoAP-MIME}}
+\lge{\texttt{112}, as shown in the table~ref{tab-CoAP-MIME}}
+}
+
 
 \Question{Erreur}
-{Quel code d'erreur retourne le serveur s'il ne peut pas envoyer une réponse dans ce format ? Aidez vous du \rfc{7252}.
+{
+\lgf{Quel code d'erreur retourne le serveur s'il ne peut pas envoyer une réponse dans ce format ? Aidez vous du \rfc{7252}.}
+\lge{What error code does the server return if it cannot send a response in this format? Help you with the \rfc{7252}.}
+
 \begin{itemize}[label=$\circ$]
    \item \Wrong{4.04 (Not Found)}
    \item \Wrong{4.02 (Bad Option)}
@@ -754,20 +1115,33 @@ Vous voulez recevoir une ressource dans le format SenML; CBOR. Quelle valeur doi
 \end{itemize}
 }
 {
-Cf. Chapitre 5.10.4. du RFC. 4.06 n'est pas facile à trouver. Il faut aller sur le site de l'IANA, aller sur le RFC de CoAP qui pointe sur celui de HTTP pour la définition de ce code qui est rarement utilisé en HTTP. 4.04 n'est pas possible car la ressource existe mais pas au bon format. 4.02 n'est également pas possible, l'option Accept est critique donc doit être connue du serveur. Finalement, il s'agit d'une erreur du client et pas du serveur ; donc l'erreur 5.01 n'est pas possible non plus.
+\lgf{Cf. Chapitre 5.10.4. du RFC. 4.06 n'est pas facile à trouver. Il faut aller sur le site de l'IANA, aller sur le RFC de CoAP qui pointe sur celui de HTTP pour la définition de ce code qui est rarement utilisé en HTTP. 4.04 n'est pas possible car la ressource existe mais pas au bon format. 4.02 n'est également pas possible, l'option Accept est critique donc doit être connue du serveur. Finalement, il s'agit d'une erreur du client et pas du serveur ; donc l'erreur 5.01 n'est pas possible non plus.}
+\lge{See Chapter 5.10.4. of the RFC. 4.06 is not easy to find. You have to go to the IANA site, go to the CoAP RFC which points to the HTTP RFC for the definition of this code which is rarely used in HTTP. 4.04 is not possible because the resource exists but not in the right format. 4.02 is also not possible, the Accept option is critical and must be known by the server. Finally, this is a client error and not a server error, so error 5.01 is not possible either.}
+
 }
     
 \section {Observe}
 
-Avec l’architecture REST, le serveur répond toujours aux requêtes d’un client. Si l'on veut suivre l'évolution d'une ressource, le client doit demander périodiquement la valeur ; le serveur ne gardant pas d'état sur les requêtes passées. Cela n'est pas toujours compatible avec les contraintes énergétiques des capteurs. Supposons que l'on ait une alarme d'incendie qui doit informer quand le taux de fumée atteint un certain seuil. Il existe deux possibilités :
+\lgf{Avec l’architecture REST, le serveur répond toujours aux requêtes d’un client. Si l'on veut suivre l'évolution d'une ressource, le client doit demander périodiquement la valeur ; le serveur ne gardant pas d'état sur les requêtes passées. Cela n'est pas toujours compatible avec les contraintes énergétiques des capteurs. Supposons que l'on ait une alarme d'incendie qui doit informer quand le taux de fumée atteint un certain seuil. Il existe deux possibilités :}
+\lge{With the REST architecture, the server always responds to a client's request. If we want to follow the evolution of a resource, the client must periodically ask for the value; the server does not keep any status on past requests. This is not always compatible with the energy constraints of sensors. Suppose we have a fire alarm that must inform when the smoke level reaches a certain threshold. There are two possibilities:}
+
+
 \begin{itemize}
-\item l'alarme est un client REST et envoie un POST vers un serveur quand l'alerte est déclenchée. Pour que cela fonctionne, il faut que l'alarme ait été préalablement configurée avec l'adresse du serveur vers où envoyer ses requêtes POST ;
-\item l'alarme est un serveur REST qui possède une ressource donnant le taux de fumée. Elle n'a pas besoin d'être configurée. Les clients l'interrogent et elle répond à leur adresse. En revanche, si l'on veut déterminer quand un seuil est atteint, il faut continuellement interroger la ressource à une fréquence élevée si l'on ne veut pas rater une information.
+\item 
+    \lgf{l'alarme est un client REST et envoie un POST vers un serveur quand l'alerte est déclenchée. Pour que cela fonctionne, il faut que l'alarme ait été préalablement configurée avec l'adresse du serveur vers où envoyer ses requêtes POST ;}
+    \lge{the alarm is a REST client and sends a POST to a server when the alert is triggered. For this to work, the alarm must be configured with the address of the server to which to send its POST requests;}
+    
+\item 
+    \lgf{l'alarme est un serveur REST qui possède une ressource donnant le taux de fumée. Elle n'a pas besoin d'être configurée. Les clients l'interrogent et elle répond à leur adresse. En revanche, si l'on veut déterminer quand un seuil est atteint, il faut continuellement interroger la ressource à une fréquence élevée si l'on ne veut pas rater une information.}
+    \lgE{the alarm is a REST server that has a resource giving the smoke rate. It does not need to be configured. Clients query it and it responds to their address. However, if you want to determine when a threshold is reached, you have to continuously query the resource at a high frequency if you don't want to miss any information.}
+    
 \end{itemize}
 
          \vspace{1em}
 
-L'option \Index{Observe}, définie dans le \rfc{7641}, permet à un serveur d'envoyer périodiquement la valeur d'une ressource vers le client qui en a fait la demande. La période d'émission (ou les règles d'émission comme envoyer quand un seuil est atteint) est définie par le comportement du serveur. 
+\lgf{L'option \Index{Observe}, définie dans le \rfc{7641}, permet à un serveur d'envoyer périodiquement la valeur d'une ressource vers le client qui en a fait la demande. La période d'émission (ou les règles d'émission comme envoyer quand un seuil est atteint) est définie par le comportement du serveur. }
+\lge{The \Index{Observe} option, defined in the \rfc{7641}, allows a server to periodically send the value of a resource to the client that requested it. The sending period (or the sending rules such as send when a threshold is reached) is defined by the behavior of the server. }
+
 
 \begin{figure}
 \centering
@@ -788,24 +1162,38 @@ L'option \Index{Observe}, définie dans le \rfc{7641}, permet à un serveur d'en
 
 	
 	\end{tikzpicture}
-\caption{Envoi périodique grâce à l'option \texttt{Observe}} 
+\lgf{\caption{Envoi périodique grâce à l'option \texttt{Observe}} }
+\lge{\caption{Periodic sending with the option \texttt{Observe}} }
+
 \label{fig-CoAP-observe} 
 \end{figure} 
 
          \vspace{1em}
 
-La figure~\vref{fig-CoAP-observe} illustre ce comportement. Le client envoie une requête GET en positionnant l'option Observe avec la valeur 0, mais dans valeur. Si le client accepte cette option, il va répondre en la positionnant dans ses réponses. Elle doit dans ce cas comporter une valeur qui ne pourra que croître de réponse en réponse.  Cela est utile pour pour permettre au client de détecter un déséquencement des réponses. Ainsi dans l'exemple, l'Observe estampillé 30 arrive après celui estampillé 40 et sera rejeté par le client.
+\lgf{La figure~\vref{fig-CoAP-observe} illustre ce comportement. Le client envoie une requête GET en positionnant l'option Observe avec la valeur 0, mais dans valeur. Si le client accepte cette option, il va répondre en la positionnant dans ses réponses. Elle doit dans ce cas comporter une valeur qui ne pourra que croître de réponse en réponse.  Cela est utile pour pour permettre au client de détecter un déséquencement des réponses. Ainsi dans l'exemple, l'Observe estampillé 30 arrive après celui estampillé 40 et sera rejeté par le client.}
+\lge{Figure~\vref{fig-CoAP-observe} illustrates this behavior. The client sends a GET request with the Observe option set to 0, but in value. If the client accepts this option, it will respond by setting it in its responses. In this case it must have a value that can only increase from response to response.  This is useful to allow the client to detect a desequencing of the responses. Thus in the example, the Observe stamped 30 arrives after the one stamped 40 and will be rejected by the client.}
+
 
          \vspace{1em}
 
-On notera également que le champ \Index{Token} doit être présent pour faire le lien entre la requête et les réponses.
+\lgf{On notera également que le champ \Index{Token} doit être présent pour faire le lien entre la requête et les réponses.}
+\lge{Note also that the \Index{Token} field must be present to make the link between the request and the answers.}
+
 
          \vspace{1em}
 
-Il faut pouvoir aussi arrêter un Observe. Il existe plusieurs cas de figure~:
+\lgf{Il faut pouvoir aussi arrêter un Observe. Il existe plusieurs cas de figure~:}
+\lge{It must also be possible to stop an Observe. There are several cases~:}
+
 \begin{itemize}
-    \item le client veut stopper un Observe en cours. Il refait la même requête mais en mettant la valeur 1 dans l'option Observe.
-    \item le client redémarre, il va perdre peut perdre son contexte concernant l'Observe, mais continuer a recevoir périodiquement des requêtes provenant du serveur. Le client ne reconnaissant pas le Token, émet un message \Index{ReSeT}. Le serveur annule l'émission périodique vers le client.
-    \item le client est inaccessible, il ne va pas pouvoir annuler la transmission. En règle générale, les réponses avec l'option Observe sont transportées dans des messages \Index{NON} confirmables. Le serveur peut de temps en temps envoyer la réponse dans un message \Index{CON}firmable. S'il ne reçoit pas d'acquittement du client, il en déduit qu'il a disparu et arrête d'envoyer des réponses périodiques.
+    \item 
+        \lgf{le client veut stopper un Observe en cours. Il refait la même requête mais en mettant la valeur 1 dans l'option Observe.}
+        \lge{lhe client wants to stop an Observe in progress. He redoes the same request but sets the Observe option to 1.}
+    \item 
+        \lgf{le client redémarre, il va perdre peut perdre son contexte concernant l'Observe, mais continuer a recevoir périodiquement des requêtes provenant du serveur. Le client ne reconnaissant pas le Token, émet un message \Index{ReSeT}. Le serveur annule l'émission périodique vers le client.}
+        \lge{the client restarts, it may lose its context about the Observe, but continue to receive periodic requests from the server. The client not recognizing the Token, sends a message \Index{ReSeT}. The server cancels the periodic transmission to the client.}
+    \item 
+        \lgf{le client est inaccessible, il ne va pas pouvoir annuler la transmission. En règle générale, les réponses avec l'option Observe sont transportées dans des messages \Index{NON} confirmables. Le serveur peut de temps en temps envoyer la réponse dans un message \Index{CON}firmable. S'il ne reçoit pas d'acquittement du client, il en déduit qu'il a disparu et arrête d'envoyer des réponses périodiques.}
+        \lge{the client is unreachable, it will not be able to cancel the transmission. As a rule, responses with the Observe option are carried in confirmable \Index{CON} messages. The server may occasionally send the response in a confirmable \Index{CON} message. If it does not receive an acknowledgement from the client, it deduces that it has disappeared and stops sending periodic responses.}
 \end{itemize}
 

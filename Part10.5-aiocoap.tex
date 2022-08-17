@@ -1,45 +1,72 @@
 \cleardoublepage
-\chapter{Experimentons CoAP}
+\lgf{\chapter{Experimentons CoAP}}
+\lge{\chapter{Let's experiment CoAP}}
 
-Les programmes se trouvent dans le répertoire \texttt{pycom} pour l'Objet et \texttt{plido-tp4} pour le serveur.
+\lgf{Les programmes se trouvent dans le répertoire \texttt{pycom} pour l'Objet et \texttt{plido-tp4} pour le serveur.}
+\lge{The programs are located in the directory \texttt{pycom} for the Object and \texttt{plido-tp4} for the server.}
 
-Les programmes pour l'Objet pourront tourner indifféremment dans une fenêtre de votre ordinateur ou sur votre Pycom. Dans la suite, nous supposerons qu'il s'agit d'une deuxième fenêtre de terminal sur votre ordinateur mais libre à vous de le lancer sur votre Pycom en Wi-Fi (voire en LoRaWAN) pour plus de réalisme. L'utilisation du réseau Sigfox est plus problématique vu que les requêtes provenant de votre Pycom sont limitées à 12 caractères et que les réponses ne sont qu'au nombre de 4 par jour et limitées à 8 caractères. 
 
-Pour nous concentrer sur le fonctionnement de CoAP, nous allons tout d'abord expérimenter en local sur notre ordinateur. Nous verrons par la suite comment utiliser le programme \pprog{generic\_relay.py}{plido-tp3}  pour bénéficier des réseaux LPWAN.
+\lgf{Les programmes pour l'Objet pourront tourner indifféremment dans une fenêtre de votre ordinateur ou sur votre Pycom. Dans la suite, nous supposerons qu'il s'agit d'une deuxième fenêtre de terminal sur votre ordinateur mais libre à vous de le lancer sur votre Pycom en Wi-Fi (voire en LoRaWAN) pour plus de réalisme. L'utilisation du réseau Sigfox est plus problématique vu que les requêtes provenant de votre Pycom sont limitées à 12 caractères et que les réponses ne sont qu'au nombre de 4 par jour et limitées à 8 caractères. }
+\lge{The programs for the Object can run either in a window on your computer or on your Pycom. In the following, we will assume that it is a second terminal window on your computer but feel free to run it on your Pycom in Wi-Fi (or even in LoRaWAN) for more realism. The use of the Sigfox network is more problematic since the requests from your Pycom are limited to 12 characters and the answers are only 4 per day and limited to 8 characters. }
 
-Attention, le serveur ne fonctionne pas directement sous Windows. Vous devez impérativement le faire tourner dans la machine virtuelle.
+\lgf{Pour nous concentrer sur le fonctionnement de CoAP, nous allons tout d'abord expérimenter en local sur notre ordinateur. Nous verrons par la suite comment utiliser le programme \pprog{generic\_relay.py}{plido-tp3}  pour bénéficier des réseaux LPWAN.}
+\lge{To concentrate on the functioning of CoAP, we will first experiment locally on our computer. We will then see how to use the program \pprog{generic\_relay.py}{plido-tp3} to benefit from LPWAN networks}.
 
-\section{Mise en œuvre du client/serveur}
+
+\lgf{Attention, le serveur ne fonctionne pas directement sous Windows. Vous devez impérativement le faire tourner dans la machine virtuelle.}
+\lge{Be careful, the server does not work directly under Windows. You must run it in the virtual machine.}
+
+\lgf{\section{Mise en œuvre du client/serveur}}
+\lge{\section{Client/server implementation}}
+
 
 
  \begin{wrapfigure}{r}{3cm}
 \Youtube{https://youtu.be/Nieitr19VGg}
 \end{wrapfigure}
 
-Nous allons mettre en œuvre le protocole CoAP entre deux processus sur votre machine puis, si vous le voulez, vous pourrez le tester sur un LoPy. Côté Objet, nous allons utiliser une mise en œuvre simple mais compacte du protocole pour comprendre son fonctionnement. À l’autre extrémité, nous utiliserons la mise en œuvre \Index{aiocoap} qui est très complète mais beaucoup plus complexe et demandant plus de ressources.
+\lgf{Nous allons mettre en œuvre le protocole CoAP entre deux processus sur votre machine puis, si vous le voulez, vous pourrez le tester sur un LoPy. Côté Objet, nous allons utiliser une mise en œuvre simple mais compacte du protocole pour comprendre son fonctionnement. À l’autre extrémité, nous utiliserons la mise en œuvre \Index{aiocoap} qui est très complète mais beaucoup plus complexe et demandant plus de ressources.}
+\lge{We will implement the CoAP protocol between two processes on your machine and then, if you want, you can test it on a LoPy. On the Object side, we will use a simple but compact implementation of the protocol to understand how it works. At the other end, we will use the \Index{aiocoap} implementation which is very complete but much more complex and resource intensive.}
 
 \subsection{aiocoap}
 
-Comme son nom l'indique, aiocoap met en œuvre CoAP, avec les modules asynchronous Input/Output, permettant un fort degré de parallélisme. Le programme suivant (\pprog{coap\_basic\_server1.py}{plido-tp4}) donne un exemple d’un serveur simple gérant une seule ressource time :
+\lgf{Comme son nom l'indique, aiocoap met en œuvre CoAP, avec les modules asynchronous Input/Output, permettant un fort degré de parallélisme. Le programme suivant (\pprog{coap\_basic\_server1.py}{plido-tp4}) donne un exemple d’un serveur simple gérant une seule ressource time :}
+\lge{As its name indicates, aiocoap implements CoAP, with asynchronous Input/Output modules, allowing a high degree of parallelism. The following program (\pprog{coap\_basic\_server1.py}{plido-tp4}) gives an example of a simple server managing a single time resource:}
+
 
 \pythonlst{coap\_basic\_server1.py}
 
 \begin{itemize}
-    \item Lignes 21 et 22, l’utilisation de \textit{aicoap} se traduit par l’importation des modules qui se trouvent dans le répertoire \texttt{aoicoap}. 
-    \item Dans la fonction \texttt{main} le programme~:
+    \item 
+        \lgf{Lignes 21 et 22, l’utilisation de \textit{aicoap} se traduit par l’importation des modules qui se trouvent dans le répertoire \texttt{aoicoap}. }
+        \lge{Lines 21 and 22, the use of \textit{aicoap} results in the import of the modules which are in the \texttt{aoicoap} directory. }
+    \item  
+        \lgf{Dans la fonction \texttt{main} le programme~:}
+        \lge{In the function \texttt{main} the program:}
     \begin{itemize}
-        \item cherche son adresse IP fixe (lignes 40 à 42)~;
-        \item  fixe à la valeur par défaut le numéro de port à la valeur affectée au serveur CoAP (ligne 44)\footnote{L’utilisation d’une adresse IP et non du joker 0.0.0.0 permet de faire tourner le serveur dans un environnement Windows et MAC}~;
-        \item ligne 47, La variable \texttt{root} contient l’arbre des ressources. À la ligne suivante, la ressource \texttt{time} est associée à une classe \texttt{TimeResource}.
-        \item La méthode~:
+        \item  
+           \lgf{cherche son adresse IP fixe (lignes 40 à 42)~;}
+           \lge{looks for its fixed IP address (lines 40 to 42);}
+        \item   
+            \lgf{fixe à la valeur par défaut le numéro de port à la valeur affectée au serveur CoAP (ligne 44)\footnote{L’utilisation d’une adresse IP et non du joker 0.0.0.0 permet de faire tourner le serveur dans un environnement Windows et MAC};}
+            \lge{sets the port number to the default value assigned to the CoAP server (line 44)\footnote{The use of an IP address and not the wildcard 0.0.0.0 allows the server to run in a Windows and MAC environment};}
+        \item  
+             \lgf{ligne 47, La variable \texttt{root} contient l’arbre des ressources. À la ligne suivante, la ressource \texttt{time} est associée à une classe \texttt{TimeResource}.}
+             \lge{line 47, the variable \texttt{root} contains the tree of resources. On the next line, the resource \texttt{time} is associated with a class \texttt{TimeResource}.}
+        \item  
+        \lgf{La méthode~:}
+        \lge{The method:}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\tiny, escapechar=@] 
 asyncio.Task(aiocoap.Context.create_server_context(root, bind=(ip_addr, port)))
 \end{termc}
 
-        permet de lier cet arbre de ressource à l’adresse IP et au numéro de port précédemment défini.
+            \lgf{permet de lier cet arbre de ressource à l’adresse IP et au numéro de port précédemment défini.}
+            \lge{allows to link this resource tree to the IP address and port number previously defined.}
         
-        \item Ligne 55, le serveur est ensuite lancé dans une boucle sans fin.
+        \item  
+            \lgf{Ligne 55, le serveur est ensuite lancé dans une boucle sans fin.}
+            \lge{Line 55, the server is then launched in an endless loop.}
     \end{itemize}
 
 \end{itemize}
@@ -47,23 +74,29 @@ asyncio.Task(aiocoap.Context.create_server_context(root, bind=(ip_addr, port)))
          \vspace{1em}
 
 
-Il est plus intéressant de voir le traitement effectué lorsque la ressource est appelée par le serveur. La classe \texttt{TimeResource} dérivant de la classe générique \texttt{aiocoap} \pfunction{aiocoap}{Resource} est utilisée (ligne 24)~:
+\lgf{Il est plus intéressant de voir le traitement effectué lorsque la ressource est appelée par le serveur. La classe \texttt{TimeResource} dérivant de la classe générique \texttt{aiocoap} \pfunction{aiocoap}{Resource} est utilisée (ligne 24)~:}
+\lge{It is more interesting to see the processing done when the resource is called by the server. The class \texttt{TimeResource} derived from the generic class \texttt{aiocoap} \pfunction{aiocoap}{Resource} is used (line 24):}
 
 \begin{termc}[backgroundcolor=\color{palerod}, basicstyle=\ttfamily\small, escapechar=@] 
 class TimeResource(resource.Resource):
 \end{termc}
 
-Pour chaque méthode CoAP, une méthode peut être définie dans cette classe. Dans l’exemple, la méthode \texttt{render\_get} permet de traiter les requêtes GET. 
+\lgf{Pour chaque méthode CoAP, une méthode peut être définie dans cette classe. Dans l’exemple, la méthode \texttt{render\_get} permet de traiter les requêtes GET. }
+\lge{For each CoAP method, a method can be defined in this class. In the example, the method \texttt{render\_get} allows to treat the GET requests. }
+
 
          \vspace{1em}
 
 
-Pour simuler un temps de traitement, le programme commence par attendre 5 secondes (ligne 27) puis construit la chaîne de caractères contenant la date qu’il va retourner dans un objet \texttt{aoicoap} \pfunction{aoicoap}{Message}.
+\lgf{Pour simuler un temps de traitement, le programme commence par attendre 5 secondes (ligne 27) puis construit la chaîne de caractères contenant la date qu’il va retourner dans un objet \texttt{aoicoap} \pfunction{aoicoap}{Message}.}
+\lge{To simulate a processing time, the program starts by waiting for 5 seconds (line 27) and then constructs the string containing the date that it will return in a \texttt{aoicoap} object \pfunction{aoicoap}{Message}.}
 
          \vspace{1em}
 
 
-Ainsi, si tout se passe correctement, la réponse à une requête (Code = 0x01) sera 2.05 (Content). La figure~\vref{fig-CoAP-date} résume cet échange que nous avions vu théoriquement dans le chapitre~\vref{chap-token} consacré aux tokens.
+\lgf{Ainsi, si tout se passe correctement, la réponse à une requête (Code = 0x01) sera 2.05 (Content). La figure~\vref{fig-CoAP-date} résume cet échange que nous avions vu théoriquement dans le chapitre~\vref{chap-token} consacré aux tokens.}
+\lge{Thus, if everything goes well, the answer to a request (Code = 0x01) will be 2.05 (Content). The figure~\vref{fig-CoAP-date} summarizes this exchange that we had seen theoretically in the chapter~\vref{chap-token} devoted to tokens.}
+
 
 \begin{figure}
 \centering
@@ -88,29 +121,39 @@ Ainsi, si tout se passe correctement, la réponse à une requête (Code = 0x01)
 		\draw [color=verttelecom, thick] (4, 1.5) -- +(0.5, 0); 
 	
 	\end{tikzpicture}
-\caption{Récupération de la date} 
+\lgf{\caption{Récupération de la date} }
+\lge{\caption{Date retrieval} }
 \label{fig-CoAP-date} 
 \end{figure} 	
 
-\subsection{côté Objet}
+\lgf{\subsection{côté Objet}}
+\lge{\subsection{Object side}}
 
-Du coté du client, nous allons utiliser une mise en œuvre plus compacte qui nous permettra d’expérimenter le fonctionnement de CoAP en modifiant les valeurs des champs protocolaires.
+\lgf{Du coté du client, nous allons utiliser une mise en œuvre plus compacte qui nous permettra d’expérimenter le fonctionnement de CoAP en modifiant les valeurs des champs protocolaires.}
+\lge{On the client side, we will use a more compact implementation that will allow us to experiment the operation of CoAP by changing the values of the protocol fields.}
+
 
          \vspace{1em}
 
 \pycomlst{coap\_empty\_msg.py}
 
-Le programme \lprog{coap\_empty\_msg.py}{pycom} est beaucoup plus simple. Dans un premier temps, vous devez remplacer l’adresse IP par celle fournie par votre serveur CoAP. Le programme crée une socket UDP au travers de laquelle l’échange avec le serveur sera effectué. La première action consiste à créer un message \lfunction{CoAP}{CoAP} (ligne 9) et à  la ligne suivante créer un en-tête obligatoire avec les paramètres par defaut avec la fonction \lprog{CoAP}{new_header}.
+\lgf{Le programme \lprog{coap\_empty\_msg.py}{pycom} est beaucoup plus simple. Dans un premier temps, vous devez remplacer l’adresse IP par celle fournie par votre serveur CoAP. Le programme crée une socket UDP au travers de laquelle l’échange avec le serveur sera effectué. La première action consiste à créer un message \lfunction{CoAP}{CoAP} (ligne 9) et à  la ligne suivante créer un en-tête obligatoire avec les paramètres par defaut avec la fonction \lprog{CoAP}{new_header}.}
+\lge{The program \lprog{coap\_empty\_msg.py}{pycom} is much simpler. First, you must replace the IP address with the one provided by your CoAP server. The program creates a UDP socket through which the exchange with the server will be made. The first action consists in creating a message \lfunction{CoAP}{CoAP} (line 9) and on the next line create a mandatory header with the default parameters with the function \lprog{CoAP}{new_header}.}
 
-Le programme affiche le message avec la fonction  \lfunction{CoAP}{dump}(ligne 11) et l’envoie sur la socket. La ligne 13 permet de limiter l’attente de la réponse à 10 secondes. Cette réponse est attendue ligne 16, transformée en message CoAP ligne 17 et affichée.
+
+\lgf{Le programme affiche le message avec la fonction  \lfunction{CoAP}{dump}(ligne 11) et l’envoie sur la socket. La ligne 13 permet de limiter l’attente de la réponse à 10 secondes. Cette réponse est attendue ligne 16, transformée en message CoAP ligne 17 et affichée.}
+\lge{The program displays the message with the function \lfunction{CoAP}{dump}(line 11) and sends it to the socket. Line 13 allows to limit the waiting time of the answer to 10 seconds. This answer is expected on line 16, transformed into a CoAP message on line 17 and displayed.}
+
 
          \vspace{1em}
 
-Lancez une capture Wireshark pour voir le trafic passant sur le port de CoAP (\texttt{udp.port==5683} dans la fenêtre de filtrage).
+\lgf{Lancez une capture Wireshark pour voir le trafic passant sur le port de CoAP (\texttt{udp.port==5683} dans la fenêtre de filtrage).}
+\lge{Run a Wireshark capture to see the traffic passing through the CoAP port (\texttt{udp.port==5683} in the filter window).}
 
          \vspace{1em}
 
-Lancez maintenant le programme client.
+\lgf{Lancez maintenant le programme client.}
+\lge{Now start the client program.}
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 b ’ 40000001 ’
@@ -119,7 +162,8 @@ b ’ 70000001 ’
 RST 0 x0001 EMPTY
 \end{termc}
 
-Les messages suivants ont circulé sur le réseau.
+\lgf{Les messages suivants ont circulé sur le réseau.}
+\lge{The following messages were circulated on the network.}
 
 \begin{termc}[backgroundcolor=\color{blue!10}, basicstyle=\ttfamily\tiny, ] 
 18:38:30.381449 IP 192.168.1.26.50883 > 192.168.1.26.5683: UDP, length 4
@@ -130,18 +174,26 @@ Les messages suivants ont circulé sur le réseau.
 	0x0010:  c0a8 011a 1633 c6c3 000c 83a2 7000 0001  .....3......p...
 \end{termc}
 
-On retrouve dans le contenu des messages UDP, le message CoAP donné par l’application. Si l’on prend le deuxième message, il commence par 0x70 ; ce qui correspond en binaire à \texttt{0b01\_11\_0000}, soit version = 1, type = 3 et longueur du token = 0.
-L’octet suivant donne le code 0 (\Index{Empty}) et les deux derniers octets contiennent le message ID. 
+\lgf{On retrouve dans le contenu des messages UDP, le message CoAP donné par l’application. Si l’on prend le deuxième message, il commence par 0x70 ; ce qui correspond en binaire à \texttt{0b01\_11\_0000}, soit version = 1, type = 3 et longueur du token = 0.
+L’octet suivant donne le code 0 (\Index{Empty}) et les deux derniers octets contiennent le message ID. }
+\lge{One finds in the contents of the UDP messages, the CoAP message given by the application. If we take the second message, it starts with 0x70; which corresponds in binary to \texttt{0b01\_11\_0000}, that is to say version = 1, type = 3 and length of the token = 0.
+The following byte gives the code 0 (\Index{Empty}) and the last two bytes contain the ID message. }
 
-Le serveur ne sachant pas quoi faire de la requête, la rejette en envoyant un message ReSeT\index{RST} pour essayer d’arrêter le code sur le client qui envoie ce genre de requête.
+\lgf{Le serveur ne sachant pas quoi faire de la requête, la rejette en envoyant un message ReSeT\index{RST} pour essayer d’arrêter le code sur le client qui envoie ce genre de requête.}
+\lge{The server doesn't know what to do with the request, so it rejects it by sending a ReSeT\index{RST} message to try to stop the code on the client that sends this kind of request.}
+
 
 \section {GET \texttt{/time}}
 
-Nous laissons tourner le serveur CoAP et nous allons construire la requête CoAP du client pour qu'il demande la ressource \texttt{/time}\footnote{N'oubliez pas de mettre la bonne adresse IP du SERVER dans ce programme et dans les suivants}.
+\lgf{Nous laissons tourner le serveur CoAP et nous allons construire la requête CoAP du client pour qu'il demande la ressource \texttt{/time}\footnote{N'oubliez pas de mettre la bonne adresse IP du SERVER dans ce programme et dans les suivants}.}
+\lge{We let the CoAP server run and we are going to build the CoAP request from the client to ask for the resource \texttt{/time}\footnote{Don't forget to put the right IP address of the SERVER in this program and in the following ones}.}
+
 
 \pycomlst{coap\_get\_time.py}
 
-la méthode \pfunction{CoAP}{new\_header} précise le code, ici GET et et on ajoute l'élément d'URI time en option (ligne 10) grâce à la méthode \pfunction{CoAP}{add\_option}. Côté client, on obtient le résultat suivant :
+\lgf{la méthode \pfunction{CoAP}{new\_header} précise le code, ici GET et et on ajoute l'élément d'URI time en option (ligne 10) grâce à la méthode \pfunction{CoAP}{add\_option}. Côté client, on obtient le résultat suivant :}
+\lge{the method \pfunction{CoAP}{new\_header} specifies the code, here GET and and we add the URI time element in option (line 10) thanks to the method \pfunction{CoAP}{add\_option}. On the client side, we obtain the following result:}
+
 
 \begin{termc}[backgroundcolor=\color{gray!10}, basicstyle=\ttfamily\small, escapechar=@] 
 > python3 coap_get_time1.py
@@ -153,11 +205,15 @@ b'60000001'
 ACK  0x0001 EMPTY 
 \end{termc}
 
-La requête CoAP commence par le mot \texttt{40010001}, indiquant un message \Index{CON}firmable, sans Token, un code GET et un MID de 0x0001, suivi de l'option \Index{Uri-Path}.
+\lgf{La requête CoAP commence par le mot \texttt{40010001}, indiquant un message \Index{CON}firmable, sans Token, un code GET et un MID de 0x0001, suivi de l'option \Index{Uri-Path}.}
+\lge{The CoAP request starts with the word \texttt{40010001}, indicating a \Index{CON}firmable message, with no Token, a GET code and a MID of 0x0001, followed by the \Index{Uri-Path} option.}
+
 
          \vspace{1em}
 
-La réponse est un \Index{ACK} avec la même valeur de  \textit{Message} ID et le code est vide (0.00).
+\lgf{La réponse est un \Index{ACK} avec la même valeur de  \textit{Message} ID et le code est vide (0.00).}
+\lge{The response is an \Index{ACK} with the same value of \textit{Message} ID and the code is empty (0.00).}
+
 
          \vspace{1em}
 

@@ -238,8 +238,8 @@ showstringspaces=false
 
 
 
-\newcommand\lgf[1]{\ifthenelse{\boolean{lfrench}}{#1}{}}
-\newcommand\lge[1]{\ifthenelse{\boolean{lenglish}}{#1}{}}
+\newcommand\lgf[1]{\ifthenelse{\boolean{lfrench}}{#1}{}}%
+\newcommand\lge[1]{\ifthenelse{\boolean{lenglish}}{#1}{}}%
 
 \newcommand\Vrai[0]{\ifthenelse{\boolean{lfrench}}{Vrai}{}\ifthenelse{\boolean{lenglish}}{True}{}}
 \newcommand\Faux[0]{\ifthenelse{\boolean{lfrench}}{Faux}{}\ifthenelse{\boolean{lenglish}}{False}{}}
@@ -337,7 +337,7 @@ showstringspaces=false
 \input{acronyms}
 \end{multicols}
 
-\setboolean{allchap}{true} % true: take all, false take nothing only /input
+%\setboolean{allchap}{true} % true: take all, false take nothing only /input
 
 
 
@@ -352,9 +352,9 @@ showstringspaces=false
 \Input{Part06.5-beebotte}
 \Input{Part07.0-LoPy}
 \Input{Part08.0-Sigfox}
-\input{Part09.0-LoRaWAN}
+\Input{Part09.0-LoRaWAN}
 \Input{Part10.0-CoAP}
-\Input{Part10.5-aiocoap}
+\input{Part10.5-aiocoap}
 \Input{Part11.0-LwM2M}
 
 
